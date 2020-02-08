@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "225956849105",
+    "firebase_url": "https://trueconnection-702ad.firebaseio.com",
+    "project_id": "trueconnection-702ad",
+    "storage_bucket": "trueconnection-702ad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225956849105:android:810ec79c9ff0ea35c3ecf0",
+        "android_client_info": {
+          "package_name": "com.trueconnect.launch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "225956849105-8a0giq1he4h39lg64pr69cot8jkfd4f1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trueconnect.launch",
+            "certificate_hash": "5b834302d1bcecf5c3a177b518684ed7be064091"
+          }
+        },
+        {
+          "client_id": "225956849105-grtqg53s21k6ho1uqi1rd7cesln7jh9q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmFFtTaTHDJh-6Nf3KYrpa7zZkAUGFDnw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "225956849105-grtqg53s21k6ho1uqi1rd7cesln7jh9q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
