@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 
 class ImageUtil {
 
-static Future<File> getImage() async {
+static Future<File> pickImageFromGallery() async {
     File tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
     return tempImage;
   }

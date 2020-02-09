@@ -11,9 +11,14 @@ import 'package:provider/provider.dart';
 import 'package:trueconnect/user.dart';
 import 'package:trueconnect/create_user.dart';
 import 'package:trueconnect/view_user.dart';
+import 'package:trueconnect/pages/user_profile/user_profile.dart';
+import 'package:trueconnect/pages/testpage.dart';
+
 import 'package:trueconnect/utils/fs_util.dart';
+import 'package:trueconnect/utils/image_util.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:geolocator/geolocator.dart';
 
 void main() => runApp(MyApp());
 
@@ -33,6 +38,9 @@ class _MyAppState extends State<MyApp> implements AddUserCallback {
   final databaseReference = Firestore.instance;
   Future<File> imageFile;
   File sampleImage;
+  Position _currentPosition;
+  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  String _currentAddress;
 
   _loginWithFB() async{
 
@@ -130,14 +138,36 @@ Widget showImage() {
     );
   }
 
+_getCurrentLocation() {
+    geolocator
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      setState(() {
+        _currentPosition = position;
+      });
 
-  Future getImage() async {
-    var tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
- 
-    setState(() {
-      sampleImage = tempImage;
+      _getAddressFromLatLng();
+    }).catchError((e) {
+      print(e);
     });
   }
+
+_getAddressFromLatLng() async {
+    try {
+      List<Placemark> p = await geolocator.placemarkFromCoordinates(
+          _currentPosition.latitude, _currentPosition.longitude);
+
+      Placemark place = p[0];
+
+      setState(() {
+        _currentAddress =
+            "${place.locality}, ${place.postalCode}, ${place.country}";
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -152,6 +182,8 @@ Widget showImage() {
     routes: {
       '/createuser': (context) => CreateUser(),
       '/viewuser': (context) => ViewUser(),
+      '/userprofile': (context) => UserProfile(),
+      '/testpage': (context) => TestPage(),
     },
    title: 'Project Pimp',
       home: new Scaffold(
@@ -195,11 +227,11 @@ Widget showImage() {
         RaisedButton(
               onPressed: () {
 
-                Navigator.pushNamed(context,'/createuser');
+                Navigator.pushNamed(context,'/userprofile');
 
 
               },
-              child: Text('Create User'),
+              child: Text('User profile'),
             ),
         ),
  Builder(
@@ -207,9 +239,9 @@ Widget showImage() {
         RaisedButton(
               onPressed: () {
 
-                Navigator.pushNamed(context,'/viewuser');
+                Navigator.pushNamed(context,'/testpage');
              },
-              child: Text('View User'),
+              child: Text('Test stateful page'),
             ),
             ),
 
@@ -235,7 +267,14 @@ Widget showImage() {
 
     RaisedButton(
               onPressed: () {
-                getImage();
+                
+                  ImageUtil.pickImageFromGallery().then((image){
+                   
+                    setState(() {
+                    sampleImage = image;
+                    }); 
+                  }
+                  );
              },
               child: Text('Select Image2'),
             ),
@@ -267,6 +306,13 @@ Widget showImage() {
               child: Text('Test Firebase'),
             ),
       ),
+      RaisedButton(
+              onPressed: () {
+                _getCurrentLocation();
+             },
+              child: Text('Get location'),
+            ),
+       _currentPosition != null?Text(_currentAddress):Text('Location'),
 
       RaisedButton(
               onPressed: () {
