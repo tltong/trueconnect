@@ -7,7 +7,9 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:country_pickers/country_pickers.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:trueconnect/utils/appdata.dart';
 
+enum photoSelection { Gallery, Facebook }
 
 class UserSettingsTabs extends StatefulWidget {
   @override
@@ -61,7 +63,7 @@ class UserSettingsTabsState extends State<UserSettingsTabs>  {
           child:
           TabBarView(
             children: [
-              PhotoGrid(),
+              PhotoGrid(context),
               UserDetails(),
               Icon(Icons.directions_bike),
               
@@ -230,8 +232,39 @@ Widget UserDetails() {
 
 }
 
+Future<photoSelection> _asyncSimpleDialog(BuildContext context) async {
+  return await showDialog<photoSelection>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text('Choose photo'),
+          children: <Widget>[
+            SimpleDialogOption(
+              onPressed: () {
+                ImageUtil.pickImageFromGallery().then((retimage){
+              if (retimage!=null)
+                setState((){ image1=retimage;});
+              });
+              Navigator.pop(context); 
+              },
+              child: const Text('Gallery'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                
+                ImageUtil.pickImagefromFacebook(context, appData.fbtoken).then((photos){
+                 
+                });
+              },
+              child: const Text('Facebook'),
+            ),
+          ],
+        );
+      });
+}
 
-Widget PhotoGrid() {
+Widget PhotoGrid(BuildContext context) {
    return  Scaffold(
      
       body: 
@@ -247,10 +280,16 @@ Widget PhotoGrid() {
             Image.asset('images/addphoto.png'):
             Image.file(image1),
             onTap: () {
-              ImageUtil.pickImageFromGallery().then((retimage){
-              if (retimage!=null)
-                setState((){ image1=retimage;});
-              }); }, ),
+              _asyncSimpleDialog(context);
+            
+
+            
+            /*
+             
+            */
+            },
+            
+            ),
         ],
       ),
     )

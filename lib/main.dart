@@ -16,9 +16,12 @@ import 'package:trueconnect/pages/testpage.dart';
 
 import 'package:trueconnect/utils/fs_util.dart';
 import 'package:trueconnect/utils/image_util.dart';
-
+import 'package:trueconnect/utils/appdata.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_facebook_image_picker/flutter_facebook_image_picker.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -46,7 +49,8 @@ class _MyAppState extends State<MyApp> implements AddUserCallback {
 
     
     final result = await facebookLogin.logInWithReadPermissions(['email']);
-
+    appData.fbtoken = result.accessToken.token;
+    
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
         final token = result.accessToken.token;
@@ -73,6 +77,7 @@ class _MyAppState extends State<MyApp> implements AddUserCallback {
     facebookLogin.logOut();
     setState(() {
       _isLoggedIn = false;
+      appData.fbtoken=null;
     });
   }
 
@@ -158,6 +163,7 @@ _getAddressFromLatLng() async {
           _currentPosition.latitude, _currentPosition.longitude);
 
       Placemark place = p[0];
+      
 
       setState(() {
         _currentAddress =
@@ -202,8 +208,10 @@ _getAddressFromLatLng() async {
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-		                  Image.network(userProfile["picture"]["data"]["url"], height: 50.0, width: 50.0,),
+		                  Image.network(userProfile["picture"]["data"]["url"], height: 200.0, width: 200.0,),
                       Text(userProfile["name"]),
+                      
+
                       OutlineButton( child: Text("Logout"), onPressed: (){
                         _logout();
                       },)
@@ -242,6 +250,27 @@ _getAddressFromLatLng() async {
                 Navigator.pushNamed(context,'/testpage');
              },
               child: Text('Test stateful page'),
+            ),
+            ),
+Builder(
+        builder: (context) => 
+        RaisedButton(
+              onPressed: () {
+                  Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => FacebookImagePicker(
+                      appData.fbtoken,
+                      onDone: (items) {
+                        Navigator.pop(context);
+                        
+                      },
+                      onCancel: () => Navigator.pop(context),
+                    ),
+              ),
+            );
+                
+             },
+              child: Text('Select image from FB'),
             ),
             ),
 

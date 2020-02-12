@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:trueconnect/utils/appdata.dart';
+
 
 class TestPage extends StatefulWidget {
   @override
@@ -31,9 +33,28 @@ class TestPageState extends State<TestPage>{
         title: Text("Test page"),
       ),
 
+      body: 
+       new Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            appData.fbtoken != null ? Text(appData.fbtoken):Text('Not logged in on FB'),
+             RaisedButton(
+              onPressed: () {
+              Navigator.pop(context);
+              },
+            child: Text('Go back!'),
+           ),
+
+          ],
+        )
+      ),
    
       
     );
   }
   
 } 
+
+
+
