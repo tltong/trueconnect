@@ -17,6 +17,7 @@ import 'package:trueconnect/pages/testpage.dart';
 import 'package:trueconnect/utils/fs_util.dart';
 import 'package:trueconnect/utils/image_util.dart';
 import 'package:trueconnect/utils/appdata.dart';
+import 'package:trueconnect/utils/login_util.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -46,19 +47,19 @@ class _MyAppState extends State<MyApp> implements AddUserCallback {
   String _currentAddress;
 
   _loginWithFB() async{
-
     
     final result = await facebookLogin.logInWithReadPermissions(['email']);
     appData.fbtoken = result.accessToken.token;
-    
+        
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
         final token = result.accessToken.token;
-        final graphResponse = await http.get('https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=${token}');
+        final graphResponse = await http.get('https://graph.facebook.com/v2.12/me?fields=first_name,last_name,name,picture,email&access_token=${token}');
         final profile = JSON.jsonDecode(graphResponse.body);
         print(profile);
         setState(() {
           userProfile = profile;
+          
           _isLoggedIn = true;
         });
         break;
@@ -208,25 +209,47 @@ _getAddressFromLatLng() async {
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-		                  Image.network(userProfile["picture"]["data"]["url"], height: 200.0, width: 200.0,),
+		                  Image.network(userProfile["picture"]["data"]["url"]),
                       Text(userProfile["name"]),
-                      
+                      RaisedButton( child: Text("Logout"), onPressed: (){
+                         LoginUtil login = LoginUtil();
+                         login.LogoutFB();
 
-                      OutlineButton( child: Text("Logout"), onPressed: (){
-                        _logout();
-                      },)
+
+                      }),
                     ],
                   )
                 : Center(
-                    child: OutlineButton(
+                    child: RaisedButton(
                       child: Text("Login with Facebook"),
                       onPressed: () {
-                        _loginWithFB();
+                        
+                          LoginUtil login = LoginUtil();
+                          login.LoginWithFB().then((ret){
+                              
+                              
+                              User currentUser = User.namedConst(ret);
+                              appData.currentUser = currentUser;
+                              print('from login page : '+ appData.currentUser.id);
+                            
+
+                          }
+                          
+                          );
+
+
+
                       },
                     ),
                   )
           ),
 
+          new Center(
+            child:
+          RaisedButton( child: Text("FB test"), onPressed: (){
+                        
+                      }),
+          ),
           new Center(
               child: Column(children: <Widget>[
                   
@@ -308,7 +331,7 @@ Builder(
               child: Text('Select Image2'),
             ),
    sampleImage == null ? Text('Select image #2') : enableUpload(),
-
+/*
   Builder(
         builder: (context) => 
         RaisedButton(
@@ -335,6 +358,7 @@ Builder(
               child: Text('Test Firebase'),
             ),
       ),
+      */
       RaisedButton(
               onPressed: () {
                 _getCurrentLocation();
@@ -342,7 +366,7 @@ Builder(
               child: Text('Get location'),
             ),
        _currentPosition != null?Text(_currentAddress):Text('Location'),
-
+/*
       RaisedButton(
               onPressed: () {
                 
@@ -355,7 +379,9 @@ Builder(
                 });
              },
               child: Text('Database read'),
-            ),
+            )
+            
+            ,*/
               ],)
           )
 

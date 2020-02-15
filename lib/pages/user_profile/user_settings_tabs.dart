@@ -34,6 +34,9 @@ class UserSettingsTabsState extends State<UserSettingsTabs>  {
   }
 
   File image1,image2,image3,image4,image5,image6,image7,image8,image9;
+  bool image1profile=false,image2profile=false,image3profile=false;
+
+
   final PageStorageBucket bucket = PageStorageBucket();
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   
@@ -232,37 +235,133 @@ Widget UserDetails() {
 
 }
 
-Future<photoSelection> _asyncSimpleDialog(BuildContext context) async {
+void clearprofilestates()
+{
+  image1profile = image2profile = image3profile = false;
+
+
+
+}
+
+Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) async {
+  
   return await showDialog<photoSelection>(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
         return SimpleDialog(
-          title: const Text('Choose photo'),
+          title: const Text('Photo options'),
           children: <Widget>[
+            SimpleDialogOption(
+              onPressed: () {
+                clearprofilestates();
+                setState(() {          
+                
+                switch(imageindex) {
+                  case 1:
+                    image1profile=true;
+                    break;
+                  case 2:
+                    image2profile=true;
+                    break;
+                }
+                
+                }); 
+                Navigator.pop(context);
+              },
+              child: const Text('Make profile photo'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                setState((){ 
+
+                   switch(imageindex) {
+
+                    case 1:
+                    image1profile=false;
+                    image1=null;
+                    break;
+
+                   case 2:
+                    image2profile=false;
+                    image2=null;
+                    break;
+
+
+                   }
+
+
+                  });
+              
+              Navigator.pop(context); 
+              },
+              child: const Text('Remove photo'),
+            ),
             SimpleDialogOption(
               onPressed: () {
                 ImageUtil.pickImageFromGallery().then((retimage){
               if (retimage!=null)
-                setState((){ image1=retimage;});
+                setState((){ 
+                  
+                   switch(imageindex) {
+                   case 1: 
+                      image1profile=false;
+                      image1=retimage;
+                      break;
+
+                   case 2:
+                      image2profile=false;
+                      image2=retimage;
+                      break;
+                  
+                   }
+                  
+                  });
               });
               Navigator.pop(context); 
               },
-              child: const Text('Gallery'),
+              child: const Text('Choose new photo'),
             ),
-            SimpleDialogOption(
-              onPressed: () {
-                
-                ImageUtil.pickImagefromFacebook(context, appData.fbtoken).then((photos){
-                 
-                });
-              },
-              child: const Text('Facebook'),
-            ),
+            
           ],
         );
       });
 }
+
+
+Container photoItem(File inImage, bool profilePic){
+
+  
+  if (inImage == null){
+
+    return new Container(
+            child: Image.asset('images/addphoto.png'),
+            
+            );
+  }
+  else {
+
+    if (profilePic==false){
+     return new Container(
+            child: Image.file(inImage),
+            
+            );
+    }else{
+      return new Container(
+        decoration: new BoxDecoration(
+          border: new Border.all(
+            color: Colors.green,
+            width: 3.0,
+            style: BorderStyle.solid
+          ),
+          image: new DecorationImage(
+              image: new FileImage(inImage),
+          )
+        ));
+    }
+  }
+}
+
 
 Widget PhotoGrid(BuildContext context) {
    return  Scaffold(
@@ -277,19 +376,81 @@ Widget PhotoGrid(BuildContext context) {
         children: <Widget>[
           GestureDetector(
             child: image1==null?
+            photoItem(null,false):
+            image1profile==true?photoItem(image1,true):photoItem(image1,false),
+            onTap: () {
+              if (image1==null){
+                ImageUtil.pickImageFromGallery().then((retimage){
+              if (retimage!=null)
+                setState((){ image1=retimage;});
+              });
+              }else{
+              _asyncSimpleDialog(context,1);
+              }
+            },
+            ),
+            GestureDetector(
+            child: image2==null?
+            photoItem(null,false):
+            image2profile==true?photoItem(image2,true):photoItem(image2,false),
+            onTap: () {
+              if (image2==null){
+                ImageUtil.pickImageFromGallery().then((retimage){
+              if (retimage!=null)
+                setState((){ image2=retimage;});
+              });
+              }else{
+              _asyncSimpleDialog(context,2);
+              }
+            },
+            ),
+
+
+/*
+          GestureDetector(
+            child: image1==null?
             Image.asset('images/addphoto.png'):
             Image.file(image1),
             onTap: () {
-              _asyncSimpleDialog(context);
-            
-
-            
-            /*
-             
-            */
+              if (image1==null){
+                ImageUtil.pickImageFromGallery().then((retimage){
+              if (retimage!=null)
+                setState((){ image1=retimage;});
+              });
+              }else{
+              _asyncSimpleDialog1(context);
+              }
             },
-            
             ),
+            
+            GestureDetector(
+            child: 
+            new Container(
+        decoration: new BoxDecoration(
+          border: new Border.all(
+            color: Colors.green,
+            width: 3.0,
+            style: BorderStyle.solid
+          ),
+          boxShadow: [
+            new BoxShadow(
+              color: Colors.green,
+              offset: new Offset(5.0, 5.0),
+              blurRadius: 5.0,
+            )
+          ],
+          image: new DecorationImage(
+              image: new AssetImage('images/addphoto.png'),
+          )
+        )),
+            
+            onTap: () {
+              
+            },
+            ),
+
+*/
+          
         ],
       ),
     )
