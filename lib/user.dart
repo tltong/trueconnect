@@ -42,9 +42,9 @@ class User extends ChangeNotifier {
   }
 
 
-  String get name => _name;
+  String get name => fbuserprofile["name"];
 
-  String get email => _email;
+  String get email => fbuserprofile["email"];
 
   String get age => _age;
 

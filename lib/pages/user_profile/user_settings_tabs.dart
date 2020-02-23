@@ -2,12 +2,15 @@ import 'package:country_pickers/country.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:trueconnect/utils/image_util.dart';
+import '../../user.dart';
+import 'get_location_page.dart';
 import 'dart:io';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:country_pickers/country_pickers.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:trueconnect/utils/appdata.dart';
+import '../../utils/location_util.dart';
 
 enum photoSelection { Gallery, Facebook }
 
@@ -23,19 +26,27 @@ class UserSettingsTabsState extends State<UserSettingsTabs>  {
 
 @override
   void initState() {
+    print('init state');
+    countryctrl = TextEditingController();
+    cityctrl = TextEditingController();
     super.initState();
 
   }
 
 @override
   void dispose() {
+    print('dispose');
+    countryctrl.dispose();
+    cityctrl.dispose();
     super.dispose();
  
   }
 
   File image1,image2,image3,image4,image5,image6,image7,image8,image9;
   bool image1profile=false,image2profile=false,image3profile=false;
-
+  
+  var countryctrl;
+  var cityctrl;
 
   final PageStorageBucket bucket = PageStorageBucket();
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
@@ -122,6 +133,8 @@ Widget _gridList() {
       ));
 
 Widget UserDetails() {
+  
+  
   return Scaffold(
         body: Padding(
         padding: EdgeInsets.all(10),
@@ -138,9 +151,51 @@ Widget UserDetails() {
                 child: Column(
                   children: <Widget>[
                     FormBuilderTextField(
-                      attribute: 'text',
+                      attribute: 'name',
+                      initialValue: appData.currentUser.name,
                       validators: [FormBuilderValidators.required()],
                       decoration: InputDecoration(labelText: "Name"),
+                    ),
+                     Builder(
+        builder: (context) => 
+        Stack(
+        children: <Widget>[
+            
+            Align(
+                alignment: Alignment.centerLeft,
+                child: RaisedButton(
+              onPressed: () {
+                     
+                    setState((){ 
+                    LocationUtil loc = new LocationUtil();
+                     loc.getLocation().then((ret){
+                          countryctrl.text=loc.country;
+                        cityctrl.text=loc.city;
+                    
+                     });
+                      });
+       
+              },
+              child: Text('Get Location'),
+            ),
+            )
+         ] ,
+        ),
+       ),
+      
+                    FormBuilderTextField(
+                      attribute: 'country',
+                      validators: [FormBuilderValidators.required()],
+                      decoration: InputDecoration(labelText: "Current Country"),
+                      controller: countryctrl
+                      
+                    ),
+        
+                     FormBuilderTextField(
+                      attribute: 'city',
+                      validators: [FormBuilderValidators.required()],
+                      decoration: InputDecoration(labelText: "Current City"),
+                      controller: cityctrl
                     ),
                     
                     FormBuilderDateTimePicker(
@@ -149,12 +204,10 @@ Widget UserDetails() {
                       format: DateFormat("dd-MM-yyyy"),
                       decoration: InputDecoration(labelText: "Date of Birth"),
                     ),
-                     
+                     /*
                       Container (
-                        
-                        child: 
-                        
-                        Column(
+                          child: 
+                           Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                           Text(
@@ -171,7 +224,7 @@ Widget UserDetails() {
                       ),
                       ],)
                       ),
-          
+                  */
                     
                      FormBuilderDropdown(
                       attribute: "gender",
@@ -184,6 +237,12 @@ Widget UserDetails() {
                           value: gender, child: Text("$gender")))
                           .toList(),
                     ),
+                     FormBuilderTextField(
+                      attribute: 'aboutme',
+                      decoration: InputDecoration(labelText: "About me"),
+                      keyboardType: TextInputType.multiline,
+                    ),
+
                     FormBuilderTextField(
                       attribute: "height",
                       decoration: InputDecoration(labelText: "Height (cm)"),
@@ -209,20 +268,23 @@ Widget UserDetails() {
                     ),
                     FormBuilderTextField(
                       attribute: 'email',
+                      initialValue: appData.currentUser.email,
+                      enabled:false,
+                      readOnly: true,
                       validators: [FormBuilderValidators.email()],
                       decoration: InputDecoration(labelText: "Email"),
                       keyboardType: TextInputType.emailAddress,
                     ),
+                  
+       
+                  
+
                     FormBuilderTextField(
                       attribute: 'mobile',
                       decoration: InputDecoration(labelText: "Mobile"),
                       keyboardType: TextInputType.phone,
                     ),
-                    FormBuilderTextField(
-                      attribute: 'aboutme',
-                      decoration: InputDecoration(labelText: "About me"),
-                      keyboardType: TextInputType.multiline,
-                    ),
+                   
                     
                   ]
                 )
@@ -232,6 +294,35 @@ Widget UserDetails() {
         )
         )
     );
+}
+
+Widget getLocationPage()
+{
+return Scaffold(
+      appBar: AppBar(
+        title: Text("Test page"),
+      ),
+
+      body: 
+       new Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            
+             RaisedButton(
+              onPressed: () {
+              
+              },
+            child: Text('Go back!'),
+           ),
+
+          ],
+        )
+      ),
+   
+      
+    );
+
 
 }
 
