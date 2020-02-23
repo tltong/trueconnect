@@ -11,6 +11,7 @@ import 'package:country_pickers/country_pickers.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:trueconnect/utils/appdata.dart';
 import '../../utils/location_util.dart';
+import 'edit_user_settings.dart';
 
 enum photoSelection { Gallery, Facebook }
 
@@ -26,7 +27,7 @@ class UserSettingsTabsState extends State<UserSettingsTabs>  {
 
 @override
   void initState() {
-    print('init state');
+
     countryctrl = TextEditingController();
     cityctrl = TextEditingController();
     super.initState();
@@ -35,7 +36,7 @@ class UserSettingsTabsState extends State<UserSettingsTabs>  {
 
 @override
   void dispose() {
-    print('dispose');
+
     countryctrl.dispose();
     cityctrl.dispose();
     super.dispose();
@@ -78,7 +79,8 @@ class UserSettingsTabsState extends State<UserSettingsTabs>  {
           TabBarView(
             children: [
               PhotoGrid(context),
-              UserDetails(),
+              EditUseSettingsPage(),
+              //UserDetails(),
               Icon(Icons.directions_bike),
               
             ],
