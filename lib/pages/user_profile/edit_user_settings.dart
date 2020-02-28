@@ -12,28 +12,58 @@ class EditUseSettingsPage extends StatefulWidget {
   }
 }
 
-
 class EditUseSettingsPageState extends State<EditUseSettingsPage>{
 
-var countryctrl = TextEditingController();
+  var countryctrl = TextEditingController();
   var cityctrl = TextEditingController();
+  var dobctrl = TextEditingController();
+  var aboutctrl = TextEditingController();
+  var heightctrl = TextEditingController();
+  var occupationctrl = TextEditingController();
+  var mobilectrl = TextEditingController();
 
-  static String country,city;
+  static String country,city,gender;
+  BoxConstraints bx = new BoxConstraints();
+  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
+  DateTime dob;
 
-
+String parsedob(String inDob)
+{
+  var parseStr = inDob.split('-');
+  return parseStr[2]+'-'+parseStr[1]+'-'+parseStr[0];
+  
+}
 
 
 @override
   void initState() {
-    
+
+    countryctrl.text=appData.currentUser.country;
+    cityctrl.text=appData.currentUser.city;
+    aboutctrl.text=appData.currentUser.about;
+    heightctrl.text=appData.currentUser.height;
+    occupationctrl.text=appData.currentUser.occupation;
+    mobilectrl.text=appData.currentUser.mobile;
+
     super.initState();
-    countryctrl.text=country;
-    cityctrl.text=city;
+ 
   }
 
 @override
   void dispose() {
+
+    
+    if (dobctrl.text.toString().isNotEmpty){
+      appData.currentUser.dob = DateTime.tryParse(parsedob(dobctrl.text));
+      
+    }
+    
+    dobctrl.dispose();
+    
+    
     super.dispose();
+
+ //   _fbKey.currentState.save();
  
   }
 
@@ -48,6 +78,13 @@ var countryctrl = TextEditingController();
     */
       body: 
        new Center(
+  
+         child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: bx.minHeight,
+            ),
+
         child: Column(
           children: <Widget>[
 
@@ -57,7 +94,7 @@ var countryctrl = TextEditingController();
 
 
           FormBuilder(
-//  key: _fbKey,
+  key: _fbKey,
   autovalidate: true,
   child: Column(
     children: <Widget>[
@@ -82,11 +119,11 @@ var countryctrl = TextEditingController();
                     setState((){ 
                     LocationUtil loc = new LocationUtil();
                      loc.getLocation().then((ret){
-                        country = loc.country;
-                        city = loc.city;
+                        //country = loc.country;
+                        //city = loc.city;
                         
-                        countryctrl.text=country;
-                        cityctrl.text=city;
+                        countryctrl.text=loc.country;
+                        cityctrl.text=loc.city;
                     
                      });
                       });
@@ -103,7 +140,8 @@ var countryctrl = TextEditingController();
                       attribute: 'country',
                       validators: [FormBuilderValidators.required()],
                       decoration: InputDecoration(labelText: "Current Country"),
-                      controller: countryctrl
+                      controller: countryctrl,
+                      onChanged: (value) => (appData.currentUser.country=value),
                       
                     ),
         
@@ -111,17 +149,25 @@ var countryctrl = TextEditingController();
                       attribute: 'city',
                       validators: [FormBuilderValidators.required()],
                       decoration: InputDecoration(labelText: "Current City"),
-                      controller: cityctrl
+                      controller: cityctrl,
+                      onChanged: (value) => (appData.currentUser.city=value),
                     ),
 
                       FormBuilderDateTimePicker(
+                //      key: _fbKey,
+                      initialValue: appData.currentUser.dob,
+                     // firstDate: DateTime.tryParse('1990-01-01'),
+                     // lastDate: DateTime.tryParse('2000-01-01'),
                       attribute: "date",
                       inputType: InputType.date,
                       format: DateFormat("dd-MM-yyyy"),
                       decoration: InputDecoration(labelText: "Date of Birth"),
+                      controller: dobctrl
                     ),
                         FormBuilderDropdown(
                       attribute: "gender",
+                      initialValue: appData.currentUser.gender,
+                      onChanged: (value) => (appData.currentUser.gender=value),
                       decoration: InputDecoration(labelText: "Gender"),
                       // initialValue: 'Male',
                       hint: Text('Select Gender'),
@@ -135,12 +181,16 @@ var countryctrl = TextEditingController();
                       attribute: 'aboutme',
                       decoration: InputDecoration(labelText: "About me"),
                       keyboardType: TextInputType.multiline,
+                      controller:aboutctrl,
+                      onChanged: (value) => (appData.currentUser.about=value),
                     ),
 
                     FormBuilderTextField(
                       attribute: "height",
                       decoration: InputDecoration(labelText: "Height (cm)"),
                       keyboardType: TextInputType.number,
+                      controller:heightctrl,
+                      onChanged: (value) => (appData.currentUser.height=value),
                       validators: [
                         FormBuilderValidators.numeric(),
                         FormBuilderValidators.min(100),
@@ -149,12 +199,16 @@ var countryctrl = TextEditingController();
                     ),
                     FormBuilderTextField(
                       attribute: 'occupation',
+                      initialValue: appData.currentUser.occupation,
                       decoration: InputDecoration(labelText: "Occupation"),
+                      controller:occupationctrl,
+                      onChanged: (value) => (appData.currentUser.occupation=value),
                     ),
                     FormBuilderDropdown(
                       attribute: "education",
                       decoration: InputDecoration(labelText: "Education"),
-                      // initialValue: 'Male',
+                      onChanged: (value) => (appData.currentUser.education=value),
+                      initialValue: appData.currentUser.education,
                        items: ['High School', 'College', 'University', 'Master', 'PhD']
                           .map((education) => DropdownMenuItem(
                           value: education, child: Text("$education")))
@@ -169,20 +223,19 @@ var countryctrl = TextEditingController();
                       decoration: InputDecoration(labelText: "Email"),
                       keyboardType: TextInputType.emailAddress,
                     ),
-                  
-       
-                  
-
                     FormBuilderTextField(
                       attribute: 'mobile',
                       decoration: InputDecoration(labelText: "Mobile"),
                       keyboardType: TextInputType.phone,
+                      controller:mobilectrl,
+                      onChanged: (value) => (appData.currentUser.mobile=value),
                     ),
 
       
     ],
-  ),
+  ),  // Column
 ),
+/*
 Row(
   children: <Widget>[
     Expanded(
@@ -193,6 +246,9 @@ Row(
           style: TextStyle(color: Colors.white),
         ),
         onPressed: () {
+          _fbKey.currentState.save();
+          
+          print(_fbKey.currentState.value);
 /*
           _fbKey.currentState.save();
           if (_fbKey.currentState.validate()) {
@@ -222,20 +278,16 @@ Row(
   ],
 )
 
-
-
-
-
-
-
-          // end of formbuilde
+*/
+          // end of formbuilder
 
 
           ],
 
          
         ) // Column
-      ),  // Center
+        
+          )) ),  // Center
    
       
     );  // Scaffold

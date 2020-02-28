@@ -13,12 +13,15 @@ class UserProfileState extends State<UserProfile> {
 
 @override
   void initState() {
+    //print('init from user profile');
     super.initState();
 
   }
 
 @override
   void dispose() {
+    //print('dispose from user profile');
+    //print('state change in photo page : ' + UserSettingsTabsState.statechange.toString());
     super.dispose();
  
   }

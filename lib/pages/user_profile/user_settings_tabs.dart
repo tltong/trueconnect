@@ -11,6 +11,7 @@ import 'package:country_pickers/country_pickers.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:trueconnect/utils/appdata.dart';
 import '../../utils/location_util.dart';
+import '../../utils/appdata.dart';
 import 'edit_user_settings.dart';
 
 enum photoSelection { Gallery, Facebook }
@@ -28,24 +29,63 @@ class UserSettingsTabsState extends State<UserSettingsTabs>  {
 @override
   void initState() {
 
-    countryctrl = TextEditingController();
-    cityctrl = TextEditingController();
+
+    image1 = appData.currentUser.image1;
+    preImage2 = image2; 
+    image2 = appData.currentUser.image2;
+
+    if (image1!=null){
+      
+      preImage1str=image1.uri.toString();
+      print('assigning preImage1str value :' + preImage1str );  
+    }
+
+
+
+
+    //print('preImage1 :' + preImage1.toString());
+    //print('image1 : ' + image1.toString());
+
+   // preImage1profile = image1profile = appData.currentUser.image1profile;
+   // preImage2profile = image2profile = appData.currentUser.image2profile;
+    
     super.initState();
 
   }
 
 @override
   void dispose() {
+   
+    print('dispose user settings');
+    appData.currentUser.image1 = image1;
+    
+    appData.currentUser.image2 = image2;
+    appData.currentUser.image1profile = image1profile;
+    appData.currentUser.image2profile = image2profile;
 
-    countryctrl.dispose();
-    cityctrl.dispose();
+    statechange=false;
+
+    if (image1!=null){
+      if (image1.uri.toString()!=preImage1str){
+        statechange=true;
+      }
+    }else{
+      if (preImage1str!=null)
+        statechange=true;
+    }
+    print('statechange : ' + statechange.toString());
+
     super.dispose();
  
   }
 
-  File image1,image2,image3,image4,image5,image6,image7,image8,image9;
-  bool image1profile=false,image2profile=false,image3profile=false;
-  
+  File image1,image2;
+  String preImage1str,preImage2str;
+  File preImage1,preImage2;
+  bool image1profile=false,image2profile=false;
+  bool preImage1profile=false,preImage2profile=false;
+  static bool statechange=false;
+
   var countryctrl;
   var cityctrl;
 
@@ -78,7 +118,9 @@ class UserSettingsTabsState extends State<UserSettingsTabs>  {
           child:
           TabBarView(
             children: [
+              
               PhotoGrid(context),
+              //Icon(Icons.directions_walk),
               EditUseSettingsPage(),
               //UserDetails(),
               Icon(Icons.directions_bike),
@@ -330,7 +372,7 @@ return Scaffold(
 
 void clearprofilestates()
 {
-  image1profile = image2profile = image3profile = false;
+  image1profile = image2profile = false;
 
 
 
@@ -353,9 +395,11 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
                 switch(imageindex) {
                   case 1:
                     image1profile=true;
+                    appData.currentUser.image1profile=true;
                     break;
                   case 2:
                     image2profile=true;
+                    appData.currentUser.image1profile=true;
                     break;
                 }
                 
