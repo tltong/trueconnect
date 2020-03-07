@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trueconnect/pages/user_profile/user_settings_tabs.dart';
+import '../../utils/appdata.dart';
+import '../../utils/fs_util.dart';
 
 class UserProfile extends StatefulWidget {
   @override
@@ -42,7 +44,29 @@ class UserProfileState extends State<UserProfile> {
       },
       child: const Icon(Icons.edit),
     ),
-      
+    
+    body: 
+       new Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            
+             RaisedButton(
+              onPressed: () {
+                //print(appData.currentUser.image1.uri.toString());
+
+               appData.currentUser.uploadImages();
+
+                 
+
+              },
+            child: Text('Test Database'),
+           ),
+
+          ],
+        )
+      ),
+    
         );
     
   }

@@ -57,6 +57,10 @@ class UserSettingsTabsState extends State<UserSettingsTabs>  {
   void dispose() {
    
     print('dispose user settings');
+    appData.currentUser.addImage(image1);
+    appData.currentUser.addImage(image2);
+
+
     appData.currentUser.image1 = image1;
     
     appData.currentUser.image2 = image2;

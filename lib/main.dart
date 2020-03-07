@@ -230,7 +230,8 @@ _getAddressFromLatLng() async {
                               
                               User currentUser = User.namedConst(ret);
                               appData.currentUser = currentUser;
-                              print('from login page : '+ appData.currentUser.id);
+
+                              //print('from login page : '+ ret.toString());
                             
 
                           }
@@ -246,7 +247,9 @@ _getAddressFromLatLng() async {
 
           new Center(
             child:
-          RaisedButton( child: Text("FB test"), onPressed: (){
+          RaisedButton( child: Text("FB logout"), onPressed: (){
+             LoginUtil login = LoginUtil();
+                         login.LogoutFB();
                         
                       }),
           ),
