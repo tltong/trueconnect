@@ -33,9 +33,13 @@ class FS_Util{
 
     List<Map<String, dynamic>> ret = new List();
 
+    
     for (int i=0;i<query.documents.length;i++){
       DocumentSnapshot ds = query.documents[i];
-      ret.add(ds.data);
+      Map<String, dynamic> retMap = new Map<String, dynamic>();
+      retMap.addAll(ds.data);
+      retMap.putIfAbsent('documentID', () => ds.documentID);
+      ret.add(retMap);
     }
     return ret;
   }
@@ -57,6 +61,7 @@ class FS_Util{
   */
   Future<String> addRecord(String collection, Map<String, dynamic> mapDoc) async {
     DocumentReference ref = await databaseReference.collection(collection).add(mapDoc);
+    
     return ref.documentID;
   }
 

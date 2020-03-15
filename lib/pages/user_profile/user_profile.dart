@@ -53,14 +53,23 @@ class UserProfileState extends State<UserProfile> {
             
              RaisedButton(
               onPressed: () {
-                //print(appData.currentUser.image1.uri.toString());
+            
+                print('uploading start');
+              
+               appData.currentUser.uploadImages().then((id){
+                print('uploading done');   
+                
+                appData.currentUser.updateUserDB().then((id){
+                print('userprofile update done');
+                });
+                
 
-               appData.currentUser.uploadImages();
-
+              });
+              
                  
 
               },
-            child: Text('Test Database'),
+            child: Text('Update Database'),
            ),
 
           ],

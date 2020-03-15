@@ -21,16 +21,25 @@ class User extends ChangeNotifier {
   String testName = 'test';
   Map fbuserprofile;
   DateTime dob;
+  String name;
   String gender;
   String about;
   String height;
   String occupation;
   String education;
   String mobile;
+  String email;
+  String documentID;
+  String first_name;
+  String last_name;
 
   File image1,image2;
   List<File> images = new List<File>();
-  List<List<String>> imagelinks = new List<List<String>>();
+  List<String> imagepaths = new List<String>();
+  List<String> imagedownloadlinks = new List<String>();
+
+
+  //List<List<String>> imagelinks = new List<List<String>>();
   bool image1profile=false,image2profile=false;
 
   //User(this._id,this._name, this._email, this._age, this._mobile);
@@ -44,64 +53,148 @@ class User extends ChangeNotifier {
     FS_Util fs = new FS_Util();
   }
 
+  void addImages(List<File> imagesin){
+   
+    images.clear();
+    for (int i=0;i<imagesin.length;i++){
+      images.add(imagesin[i]);
+      
+    }
+  
+  }
+
   void addImage(File image){
     images.add(image);
   }
 
-  void uploadImages(){
+  Future<void> uploadImages() async {
     
+   // 
+    imagepaths.clear();
+    imagedownloadlinks.clear();
+
     for (int i = 0;i<images.length;i++){
 
       FS_Util fs = new FS_Util();
       String path = 'memberphotos/'+appData.currentUser.id+'/'+'image'+i.toString();
-      print(path);
-/*
-      fs.uploadFile('member/image',images[0]).then((id){
-                   print('uploading complete : ' + id);
-                 });
-*/
-
+      
+      await fs.uploadFile(path,images[i]).then((id){
+       
+        imagepaths.add(path);
+         
+       imagedownloadlinks.add(id);
+               
+        });
     }
-  
+    
+    return;
   }
 
+  Future<void> updateUserDB() async {
+    Map<String, dynamic> profile = new Map<String, dynamic>();
+  
+    profile.putIfAbsent("name", ()=> name);
+    profile.putIfAbsent("id", ()=> id);
+    profile.putIfAbsent("first_name", ()=> first_name);
+    profile.putIfAbsent("imagepaths", ()=> imagepaths);
+    profile.putIfAbsent("imagedownloadlinks", ()=> imagedownloadlinks);
 
+  
+
+    profile.putIfAbsent("last_name", ()=> last_name);
+    profile.putIfAbsent("documentID", ()=> documentID);
+    profile.putIfAbsent("country", ()=> country);
+    profile.putIfAbsent("city", ()=> city);
+    profile.putIfAbsent("dob", ()=> dob);
+    profile.putIfAbsent("gender", ()=> gender);
+    profile.putIfAbsent("about", ()=> about);
+    profile.putIfAbsent("height", ()=> height);
+    profile.putIfAbsent("occupation", ()=> occupation);   
+    profile.putIfAbsent("education", ()=> education);
+    profile.putIfAbsent("email", ()=> email);
+    profile.putIfAbsent("mobile", ()=> mobile);
+
+    print(profile);
+    FS_Util fs = new FS_Util();
+   await fs.updateRecord('users', documentID, profile).then((ret){
+       return;
+    });
+
+
+
+  }
+
+/*
   void updateImagelinks(File image, List<String> links){
     
-    imagelinks.add(links);
+   // imagelinks.add(links);
   }
+  */
 
 
-  User.namedConst(Map profile) {
+  Future<void> initialise(Map profile) async {
+
 
     fbuserprofile = profile;
     this.id=profile["id"];
 
+    this.name=fbuserprofile["name"];
+    
+    this.email=fbuserprofile["email"];
+    this.id=fbuserprofile["id"];
+    this.first_name=fbuserprofile["first_name"];
+    this.last_name=fbuserprofile["last_name"];
+
+  //print('initialise user');
+
     FS_Util fs = new FS_Util();
-    fs.queryDoc('users','id',profile["id"]).then((doc){
+   await fs.queryDoc('users','id',id).then((doc){
 
     if (doc.length==0){
-      fs.addRecord('users', profile).then((ret){
-        print('added record' + ret);
+    //  print('user does not yet exist');
+     
+      fs.addRecord('users', fbuserprofile).then((ret){
+        documentID = ret;
+        fbuserprofile.putIfAbsent("documentID", () => ret);
+
+      fs.updateRecord('users', ret, fbuserprofile).then((ret){
+        return;
+        });
+
       });
+    }else{
+      
+      this.name=doc[0]['name'];
+      this.country=doc[0]['country'];
+      this.city=doc[0]['city'];
+      this.dob=doc[0]['dob'];
+      this.gender=doc[0]['gender'];
+      this.about=doc[0]['about'];
+      this.height=doc[0]['height'];
+      this.occupation=doc[0]['occupation'];
+      this.education=doc[0]['education'];
+      this.email=doc[0]['email'];
+      this.mobile=doc[0]['mobile'];
+      this.documentID=doc[0]['documentID'];
+      return;
     }
-
-
-
-//https://firebasestorage.googleapis.com/v0/b/trueconnection-702ad.appspot.com/o/member%2FTL%2FimageTL?alt=media&token=11590e32-b942-4533-9c45-a0b33997c1b1
-//https://firebasestorage.googleapis.com/v0/b/trueconnection-702ad.appspot.com/o/memberphotos%2F10157353612969091%2Fimage2?alt=media&token=fbd55dbf-cd99-41a4-953f-f78469d1aa9d
-
-  
   });
 
 
 
   }
 
+  User.namedConst(Map profile) {
 
-  String get name => fbuserprofile["name"];
+    fbuserprofile = profile;
+    this.id=profile["id"];
+    
+  }
 
-  String get email => fbuserprofile["email"];
+
+  //String get name => fbuserprofile["name"];
+
+  //String get email => fbuserprofile["email"];
 
   String get age => _age;
 

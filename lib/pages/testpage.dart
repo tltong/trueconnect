@@ -48,16 +48,10 @@ class TestPageState extends State<TestPage>{
            ),
            RaisedButton(
               onPressed: () {
-                //Map testmap = appData.currentUser.fbuserprofile;
-                List<String> photo1 = ['photo 1 url1','photo 1 url2'];
-                List<String> photo2 = ['photo 2 url1','photo 2 url2'];
-
-
-                List<List<String>> userlinks = new List<List<String>>();
-
-                userlinks.add(photo1);
-                userlinks.add(photo2);
-                print(userlinks[1][0]);
+               FS_Util fs = new FS_Util();
+               fs.queryDoc('users','id',appData.currentUser.id).then((doc){
+                  print(doc[0]['documentID']);
+              });
 
     
 

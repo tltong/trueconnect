@@ -228,11 +228,21 @@ _getAddressFromLatLng() async {
                           login.LoginWithFB().then((ret){
                               
                               
-                              User currentUser = User.namedConst(ret);
-                              appData.currentUser = currentUser;
+                              User currentUser = User();
+                              currentUser.initialise(ret).then((vo){
+                                appData.currentUser = currentUser;
+                                
+                               // print(appData.currentUser.email);
+                                
 
-                              //print('from login page : '+ ret.toString());
-                            
+                              });
+
+
+//                              appData.currentUser = currentUser;
+                              //print('current user : ' + appData.currentUser.name);
+                      
+
+
 
                           }
                           
@@ -245,14 +255,13 @@ _getAddressFromLatLng() async {
                   )
           ),
 
-          new Center(
-            child:
+        
           RaisedButton( child: Text("FB logout"), onPressed: (){
              LoginUtil login = LoginUtil();
                          login.LogoutFB();
                         
                       }),
-          ),
+          
           new Center(
               child: Column(children: <Widget>[
                   
@@ -309,31 +318,9 @@ Builder(
             ),
             
 
-      showImage(),
-     RaisedButton(
-              onPressed: () {
-                  FS_Util fs = new FS_Util();
-                  fs.uploadFile('member/image',sampleImage).then((id){
-                    print('uploading complete : ' + id);
-                  });
-             },
-              child: Text('Upload Image 2'),
-            ),
-
-    RaisedButton(
-              onPressed: () {
-                
-                  ImageUtil.pickImageFromGallery().then((image){
-                   
-                    setState(() {
-                    sampleImage = image;
-                    }); 
-                  }
-                  );
-             },
-              child: Text('Select Image2'),
-            ),
-   sampleImage == null ? Text('Select image #2') : enableUpload(),
+    
+    
+    
 /*
   Builder(
         builder: (context) => 
@@ -362,13 +349,7 @@ Builder(
             ),
       ),
       */
-      RaisedButton(
-              onPressed: () {
-                _getCurrentLocation();
-             },
-              child: Text('Get location'),
-            ),
-       _currentPosition != null?Text(_currentAddress):Text('Location'),
+    
 /*
       RaisedButton(
               onPressed: () {

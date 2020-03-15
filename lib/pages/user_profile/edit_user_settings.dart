@@ -55,8 +55,14 @@ String parsedob(String inDob)
     
     if (dobctrl.text.toString().isNotEmpty){
       appData.currentUser.dob = DateTime.tryParse(parsedob(dobctrl.text));
-      
     }
+
+    print(appData.currentUser.name);
+    print(appData.currentUser.country);
+    print(appData.currentUser.city);
+    print(appData.currentUser.dob);
+    print(appData.currentUser.education);
+    print(appData.currentUser.mobile);
     
     dobctrl.dispose();
     
