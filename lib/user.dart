@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:trueconnect/utils/appdata.dart';
 import 'package:trueconnect/utils/fs_util.dart';
 import 'dart:io';
+import './utils/image_util.dart';
 
 
 class User extends ChangeNotifier {
@@ -32,6 +33,7 @@ class User extends ChangeNotifier {
   String documentID;
   String first_name;
   String last_name;
+  int profilePhotoIndex;
 
   File image1,image2;
   List<File> images = new List<File>();
@@ -53,13 +55,20 @@ class User extends ChangeNotifier {
     FS_Util fs = new FS_Util();
   }
 
+  void printsomething()
+  {
+      print('test here!');
+
+  }
+
   void addImages(List<File> imagesin){
-   
     images.clear();
+   
     for (int i=0;i<imagesin.length;i++){
       images.add(imagesin[i]);
       
     }
+    
   
   }
 
@@ -79,7 +88,7 @@ class User extends ChangeNotifier {
       String path = 'memberphotos/'+appData.currentUser.id+'/'+'image'+i.toString();
       
       await fs.uploadFile(path,images[i]).then((id){
-       
+        
         imagepaths.add(path);
          
        imagedownloadlinks.add(id);
@@ -99,7 +108,12 @@ class User extends ChangeNotifier {
     profile.putIfAbsent("imagepaths", ()=> imagepaths);
     profile.putIfAbsent("imagedownloadlinks", ()=> imagedownloadlinks);
 
-  
+    for (int i=0; i<imagedownloadlinks.length;i++){
+//      File imagefile = 
+
+    }
+
+  /*
 
     profile.putIfAbsent("last_name", ()=> last_name);
     profile.putIfAbsent("documentID", ()=> documentID);
@@ -113,8 +127,10 @@ class User extends ChangeNotifier {
     profile.putIfAbsent("education", ()=> education);
     profile.putIfAbsent("email", ()=> email);
     profile.putIfAbsent("mobile", ()=> mobile);
+*/
+   // print(profile);
+   // print('document ID : ' + documentID);
 
-    print(profile);
     FS_Util fs = new FS_Util();
    await fs.updateRecord('users', documentID, profile).then((ret){
        return;
@@ -145,30 +161,25 @@ class User extends ChangeNotifier {
     this.first_name=fbuserprofile["first_name"];
     this.last_name=fbuserprofile["last_name"];
 
-  //print('initialise user');
+  
 
     FS_Util fs = new FS_Util();
    await fs.queryDoc('users','id',id).then((doc){
-
     if (doc.length==0){
-    //  print('user does not yet exist');
-     
       fs.addRecord('users', fbuserprofile).then((ret){
         documentID = ret;
         fbuserprofile.putIfAbsent("documentID", () => ret);
-
       fs.updateRecord('users', ret, fbuserprofile).then((ret){
         return;
         });
-
       });
     }else{
-      
       this.name=doc[0]['name'];
       this.country=doc[0]['country'];
       this.city=doc[0]['city'];
-      this.dob=doc[0]['dob'];
-      this.gender=doc[0]['gender'];
+     
+   //   this.dob=doc[0]['dob'];
+     this.gender=doc[0]['gender'];
       this.about=doc[0]['about'];
       this.height=doc[0]['height'];
       this.occupation=doc[0]['occupation'];
@@ -176,8 +187,25 @@ class User extends ChangeNotifier {
       this.email=doc[0]['email'];
       this.mobile=doc[0]['mobile'];
       this.documentID=doc[0]['documentID'];
+      
+      for (int i=0;i<doc[0]['imagedownloadlinks'].length;i++){
+        imagedownloadlinks.add(doc[0]['imagedownloadlinks'][i]);
+      }
+
+/*
+      for(int i=0;i<imagedownloadlinks.length;i++){
+          //print(imagedownloadlinks[i]);
+
+          ImageUtil.Fetchfromweb(imagedownloadlinks[i]).then( (ret) {
+            print('image added');
+            images.add(ret);
+        });
+
+      }
+  */   
       return;
     }
+
   });
 
 

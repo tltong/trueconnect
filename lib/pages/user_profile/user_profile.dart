@@ -59,9 +59,8 @@ class UserProfileState extends State<UserProfile> {
                appData.currentUser.uploadImages().then((id){
                 print('uploading done');   
                 
-                appData.currentUser.updateUserDB().then((id){
-                print('userprofile update done');
-                });
+               appData.currentUser.updateUserDB().then((id){
+                print('userprofile update done');   });
                 
 
               });

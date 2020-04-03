@@ -13,6 +13,7 @@ import 'package:trueconnect/utils/appdata.dart';
 import '../../utils/location_util.dart';
 import '../../utils/appdata.dart';
 import 'edit_user_settings.dart';
+import 'user_photos.dart';
 
 enum photoSelection { Gallery, Facebook }
 
@@ -30,9 +31,9 @@ class UserSettingsTabsState extends State<UserSettingsTabs>  {
   void initState() {
 
 
-    image1 = appData.currentUser.image1;
+    //image1 = appData.currentUser.image1;
     preImage2 = image2; 
-    image2 = appData.currentUser.image2;
+    //image2 = appData.currentUser.image2;
 
     if (image1!=null){
       
@@ -55,7 +56,7 @@ class UserSettingsTabsState extends State<UserSettingsTabs>  {
 
 @override
   void dispose() {
-   
+   /*
     print('dispose user settings');
 
     List<File> images = new List<File>();
@@ -66,6 +67,14 @@ class UserSettingsTabsState extends State<UserSettingsTabs>  {
     
     appData.currentUser.image1 = image1;
     appData.currentUser.image2 = image2;
+
+    if (image1profile==true){
+      appData.currentUser.profilePhotoIndex=0;
+    }
+    if (image2profile == true){
+      appData.currentUser.profilePhotoIndex=1;
+    }
+
     appData.currentUser.image1profile = image1profile;
     appData.currentUser.image2profile = image2profile;
 
@@ -79,9 +88,11 @@ class UserSettingsTabsState extends State<UserSettingsTabs>  {
       if (preImage1str!=null)
         statechange=true;
     }
-   // print('statechange : ' + statechange.toString());
-
+   
+    print("profile pic : " + appData.currentUser.profilePhotoIndex.toString());
+    */
     super.dispose();
+
  
   }
 
@@ -124,9 +135,11 @@ class UserSettingsTabsState extends State<UserSettingsTabs>  {
           child:
           TabBarView(
             children: [
+
               
-              PhotoGrid(context),
+              //PhotoGrid(context),
               //Icon(Icons.directions_walk),
+              UserPhotosPage(),
               EditUseSettingsPage(),
               //UserDetails(),
               Icon(Icons.directions_bike),
@@ -378,7 +391,9 @@ return Scaffold(
 
 void clearprofilestates()
 {
+  print('clear profile states');
   image1profile = image2profile = false;
+  print('profiles states cleared');
 
 
 
@@ -395,17 +410,22 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
           children: <Widget>[
             SimpleDialogOption(
               onPressed: () {
+                print('make profile photo');
                 clearprofilestates();
-                setState(() {          
+                setState(() {     
+                     
                 
                 switch(imageindex) {
                   case 1:
+                  print('set state 1');  
                     image1profile=true;
-                    appData.currentUser.image1profile=true;
+                  //  appData.currentUser.image1profile=true;
                     break;
                   case 2:
-                    image2profile=true;
-                    appData.currentUser.image1profile=true;
+                  print('set state 2');  
+
+                  //  image2profile=true;
+                  //  appData.currentUser.image1profile=true;
                     break;
                 }
                 
@@ -517,9 +537,10 @@ Widget PhotoGrid(BuildContext context) {
       GridView.count(
         crossAxisCount: 4,
         children: <Widget>[
+          
           GestureDetector(
-            child: image1==null?
-            photoItem(null,false):
+            child: 
+            image1==null? photoItem(null,false):
             image1profile==true?photoItem(image1,true):photoItem(image1,false),
             onTap: () {
               if (image1==null){
@@ -532,6 +553,7 @@ Widget PhotoGrid(BuildContext context) {
               }
             },
             ),
+
             GestureDetector(
             child: image2==null?
             photoItem(null,false):
@@ -601,4 +623,6 @@ Widget PhotoGrid(BuildContext context) {
     
     );
 }
+
+
 }
