@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:trueconnect/pages/user_profile/user_settings_tabs.dart';
 import '../../utils/appdata.dart';
 import '../../utils/fs_util.dart';
+import './user_photos.dart';
+import './edit_user_settings.dart';
 
 class UserProfile extends StatefulWidget {
   @override
@@ -53,22 +55,42 @@ class UserProfileState extends State<UserProfile> {
             
              RaisedButton(
               onPressed: () {
+              
             
-                print('uploading start');
-              
-               appData.currentUser.uploadImages().then((id){
-                print('uploading done');   
-                
-               appData.currentUser.updateUserDB().then((id){
-                print('userprofile update done');   });
-                
-
+            if (UserPhotosPageState.changed==true)
+            
+            {
+               print('update database');
+              appData.currentUser.processSelectedPhotos().then((id){
+             //   print('profile photo index : ' + appData.currentUser.profilePhotoIndex.toString());
+                appData.currentUser.updateUserDB();
+                print('database updated');
+                UserPhotosPageState.changed=false;
+                UserPhotosPageState.profileIndex=appData.currentUser.profilePhotoIndex;
               });
-              
+          }
+             else{
+              print('no change');
+            }
+
                  
 
               },
             child: Text('Update Database'),
+           ),
+
+           RaisedButton(
+              onPressed: () {
+              
+        //      print('Change :  ' + UserPhotosPageState.changed.toString());
+        //      print('Profile photo :  ' + UserPhotosPageState.profileIndex.toString());
+         //     var userdetails = EditUseSettingsPageState.ExtractUserSettings();
+        //      print (userdetails);
+                print(appData.currentUser.selectedUserSettings);
+             
+     
+              },
+            child: Text('Print parameters'),
            ),
 
           ],

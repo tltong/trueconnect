@@ -85,6 +85,16 @@ Future<String>uploadFile(String path, File image) async {
    await uploadTask.onComplete;    
    String downloadUrl = await storageReference.getDownloadURL();
    return downloadUrl;
- }  
+ }
+
+ Future<void>deleteFile(String path) async {
+
+   StorageReference storageReference = FirebaseStorage.instance    
+       .ref()    
+       .child(path);   
+   await storageReference.delete();    
+   return;  
+  }
+
 
 }

@@ -1,10 +1,14 @@
 
+import 'package:flutter/material.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:trueconnect/utils/appdata.dart';
 import 'package:trueconnect/utils/fs_util.dart';
 import 'dart:io';
 import './utils/image_util.dart';
+import 'dart:math';
+import './pages/user_profile/user_photos.dart';
 
 
 class User extends ChangeNotifier {
@@ -34,13 +38,17 @@ class User extends ChangeNotifier {
   String first_name;
   String last_name;
   int profilePhotoIndex;
+  int selectedProfilePhotoIndex=-1;
+  
 
   File image1,image2;
+  List<Image> selectedImages = new List<Image>();
   List<File> images = new List<File>();
   List<String> imagepaths = new List<String>();
   List<String> imagedownloadlinks = new List<String>();
 
-
+  Map<String,String> selectedUserSettings =  Map<String,String>();
+  
   //List<List<String>> imagelinks = new List<List<String>>();
   bool image1profile=false,image2profile=false;
 
@@ -76,9 +84,73 @@ class User extends ChangeNotifier {
     images.add(image);
   }
 
+  Future<void> processSelectedPhotos() async {
+
+     List<String> downloadlinks = new List<String>();
+     List<String> temp_imagepaths = new List<String>();
+    List<String> temp_imagedownloadlinks = new List<String>();
+
+    //imagedownloadlinks.clear();
+
+    int i=0;
+    int j=0;
+
+    for (Image image in selectedImages){
+        
+      if (image.toString().contains('AssetImage')){
+        i++;
+        continue;
+      }
+
+      if ((ImageUtil.ExtractImageString(image))!=null){
+        temp_imagepaths.add(imagepaths[i].toString());
+        temp_imagedownloadlinks.add(imagedownloadlinks[i].toString());
+        if (UserPhotosPageState.profileIndex==i){
+          appData.currentUser.profilePhotoIndex=temp_imagepaths.length-1;
+        }
+      }
+      
+      else{
+
+        File file = ImageUtil.FileFromImage(image);
+        var rng = new Random();
+        int index = rng.nextInt(10000);  
+        FS_Util fs = new FS_Util();
+        String path = 'memberphotos/'+appData.currentUser.id+'/'+'image'+index.toString();
+        await fs.uploadFile(path,file).then((id){
+        temp_imagedownloadlinks.add(id);
+        temp_imagepaths.add(path);
+
+        if (UserPhotosPageState.profileIndex==i){
+          appData.currentUser.profilePhotoIndex=temp_imagepaths.length-1;
+        }
+        
+        });
+        
+      }
+      i++;
+    }
+    
+    for (int i=0;i<imagedownloadlinks.length;i++){
+      String link = imagedownloadlinks[i];
+       if (temp_imagedownloadlinks.contains(link)==false){
+          FS_Util fs = new FS_Util();
+          
+          await fs.deleteFile(imagepaths[i]);
+        }
+    }
+
+    imagedownloadlinks= temp_imagedownloadlinks;
+    imagepaths=temp_imagepaths;
+
+    selectedImages.clear();
+   // print('profile photo index : ' + appData.currentUser.profilePhotoIndex.toString());
+
+
+  }
+
   Future<void> uploadImages() async {
     
-   // 
     imagepaths.clear();
     imagedownloadlinks.clear();
 
@@ -91,7 +163,7 @@ class User extends ChangeNotifier {
         
         imagepaths.add(path);
          
-       imagedownloadlinks.add(id);
+        imagedownloadlinks.add(id);
                
         });
     }
@@ -107,11 +179,8 @@ class User extends ChangeNotifier {
     profile.putIfAbsent("first_name", ()=> first_name);
     profile.putIfAbsent("imagepaths", ()=> imagepaths);
     profile.putIfAbsent("imagedownloadlinks", ()=> imagedownloadlinks);
-
-    for (int i=0; i<imagedownloadlinks.length;i++){
-//      File imagefile = 
-
-    }
+    profile.putIfAbsent("profilePhotoIndex", ()=> profilePhotoIndex);
+  
 
   /*
 
@@ -190,6 +259,7 @@ class User extends ChangeNotifier {
       
       for (int i=0;i<doc[0]['imagedownloadlinks'].length;i++){
         imagedownloadlinks.add(doc[0]['imagedownloadlinks'][i]);
+        imagepaths.add(doc[0]['imagepaths'][i]);
       }
 
 /*

@@ -19,47 +19,75 @@ class UserPhotosPage extends StatefulWidget {
 class UserPhotosPageState extends State<UserPhotosPage>{
 
 final PageStorageBucket bucket = PageStorageBucket();
- File image1,image2,file3;
- Image image3;
- bool image1profile=false,image2profile=false;
 
+ Image image1,image2,image3;
+ static int profileIndex;
+ static bool changed=false;
+
+ bool image1profile=false,image2profile=false,image3profile=false;
 
 @override
   void initState() {
-
+    print('************** USER PHOTOS INIT ********************');
+    print('selected photos : ' + appData.currentUser.selectedImages.toString());
+    print('imagedownloadlinks : ' + appData.currentUser.imagedownloadlinks.toString());
     image1profile=false;
     image2profile=false;
+    image3profile=false;
+    //changed=false;
 
-    image3 = new Image.network(appData.currentUser.imagedownloadlinks[0]);
-    print(image3.toString());
+   // profileIndex = appData.currentUser.selectedProfilePhotoIndex;
 
-    if (appData.currentUser.images!=null){
-      switch(appData.currentUser.images.length){
-          case 1:
-            image1=appData.currentUser.images[0];
-          break;
-          case 2:
-            image1=appData.currentUser.images[0];
-            image2=appData.currentUser.images[1];
-      }
-    }else{
-      image1=null;
-      image2=null;
-    }
-
-    switch(appData.currentUser.profilePhotoIndex){
-      case 1:
+    switch(profileIndex){
+      case 0:
         image1profile=true;
-      break;
-
-      case 2:
+        break;
+      case 1:
         image2profile=true;
-      break;
-
-
-
+        break;
+      case 2:
+        image3profile=true;
+        break;
     }
 
+    image1=null;
+    image2=null;
+    image3=null;
+
+    if (appData.currentUser.selectedImages.length<1){
+
+    if (appData.currentUser.imagedownloadlinks.length>0){
+      image1=new Image.network(appData.currentUser.imagedownloadlinks[0]);
+    }
+
+    if (appData.currentUser.imagedownloadlinks.length>1){
+      image2=new Image.network(appData.currentUser.imagedownloadlinks[1]);
+    }
+
+    if (appData.currentUser.imagedownloadlinks.length>2){
+      image3=new Image.network(appData.currentUser.imagedownloadlinks[2]);
+    }
+
+    }
+    
+    else{
+
+      if (appData.currentUser.selectedImages.length>0){
+        if (ImageUtil.IsAssetImage(image1)==false)
+          image1=appData.currentUser.selectedImages[0];
+      }
+      if (appData.currentUser.selectedImages.length>1){
+        if (ImageUtil.IsAssetImage(image1)==false)
+         image2=appData.currentUser.selectedImages[1];
+      }
+      if (appData.currentUser.selectedImages.length>2){
+        if (ImageUtil.IsAssetImage(image1)==false)
+          image3=appData.currentUser.selectedImages[2];
+      }
+
+    }
+  
+  
     super.initState();
  
   }
@@ -68,34 +96,50 @@ final PageStorageBucket bucket = PageStorageBucket();
   void dispose() {
 
     appData.currentUser.images.clear();
-    appData.currentUser.profilePhotoIndex=0;
 
-   
+    appData.currentUser.selectedImages.clear();
+/*
+    print('image1 : ');
+    if (image1!=null) print(image1.toString());
 
-    
-    List<File> images = new List<File>();
+    print('image2 : ');
+    if (image2!=null) print(image2.toString());
 
-    if (image1!=null){
-      images.add(image1);
-      print(image1.uri);
-    }
+    print('image3 : ');
+    if (image3!=null) print(image3.toString());
+*/
+    if (image1!=null)
+     appData.currentUser.selectedImages.add(image1);
+    else
+     appData.currentUser.selectedImages.add(Image.asset('images/addphoto.png'));
 
     if (image2!=null)
-      images.add(image2);
+      appData.currentUser.selectedImages.add(image2);
+    else
+     appData.currentUser.selectedImages.add(Image.asset('images/addphoto.png'));
 
-    if (images.length>0)
-    {
-      appData.currentUser.addImages(images);
-    }
+    if (image3!=null)
+      appData.currentUser.selectedImages.add(image3);
+    else
+     appData.currentUser.selectedImages.add(Image.asset('images/addphoto.png'));
 
+    appData.currentUser.selectedProfilePhotoIndex=0;
+
+    profileIndex=0;
     if (image1profile==true)
-      appData.currentUser.profilePhotoIndex=1;
+      profileIndex=0;
 
     if (image2profile==true)
-      appData.currentUser.profilePhotoIndex=2;
-    if (image1==null)
-      appData.currentUser.profilePhotoIndex--;
+      profileIndex=1;
 
+    if (image3profile==true)
+      profileIndex=2;
+
+  //  print("selected profile photo : " + appData.currentUser.selectedProfilePhotoIndex.toString());
+   
+   print('************** USER PHOTOS DISPOSE ********************');
+     print('selected photos : ' + appData.currentUser.selectedImages.toString());
+    print('imagedownloadlinks : ' + appData.currentUser.imagedownloadlinks.toString());
     
 
     super.dispose();
@@ -115,10 +159,35 @@ Container photoFrame (File inImage){
         ));
 }
 
+Container photoFrameFromImage (Image inImage){
+
+  var retimage;
+  if (inImage.toString().contains('NetworkImage')){
+    retimage = new NetworkImage(ImageUtil.ExtractImageString(inImage));
+  }else{
+   retimage = new FileImage(ImageUtil.FileFromImage(inImage));
+  }
+
+  return new Container(
+        decoration: new BoxDecoration(
+          border: new Border.all(
+            color: Colors.green,
+            width: 3.0,
+            style: BorderStyle.solid
+          ),
+          image: new DecorationImage(
+              image: retimage,
+          )
+        ));
+
+}
+
 void setprofilestate(int index){
 
   image1profile=false;
   image2profile=false;
+  image3profile=false;
+  changed=true;
 
   switch(index){
     case 1:
@@ -127,6 +196,10 @@ void setprofilestate(int index){
 
     case 2:
       image2profile=true;
+      break;
+
+    case 3:
+      image3profile=true;
     break;
   }
 
@@ -149,22 +222,33 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
 
                  setState((){ 
 
+
                   switch(imageindex) {
                     case 1:
-                      if (image1!=null)
+                      if (image1!=null){
+                        if (ImageUtil.IsAssetImage(image1)==false){
                        setprofilestate(1);
+                        }
+                      }
                        break;
                     case 2:
-                      if (image2!=null)
+                      if (image2!=null){
+                   if (ImageUtil.IsAssetImage(image2)==false){
                        setprofilestate(2);
+                   }
+                      }
+                       break;
+                    case 3:
+                      if (image3!=null){
+                        if (ImageUtil.IsAssetImage(image3)==false){
+                    
+                       setprofilestate(3);
+                        }
+                      }
                       break;
-
                   }
 
                   });
-               
-               
-                
                 Navigator.pop(context);
               },
               child: const Text('Make profile photo'),
@@ -172,6 +256,7 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
             SimpleDialogOption(
               onPressed: () {
                 setState((){ 
+                  changed=true;
                   switch(imageindex) {
                   case 1:
                     image1=null;
@@ -181,8 +266,12 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
                     image2=null;
                     image2profile=false;
                     break;
+                  case 3:
+                    image3=null;
+                    image3profile=false;
+                    break;
                   }
-
+                
                   });
               
               Navigator.pop(context); 
@@ -195,25 +284,30 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
               
                 ImageUtil.pickImageFromGallery().then((retimage){
               if (retimage!=null)
-                
+                changed=true;
                 setState((){ 
                   
                   switch(imageindex) {
 
                   case 1:
-                  image1=retimage;
+                  
+                  image1=Image.file(retimage);
+                 
+                
                   break;
+                  
                   case 2:
-                  image2=retimage;
+                  
+                  image2=Image.file(retimage);
+
                   break;
+                  
                   case 3:
-                  print('image3' + retimage.toString());
+                  
                   image3=Image.file(retimage);
                   break;
-
-
-                  
-                  }
+                }
+                
                   
                 
                   
@@ -246,7 +340,8 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
      
             GestureDetector(
             child: image1==null?Image.asset('images/addphoto.png'):
-            image1profile==true?photoFrame(image1):Image.file(image1),
+            image1profile==true?photoFrameFromImage(image1):image1,
+            
             onTap: () {
               _asyncSimpleDialog(context,1);
             },
@@ -254,14 +349,15 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
             
             GestureDetector(
             child: image2==null?Image.asset('images/addphoto.png'):
-            image2profile==true?photoFrame(image2):Image.file(image2),
+            image2profile==true?photoFrameFromImage(image2):image2,
             onTap: () {
                 _asyncSimpleDialog(context,2);
             },
             ),
 
             GestureDetector(
-            child: image3==null?Image.asset('images/addphoto.png'):image3,
+            child: image3==null?Image.asset('images/addphoto.png'):
+            image3profile==true?photoFrameFromImage(image3):image3,
  
             onTap: () {
             

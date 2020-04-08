@@ -3,6 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import '../../utils/appdata.dart';
 import '../../utils/location_util.dart';
 import 'package:intl/intl.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 class EditUseSettingsPage extends StatefulWidget {
   @override
@@ -14,18 +15,23 @@ class EditUseSettingsPage extends StatefulWidget {
 
 class EditUseSettingsPageState extends State<EditUseSettingsPage>{
 
+  TextEditingController namectrl = TextEditingController();
   var countryctrl = TextEditingController();
   var cityctrl = TextEditingController();
   var dobctrl = TextEditingController();
+  String genderString;
   var aboutctrl = TextEditingController();
   var heightctrl = TextEditingController();
   var occupationctrl = TextEditingController();
+  String educationString;
   var mobilectrl = TextEditingController();
 
-  static String country,city,gender;
+  String country,city,dobstring;
   BoxConstraints bx = new BoxConstraints();
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   DateTime dob;
+
+  
 
 String parsedob(String inDob)
 {
@@ -38,13 +44,26 @@ String parsedob(String inDob)
 @override
   void initState() {
 
+    namectrl.text=appData.currentUser.selectedUserSettings["name"];
+    countryctrl.text=appData.currentUser.selectedUserSettings["country"];
+    cityctrl.text=appData.currentUser.selectedUserSettings["city"];
+    dobctrl.text=appData.currentUser.selectedUserSettings["dob"];
+    genderString=appData.currentUser.selectedUserSettings["gender"];
+    aboutctrl.text=appData.currentUser.selectedUserSettings["aboutme"];
+    heightctrl.text=appData.currentUser.selectedUserSettings["height"];
+    occupationctrl.text=appData.currentUser.selectedUserSettings["occupation"];
+    educationString=appData.currentUser.selectedUserSettings["education"];
+    mobilectrl.text=appData.currentUser.selectedUserSettings["mobile"];
+/*
     countryctrl.text=appData.currentUser.country;
     cityctrl.text=appData.currentUser.city;
     aboutctrl.text=appData.currentUser.about;
     heightctrl.text=appData.currentUser.height;
     occupationctrl.text=appData.currentUser.occupation;
     mobilectrl.text=appData.currentUser.mobile;
-
+  //  print('at init dob : ' + appData.currentUser.dob.toString());
+  
+  */
     super.initState();
  
   }
@@ -52,26 +71,41 @@ String parsedob(String inDob)
 @override
   void dispose() {
 
-    
+    appData.currentUser.selectedUserSettings.clear();
+    appData.currentUser.selectedUserSettings.putIfAbsent("name", ()=> namectrl.text);
+    appData.currentUser.selectedUserSettings.putIfAbsent("country", ()=> countryctrl.text);
+    appData.currentUser.selectedUserSettings.putIfAbsent("city", ()=> cityctrl.text);
+    appData.currentUser.selectedUserSettings.putIfAbsent("dob", ()=> dobctrl.text);
+    appData.currentUser.selectedUserSettings.putIfAbsent("gender", ()=> genderString);
+    appData.currentUser.selectedUserSettings.putIfAbsent("aboutme", ()=> aboutctrl.text);
+    appData.currentUser.selectedUserSettings.putIfAbsent("height", ()=> heightctrl.text);
+    appData.currentUser.selectedUserSettings.putIfAbsent("occupation", ()=> occupationctrl.text);
+    appData.currentUser.selectedUserSettings.putIfAbsent("education", ()=> educationString);
+     appData.currentUser.selectedUserSettings.putIfAbsent("mobile", ()=> mobilectrl.text);
+   // print(appData.currentUser.selectedUserSettings);
+  /*  
     if (dobctrl.text.toString().isNotEmpty){
       appData.currentUser.dob = DateTime.tryParse(parsedob(dobctrl.text));
     }
-
+*/
+/*
     print(appData.currentUser.name);
     print(appData.currentUser.country);
     print(appData.currentUser.city);
-    print(appData.currentUser.dob);
+    print('at dispose dob : ' + dobctrl.text.toString());
+ //   print('at dispose dob : ' + appData.currentUser.dob.toString());
     print(appData.currentUser.education);
     print(appData.currentUser.mobile);
     
     dobctrl.dispose();
-    
+  */  
     
     super.dispose();
 
  //   _fbKey.currentState.save();
  
   }
+
 
  @override
   Widget build(BuildContext context) {
@@ -107,9 +141,10 @@ String parsedob(String inDob)
         
          FormBuilderTextField(
                       attribute: 'name',
-                      initialValue: appData.currentUser.name,
+                      initialValue: namectrl.text,
                       validators: [FormBuilderValidators.required()],
                       decoration: InputDecoration(labelText: "Name"),
+                      controller: namectrl
                     ),
 
  Builder(
@@ -147,7 +182,8 @@ String parsedob(String inDob)
                       validators: [FormBuilderValidators.required()],
                       decoration: InputDecoration(labelText: "Current Country"),
                       controller: countryctrl,
-                      onChanged: (value) => (appData.currentUser.country=value),
+                      initialValue: countryctrl.text,
+              //        onChanged: (value) => (appData.currentUser.country=value),
                       
                     ),
         
@@ -156,24 +192,29 @@ String parsedob(String inDob)
                       validators: [FormBuilderValidators.required()],
                       decoration: InputDecoration(labelText: "Current City"),
                       controller: cityctrl,
-                      onChanged: (value) => (appData.currentUser.city=value),
+                      initialValue: cityctrl.text,
+               //       onChanged: (value) => (appData.currentUser.city=value),
                     ),
-
                       FormBuilderDateTimePicker(
-                //      key: _fbKey,
-                      initialValue: appData.currentUser.dob,
-                     // firstDate: DateTime.tryParse('1990-01-01'),
-                     // lastDate: DateTime.tryParse('2000-01-01'),
+                      
+                       initialValue:dobctrl.text.length>0?DateTime.tryParse(dobctrl.text):null,
+                       initialDate:dobctrl.text.length>0?DateTime.tryParse(dobctrl.text):DateTime(1990,01,01),
+//                      initialDate:appData.currentUser.dob==null?DateTime(1990,01,01):
+ //                     DateTime.parse(appData.currentUser.dob.toString()),
+  //                    initialValue:appData.currentUser.dob==null?DateTime(1990,01,01):
+  //                    DateTime.parse(appData.currentUser.dob.toString()),
                       attribute: "date",
                       inputType: InputType.date,
-                      format: DateFormat("dd-MM-yyyy"),
+                      format: DateFormat("yyyy-MM-dd"),
                       decoration: InputDecoration(labelText: "Date of Birth"),
                       controller: dobctrl
                     ),
+
+                    
                         FormBuilderDropdown(
                       attribute: "gender",
-                      initialValue: appData.currentUser.gender,
-                      onChanged: (value) => (appData.currentUser.gender=value),
+                      initialValue: genderString,
+                      onChanged: (value) => (genderString=value),
                       decoration: InputDecoration(labelText: "Gender"),
                       // initialValue: 'Male',
                       hint: Text('Select Gender'),
@@ -185,41 +226,47 @@ String parsedob(String inDob)
                     ),
                      FormBuilderTextField(
                       attribute: 'aboutme',
+                      initialValue: aboutctrl.text,
                       decoration: InputDecoration(labelText: "About me"),
                       keyboardType: TextInputType.multiline,
                       controller:aboutctrl,
                       onChanged: (value) => (appData.currentUser.about=value),
                     ),
-
+  
                     FormBuilderTextField(
                       attribute: "height",
+                      initialValue: heightctrl.text,
                       decoration: InputDecoration(labelText: "Height (cm)"),
                       keyboardType: TextInputType.number,
                       controller:heightctrl,
-                      onChanged: (value) => (appData.currentUser.height=value),
+//                      onChanged: (value) => (heightctrl.text=value),
                       validators: [
                         FormBuilderValidators.numeric(),
                         FormBuilderValidators.min(100),
                         FormBuilderValidators.max(200),
                       ],
                     ),
+                    
+                    
                     FormBuilderTextField(
                       attribute: 'occupation',
-                      initialValue: appData.currentUser.occupation,
+                      initialValue: occupationctrl.text,
                       decoration: InputDecoration(labelText: "Occupation"),
                       controller:occupationctrl,
-                      onChanged: (value) => (appData.currentUser.occupation=value),
+              //        onChanged: (value) => (appData.currentUser.occupation=value),
                     ),
+                    
                     FormBuilderDropdown(
                       attribute: "education",
                       decoration: InputDecoration(labelText: "Education"),
-                      onChanged: (value) => (appData.currentUser.education=value),
-                      initialValue: appData.currentUser.education,
+                      onChanged: (value) => (educationString=value),
+                      initialValue: educationString,
                        items: ['High School', 'College', 'University', 'Master', 'PhD']
                           .map((education) => DropdownMenuItem(
                           value: education, child: Text("$education")))
                           .toList(),
                     ),
+                    
                     FormBuilderTextField(
                       attribute: 'email',
                       initialValue: appData.currentUser.email,
@@ -231,10 +278,11 @@ String parsedob(String inDob)
                     ),
                     FormBuilderTextField(
                       attribute: 'mobile',
+                      initialValue: mobilectrl.text,
                       decoration: InputDecoration(labelText: "Mobile"),
                       keyboardType: TextInputType.phone,
                       controller:mobilectrl,
-                      onChanged: (value) => (appData.currentUser.mobile=value),
+                 //     onChanged: (value) => (mobilectrl.text=value),
                     ),
 
       

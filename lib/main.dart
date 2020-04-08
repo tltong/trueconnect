@@ -235,6 +235,8 @@ _getAddressFromLatLng() async {
                                 appData.currentUser = currentUser;
                                 print('initialise user');
                                 print(appData.currentUser.imagedownloadlinks);
+                                print(appData.currentUser.imagepaths);
+
                               });
 
 //                              appData.currentUser = currentUser;
