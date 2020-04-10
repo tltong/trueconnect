@@ -226,16 +226,19 @@ _getAddressFromLatLng() async {
                          
                           LoginUtil login = LoginUtil();
                           login.LoginWithFB().then((ret){
-
-                             
-                              
                               User currentUser = User();
                               currentUser.initialise(ret).then((vo){
                                
                                 appData.currentUser = currentUser;
-                                print('initialise user');
-                                print(appData.currentUser.imagedownloadlinks);
-                                print(appData.currentUser.imagepaths);
+                              
+                                print(appData.currentUser.name);
+                                print(appData.currentUser.country);
+                                print(appData.currentUser.city);
+                                print(appData.currentUser.dob);
+                                appData.currentUser.initialiseUserSettings();
+                                print(appData.currentUser.selectedUserSettings);
+                                
+                               
 
                               });
 

@@ -20,12 +20,14 @@ class User extends ChangeNotifier {
   String _mobile;
   String country;
   String city;
+  String dob;
 
   String id;
 
   String testName = 'test';
   Map fbuserprofile;
-  DateTime dob;
+ // DateTime dob;
+
   String name;
   String gender;
   String about;
@@ -63,9 +65,74 @@ class User extends ChangeNotifier {
     FS_Util fs = new FS_Util();
   }
 
-  void printsomething()
+// return true if settings are changed
+  bool UserSettingsChanged()
   {
-      print('test here!');
+    
+    if (name!=appData.currentUser.selectedUserSettings["name"]){
+      return true;
+    }
+    if (country!=appData.currentUser.selectedUserSettings["country"]){
+      return true;
+    }
+    if (city!=appData.currentUser.selectedUserSettings["city"]){
+      return true;
+    }
+    if (dob!=appData.currentUser.selectedUserSettings["dob"]){
+      return true;
+    }
+    if (gender!=appData.currentUser.selectedUserSettings["gender"]){
+      return true;
+    }
+   if (about!=appData.currentUser.selectedUserSettings["aboutme"]){
+      return true;
+    }
+   if (height!=appData.currentUser.selectedUserSettings["height"]){
+      return true;
+    }
+   if (occupation!=appData.currentUser.selectedUserSettings["occupation"]){
+      return true;
+    }
+   if (education!=appData.currentUser.selectedUserSettings["education"]){
+      return true;
+    }
+   if (mobile!=appData.currentUser.selectedUserSettings["mobile"]){
+      return true;
+    }
+    return false;
+  }
+
+  void initialiseUserSettings()
+  {
+    appData.currentUser.selectedUserSettings["name"] = name;
+    appData.currentUser.selectedUserSettings["dob"] = dob;
+    appData.currentUser.selectedUserSettings["country"] = country;
+    appData.currentUser.selectedUserSettings["city"] = city;
+    appData.currentUser.selectedUserSettings["gender"] = gender;
+    appData.currentUser.selectedUserSettings["aboutme"]= about;
+    appData.currentUser.selectedUserSettings["height"] = height;
+    appData.currentUser.selectedUserSettings["occupation"] = occupation;
+    appData.currentUser.selectedUserSettings["education"] = education;
+    appData.currentUser.selectedUserSettings["mobile"] = mobile;
+
+
+
+  }
+
+  Future<void> processSelectedUserSettings() async {
+
+    name = appData.currentUser.selectedUserSettings["name"];
+    dob = appData.currentUser.selectedUserSettings["dob"];
+    country = appData.currentUser.selectedUserSettings["country"];
+    city = appData.currentUser.selectedUserSettings["city"];
+    gender = appData.currentUser.selectedUserSettings["gender"];
+    about = appData.currentUser.selectedUserSettings["aboutme"];
+    height = appData.currentUser.selectedUserSettings["height"];
+    occupation = appData.currentUser.selectedUserSettings["occupation"];
+    education = appData.currentUser.selectedUserSettings["education"];
+    mobile = appData.currentUser.selectedUserSettings["mobile"];
+    await updateUserDB();
+    return;
 
   }
 
@@ -83,6 +150,29 @@ class User extends ChangeNotifier {
   void addImage(File image){
     images.add(image);
   }
+/*
+   bool UserSettingsChanged(){
+
+    bool ret = false;
+
+    if (name!=appData.currentUser.selectedUserSettings["name"])
+      return false;
+
+    return true;
+/*
+    namectrl.text=appData.currentUser.selectedUserSettings["name"];
+    countryctrl.text=appData.currentUser.selectedUserSettings["country"];
+    cityctrl.text=appData.currentUser.selectedUserSettings["city"];
+    dobctrl.text=appData.currentUser.selectedUserSettings["dob"];
+    genderString=appData.currentUser.selectedUserSettings["gender"];
+    aboutctrl.text=appData.currentUser.selectedUserSettings["aboutme"];
+    heightctrl.text=appData.currentUser.selectedUserSettings["height"];
+    occupationctrl.text=appData.currentUser.selectedUserSettings["occupation"];
+    educationString=appData.currentUser.selectedUserSettings["education"];
+    mobilectrl.text=appData.currentUser.selectedUserSettings["mobile"];
+*/
+  }
+*/
 
   Future<void> processSelectedPhotos() async {
 
@@ -180,6 +270,15 @@ class User extends ChangeNotifier {
     profile.putIfAbsent("imagepaths", ()=> imagepaths);
     profile.putIfAbsent("imagedownloadlinks", ()=> imagedownloadlinks);
     profile.putIfAbsent("profilePhotoIndex", ()=> profilePhotoIndex);
+    profile.putIfAbsent("dob", ()=> dob);
+    profile.putIfAbsent("country", ()=> country);
+    profile.putIfAbsent("city", ()=> city);
+    profile.putIfAbsent("gender", ()=> gender);
+    profile.putIfAbsent("about", ()=> about);
+    profile.putIfAbsent("height", ()=> height);
+    profile.putIfAbsent("occupation", ()=> occupation);   
+    profile.putIfAbsent("education", ()=> education);
+    profile.putIfAbsent("mobile", ()=> mobile);
   
 
   /*
@@ -230,8 +329,6 @@ class User extends ChangeNotifier {
     this.first_name=fbuserprofile["first_name"];
     this.last_name=fbuserprofile["last_name"];
 
-  
-
     FS_Util fs = new FS_Util();
    await fs.queryDoc('users','id',id).then((doc){
     if (doc.length==0){
@@ -246,9 +343,8 @@ class User extends ChangeNotifier {
       this.name=doc[0]['name'];
       this.country=doc[0]['country'];
       this.city=doc[0]['city'];
-     
-   //   this.dob=doc[0]['dob'];
-     this.gender=doc[0]['gender'];
+      this.dob=doc[0]['dob'];
+      this.gender=doc[0]['gender'];
       this.about=doc[0]['about'];
       this.height=doc[0]['height'];
       this.occupation=doc[0]['occupation'];
@@ -261,6 +357,9 @@ class User extends ChangeNotifier {
         imagedownloadlinks.add(doc[0]['imagedownloadlinks'][i]);
         imagepaths.add(doc[0]['imagepaths'][i]);
       }
+   
+      
+    
 
 /*
       for(int i=0;i<imagedownloadlinks.length;i++){

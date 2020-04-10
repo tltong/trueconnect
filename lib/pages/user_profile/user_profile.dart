@@ -24,8 +24,18 @@ class UserProfileState extends State<UserProfile> {
 
 @override
   void dispose() {
-    //print('dispose from user profile');
-    //print('state change in photo page : ' + UserSettingsTabsState.statechange.toString());
+
+
+    if (appData.currentUser.UserSettingsChanged()==true){
+
+      appData.currentUser.processSelectedUserSettings().then((id){
+        print('database updated');
+        });
+    }else{
+      print('no change');
+    }
+  
+
     super.dispose();
  
   }
@@ -76,7 +86,17 @@ class UserProfileState extends State<UserProfile> {
                  
 
               },
-            child: Text('Update Database'),
+            child: Text('Update Photo Database'),
+           ),
+
+            RaisedButton(
+              onPressed: () {
+                print('update user settings DB');
+                appData.currentUser.processSelectedUserSettings().then((id){
+                  print('done'); 
+                });
+              },
+            child: Text('Update User Settings'),
            ),
 
            RaisedButton(
@@ -87,8 +107,9 @@ class UserProfileState extends State<UserProfile> {
          //     var userdetails = EditUseSettingsPageState.ExtractUserSettings();
         //      print (userdetails);
                 print(appData.currentUser.selectedUserSettings);
-             
-     
+             //   print(appData.currentUser.name);
+                bool ret = appData.currentUser.UserSettingsChanged();
+                print('user settings changed? ' + ret.toString());
               },
             child: Text('Print parameters'),
            ),

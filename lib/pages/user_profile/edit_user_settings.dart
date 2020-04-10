@@ -68,6 +68,7 @@ String parsedob(String inDob)
  
   }
 
+
 @override
   void dispose() {
 
@@ -82,6 +83,9 @@ String parsedob(String inDob)
     appData.currentUser.selectedUserSettings.putIfAbsent("occupation", ()=> occupationctrl.text);
     appData.currentUser.selectedUserSettings.putIfAbsent("education", ()=> educationString);
      appData.currentUser.selectedUserSettings.putIfAbsent("mobile", ()=> mobilectrl.text);
+  
+  print(appData.currentUser.selectedUserSettings);
+  
    // print(appData.currentUser.selectedUserSettings);
   /*  
     if (dobctrl.text.toString().isNotEmpty){
@@ -142,6 +146,8 @@ String parsedob(String inDob)
          FormBuilderTextField(
                       attribute: 'name',
                       initialValue: namectrl.text,
+                      enabled:false,
+                      readOnly: true,
                       validators: [FormBuilderValidators.required()],
                       decoration: InputDecoration(labelText: "Name"),
                       controller: namectrl
@@ -230,7 +236,7 @@ String parsedob(String inDob)
                       decoration: InputDecoration(labelText: "About me"),
                       keyboardType: TextInputType.multiline,
                       controller:aboutctrl,
-                      onChanged: (value) => (appData.currentUser.about=value),
+               //       onChanged: (value) => (aboutctrl.text=value),
                     ),
   
                     FormBuilderTextField(
