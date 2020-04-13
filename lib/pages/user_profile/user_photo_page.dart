@@ -30,13 +30,14 @@ class UserPhotoPageState extends State<UserPhotoPage>{
     print('**** init from new user photo page ****');
     
     photos = appData.currentUser.getPhotos();
-
+    
     image1=photos.image1;
     image2=photos.image2;
     image3=photos.image3;
     print(image1);
     print(image2);
     print(image3);
+    print('profile photo : ' + profileIndex.toString());
     super.initState();
   }
 
@@ -50,7 +51,7 @@ class UserPhotoPageState extends State<UserPhotoPage>{
   photos.image1=image1;
   photos.image2=image2;
   photos.image3=image3;
-  
+  print('profile photo : ' + profileIndex.toString());
   appData.currentUser.UserPhotoPageCallBack(photos);
 
   super.dispose();
@@ -66,7 +67,7 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
         return SimpleDialog(
           title: const Text('Photo options'),
           children: <Widget>[
-/*
+
             SimpleDialogOption(
               onPressed: () {
 
@@ -74,26 +75,13 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
 
                   switch(imageindex) {
                     case 1:
-                      if (image1!=null){
-                        if (ImageUtil.IsAssetImage(image1)==false){
-                       setprofilestate(1);
-                        }
-                      }
-                       break;
+                      if (image1!=null) profileIndex=1;
+                      break;
                     case 2:
-                      if (image2!=null){
-                   if (ImageUtil.IsAssetImage(image2)==false){
-                       setprofilestate(2);
-                   }
-                      }
-                       break;
+                      if (image2!=null) profileIndex=1;
+                      break;
                     case 3:
-                      if (image3!=null){
-                        if (ImageUtil.IsAssetImage(image3)==false){
-                    
-                       setprofilestate(3);
-                        }
-                      }
+                      if (image3!=null) profileIndex=3;
                       break;
                   }
 
@@ -102,7 +90,7 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
               },
               child: const Text('Make profile photo'),
             ),
-*/
+
 
 
             SimpleDialogOption(

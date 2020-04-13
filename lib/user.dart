@@ -179,14 +179,19 @@ Future<String> processImageFull(Image inImage, String oldpath, String newpath) a
   String retstring;
   
   if(inImage==null){
-    if(oldpath!=null){
+    // this is if user removed a photo. Need to delete old photo on storage
+     if(oldpath!=null){
+       
       await fs.deleteFile(oldpath).then((id){
         retstring=null;
       });
     }
   }else{
+     
+    // this is if user selected a new photo.  Need to delete old photo on storage
     await processImage(inImage,newpath).then((id) async {
-    if (oldpath!=null) {
+    if (oldpath!=null ) {
+        if (ImageUtil.IsNetworkImage(inImage)==false)
         await fs.deleteFile(oldpath).then((ret){});
     }
     retstring=id;
@@ -205,8 +210,10 @@ Future<void> processPhotosSelected() async {
   String image1uploadpath = generateFilePath();
   await processImageFull(photos.selectedImage1,photos.image1uploadpath,image1uploadpath).then((id){
     if (id==null){
+      if (ImageUtil.IsNetworkImage(photos.selectedImage1)==false){
       photos.image1uploadpath=null;
       photos.image1downloadpath=null;
+    }
     }else{
       photos.image1uploadpath=image1uploadpath;
       photos.image1downloadpath=id;
@@ -218,8 +225,10 @@ Future<void> processPhotosSelected() async {
   String image2uploadpath = generateFilePath();
   await processImageFull(photos.selectedImage2,photos.image2uploadpath,image2uploadpath).then((id){
     if (id==null){
+      if (ImageUtil.IsNetworkImage(photos.selectedImage2)==false){
       photos.image2uploadpath=null;
       photos.image2downloadpath=null;
+      }
     }else{
       photos.image2uploadpath=image2uploadpath;
       photos.image2downloadpath=id;
@@ -231,83 +240,15 @@ Future<void> processPhotosSelected() async {
   String image3uploadpath = generateFilePath();
   await processImageFull(photos.selectedImage3,photos.image3uploadpath,image3uploadpath).then((id){
     if (id==null){
+      if (ImageUtil.IsNetworkImage(photos.selectedImage3)==false){
       photos.image3uploadpath=null;
       photos.image3downloadpath=null;
+      }
     }else{
       photos.image3uploadpath=image3uploadpath;
       photos.image3downloadpath=id;
     }
   });
-
-  /*
-  FS_Util fs = new FS_Util();
-  
-  if (photos.selectedImage1==null){
-    if (photos.image1uploadpath!=null){
-      await fs.deleteFile(photos.image1uploadpath).then((id){
-        photos.image1uploadpath=null;
-        photos.image1downloadpath=null;
-      });
-    }
-  }else{
-    String image1uploadpath = generateFilePath();
-    await processImage(photos.selectedImage1,image1uploadpath).then((id) async {
-    if (photos.image1uploadpath!=null) {
-        await fs.deleteFile(photos.image1uploadpath).then((ret){});
-    }
-    photos.image1uploadpath=image1uploadpath;
-    photos.image1downloadpath=id;
-  
-  });
-  }
-*/
-  // image2
-    /*
-  if (photos.selectedImage2==null){
-    if (photos.image2uploadpath!=null){
-      FS_Util fs = new FS_Util();
-      await fs.deleteFile(photos.image2uploadpath).then((id){
-        photos.image2uploadpath=null;
-        photos.image2downloadpath=null;
-      });
-    }
-  }else
-
-  {
-  String image2uploadpath = generateFilePath();
-  await processImage(photos.selectedImage2,image2uploadpath).then((id){
-  
-    photos.image2uploadpath=image2uploadpath;
-    photos.image2downloadpath=id;
-  
-  });
-  }
-  
-  // image3
-
-  if (photos.selectedImage3==null){
-    if (photos.image3uploadpath!=null){
-      FS_Util fs = new FS_Util();
-      await fs.deleteFile(photos.image3uploadpath).then((id){
-        photos.image3uploadpath=null;
-        photos.image3downloadpath=null;
-      });
-    }
-  }else
-  {
-  String image3uploadpath = generateFilePath();
-  await processImage(photos.selectedImage3,image3uploadpath).then((id){
-    if (id != null){
-    if(id.contains('http')){
-        FS_Util fs = new FS_Util();
-        fs.deleteFile(photos.image3uploadpath);
-      }
-    photos.image3uploadpath=image3uploadpath;
-    photos.image3downloadpath=id;
-  }
-  });
-  }
-*/
 
 
   print('after uploads');
@@ -447,12 +388,9 @@ void printUserSettings()
   }
 /*
    bool UserSettingsChanged(){
-
     bool ret = false;
-
     if (name!=appData.currentUser.selectedUserSettings["name"])
       return false;
-
     return true;
 /*
     namectrl.text=appData.currentUser.selectedUserSettings["name"];
@@ -582,7 +520,6 @@ void printUserSettings()
     profile.putIfAbsent("image3downloadpath", ()=> photos.image3downloadpath);
 
   /*
-
     profile.putIfAbsent("last_name", ()=> last_name);
     profile.putIfAbsent("documentID", ()=> documentID);
     profile.putIfAbsent("country", ()=> country);
@@ -677,12 +614,10 @@ void printUserSettings()
 /*
       for(int i=0;i<imagedownloadlinks.length;i++){
           //print(imagedownloadlinks[i]);
-
           ImageUtil.Fetchfromweb(imagedownloadlinks[i]).then( (ret) {
             print('image added');
             images.add(ret);
         });
-
       }
   */   
       return;
@@ -727,8 +662,3 @@ void printUserSettings()
     
   } 
 }
-
-
-
-
-

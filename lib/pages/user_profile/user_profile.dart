@@ -4,6 +4,7 @@ import '../../utils/appdata.dart';
 import '../../utils/fs_util.dart';
 import './user_photos.dart';
 import './edit_user_settings.dart';
+import '../../utils/image_util.dart';
 
 class UserProfile extends StatefulWidget {
   @override
@@ -123,21 +124,7 @@ class UserProfileState extends State<UserProfile> {
 */
            RaisedButton(
               onPressed: () {
-        //      print('Change :  ' + UserPhotosPageState.changed.toString());
-          //    print('********** PRINT PARAMETERS **********');
-          //    print('selected photos on photopage : ' + appData.currentUser.selectedImages.toString());
-          //    print('Profile photo on photopage : ' + UserPhotosPageState.profileIndex.toString());
-          //    print('Profile photo on user selectedProfilePhotoIndex : ' + appData.currentUser.selectedProfilePhotoIndex.toString());
-              
-
-         //     var userdetails = EditUseSettingsPageState.ExtractUserSettings();
-        //      print (userdetails);
-     //           print('Selected user settings : ' + appData.currentUser.selectedUserSettings.toString());
-       //         appData.currentUser.printUserSettings();
-             //   print(appData.currentUser.name);
-           //     bool ret = appData.currentUser.UserSettingsChanged();
-            //    print('user settings changed? ' + ret.toString());
-
+  
               print('***** Print parameters *****');
               appData.currentUser.printPhotosParameters();
 //              appData.currentUser.processPhotosSelected();
@@ -150,6 +137,14 @@ class UserProfileState extends State<UserProfile> {
                 appData.currentUser.processPhotosSelected();
               },
             child: Text('Process photos'),
+           ),
+
+            RaisedButton(
+             onPressed: () {
+                print(ImageUtil.IsNetworkImage(null));
+                print(ImageUtil.IsFileImage(null));
+               },
+            child: Text('Test stuff'),
            ),
 
           ],
