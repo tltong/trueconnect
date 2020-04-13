@@ -34,6 +34,7 @@ class UserPhotoPageState extends State<UserPhotoPage>{
     image1=photos.image1;
     image2=photos.image2;
     image3=photos.image3;
+    profileIndex=photos.profilePhotoIndex;
     print(image1);
     print(image2);
     print(image3);
@@ -51,11 +52,14 @@ class UserPhotoPageState extends State<UserPhotoPage>{
   photos.image1=image1;
   photos.image2=image2;
   photos.image3=image3;
+  photos.profilePhotoIndex=profileIndex;
   print('profile photo : ' + profileIndex.toString());
   appData.currentUser.UserPhotoPageCallBack(photos);
 
   super.dispose();
 }
+
+
 
 
 Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) async {
@@ -78,7 +82,7 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
                       if (image1!=null) profileIndex=1;
                       break;
                     case 2:
-                      if (image2!=null) profileIndex=1;
+                      if (image2!=null) profileIndex=2;
                       break;
                     case 3:
                       if (image3!=null) profileIndex=3;
@@ -91,24 +95,22 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
               child: const Text('Make profile photo'),
             ),
 
-
-
             SimpleDialogOption(
               onPressed: () {
                 setState((){ 
-//                  changed=true;
+
                   switch(imageindex) {
                   case 1:
                     image1=null;
- //                   image1profile=false;
+                    if (profileIndex==1) profileIndex=0;
                     break;
                   case 2:
                     image2=null;
- //                   image2profile=false;
+                    if (profileIndex==2) profileIndex=2;
                     break;
                   case 3:
                     image3=null;
- //                   image3profile=false;
+                    if (profileIndex==3) profileIndex=3;
                     break;
                   }
                 
@@ -151,6 +153,44 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
       });
 }
 
+Container photoFrameFromImage (Image inImage){
+
+  var retimage;
+  switch(ImageUtil.Imagetype(inImage)){
+
+    case 'NetworkImage':
+      retimage = new NetworkImage(ImageUtil.ExtractImageString(inImage));
+      return new Container(
+        decoration: new BoxDecoration(
+          border: new Border.all(
+            color: Colors.green,
+            width: 3.0,
+            style: BorderStyle.solid
+          ),
+          image: new DecorationImage(
+              image: retimage,
+          )
+        ));
+    break;
+
+    case 'FileImage':
+      retimage = new FileImage(ImageUtil.FileFromImage(inImage));
+       return new Container(
+        decoration: new BoxDecoration(
+          border: new Border.all(
+            color: Colors.green,
+            width: 3.0,
+            style: BorderStyle.solid
+          ),
+          image: new DecorationImage(
+              image: retimage,
+          )
+        ));
+    break;
+
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +208,8 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
             GestureDetector(
 
 //               child: Image.asset('images/addphoto.png'),
-           child: image1==null?Image.asset('images/addphoto.png'):image1,
+           child: image1==null?Image.asset('images/addphoto.png'):
+           profileIndex==1?photoFrameFromImage(image1):image1,
             
             onTap: () {
               _asyncSimpleDialog(context,1);
@@ -176,7 +217,8 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
             ),
             
             GestureDetector(
-            child: image2==null?Image.asset('images/addphoto.png'):image2,
+            child: image2==null?Image.asset('images/addphoto.png'):
+            profileIndex==2?photoFrameFromImage(image2):image2,
             
             onTap: () {
                 _asyncSimpleDialog(context,2);
@@ -184,7 +226,8 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
             ),
 
             GestureDetector(
-            child: image3==null?Image.asset('images/addphoto.png'):image3,
+            child: image3==null?Image.asset('images/addphoto.png'):
+            profileIndex==3?photoFrameFromImage(image3):image3,
 
             onTap: () {
                 _asyncSimpleDialog(context,3);

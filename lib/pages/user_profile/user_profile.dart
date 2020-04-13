@@ -141,8 +141,7 @@ class UserProfileState extends State<UserProfile> {
 
             RaisedButton(
              onPressed: () {
-                print(ImageUtil.IsNetworkImage(null));
-                print(ImageUtil.IsFileImage(null));
+                print(appData.currentUser.photos.profilePhotoIndexDB);
                },
             child: Text('Test stuff'),
            ),

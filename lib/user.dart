@@ -12,7 +12,7 @@ import './pages/user_profile/user_photos.dart';
 
 
 class Photos {
-  int profilePhotoIndex;
+  int profilePhotoIndex,profilePhotoIndexDB;
   Image image1,image2,image3;
   Image selectedImage1,selectedImage2,selectedImage3;
 
@@ -78,6 +78,13 @@ class User extends ChangeNotifier {
     FS_Util fs = new FS_Util();
   }
 
+bool photosChanged(){
+
+
+
+}
+
+
 void initialisePhotos(){
   photos.selectedImage1=photos.image1downloadpath==null?null:(ImageUtil.NetworkImageFromLink(photos.image1downloadpath));
 
@@ -85,39 +92,19 @@ void initialisePhotos(){
 
   photos.selectedImage3=photos.image3downloadpath==null?null:(ImageUtil.NetworkImageFromLink(photos.image3downloadpath));
 
+  photos.profilePhotoIndex=photos.profilePhotoIndexDB;
 }
 
 Photos getPhotos(){
 
   Photos ret = new Photos();
 
-  print('*** from user get photos *** ');
-
-  print('photos.selectedImage1');
-  print(photos.selectedImage1);
-
-  print('photos.selectedImage2');
-  print(photos.selectedImage2);
-  
-  print('photos.selectedImage3');
-  print(photos.selectedImage3);
-
-
   ret.image1=photos.selectedImage1;
 
   ret.image2=photos.selectedImage2;
   ret.image3=photos.selectedImage3;
 
-
- // ret.image1 = photos.selectedImage1==null?
- // (imagedownloadlinks.length>0?ImageUtil.NetworkImageFromLink(imagedownloadlinks[0]):null):(photos.selectedImage1);
- 
- // ret.image2 = photos.selectedImage2==null?
- // (imagedownloadlinks.length>1?ImageUtil.NetworkImageFromLink(imagedownloadlinks[1]):null):(photos.selectedImage2);
-
- // ret.image3 = photos.selectedImage3==null?
- // (imagedownloadlinks.length>2?ImageUtil.NetworkImageFromLink(imagedownloadlinks[2]):null):(photos.selectedImage3);
-
+  ret.profilePhotoIndex=photos.profilePhotoIndex;
   return ret;
 }
 
@@ -126,12 +113,15 @@ void UserPhotoPageCallBack(Photos inphotos){
   photos.selectedImage1=inphotos.image1;
   photos.selectedImage2=inphotos.image2;
   photos.selectedImage3=inphotos.image3;
+//  print('inside user profile photo index : ' + photos.profilePhotoIndex.toString());
+  photos.profilePhotoIndex=inphotos.profilePhotoIndex;
 
 }
 void printPhotosParameters(){
     print('selectedImage1 : ' + photos.selectedImage1.toString());
     print('selectedImage2 : ' + photos.selectedImage2.toString());
     print('selectedImage3 : ' + photos.selectedImage3.toString());
+    print('profile photo index : ' + photos.profilePhotoIndex.toString());
 }
 
 Future<String> processImage(Image image, String path) async {
@@ -252,12 +242,14 @@ Future<void> processPhotosSelected() async {
 
 
   print('after uploads');
+  print(photos.profilePhotoIndex);
 /*
   print(photos.image1downloadpath);
   print(photos.image2downloadpath);
   print(photos.image3downloadpath);
 */
   await updateUserDB();
+  photos.profilePhotoIndexDB=photos.profilePhotoIndex;
   initialisePhotos();
 
 
@@ -518,6 +510,9 @@ void printUserSettings()
     profile.putIfAbsent("image2downloadpath", ()=> photos.image2downloadpath);
     profile.putIfAbsent("image3uploadpath", ()=> photos.image3uploadpath);
     profile.putIfAbsent("image3downloadpath", ()=> photos.image3downloadpath);
+    profile['profilePhotoIndex'] = photos.profilePhotoIndex.toString();
+
+    
 
   /*
     profile.putIfAbsent("last_name", ()=> last_name);
@@ -600,13 +595,15 @@ void printUserSettings()
       this.photos.image3uploadpath=doc[0]['image3uploadpath'];
       this.photos.image3downloadpath=doc[0]['image3downloadpath'];
 
-      initialisePhotos();
+     
       
       for (int i=0;i<doc[0]['imagedownloadlinks'].length;i++){
         imagedownloadlinks.add(doc[0]['imagedownloadlinks'][i]);
         imagepaths.add(doc[0]['imagepaths'][i]);
       }
-      this.profilePhotoIndex=doc[0]['profilePhotoIndex'];
+      photos.profilePhotoIndexDB=int.parse(doc[0]['profilePhotoIndex']);
+
+      initialisePhotos();
    
       
     
