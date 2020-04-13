@@ -29,15 +29,14 @@ final PageStorageBucket bucket = PageStorageBucket();
 @override
   void initState() {
     print('************** USER PHOTOS INIT ********************');
-    print('selected photos : ' + appData.currentUser.selectedImages.toString());
-    print('imagedownloadlinks : ' + appData.currentUser.imagedownloadlinks.toString());
+    print('image1profile before : ' + image1profile.toString() + ', image2profile :' + image2profile.toString() + ', image3profile : ' + image3profile.toString());
+
+    profileIndex = appData.currentUser.selectedProfilePhotoIndex;
+  
     image1profile=false;
     image2profile=false;
     image3profile=false;
-    //changed=false;
-
-   // profileIndex = appData.currentUser.selectedProfilePhotoIndex;
-
+    
     switch(profileIndex){
       case 0:
         image1profile=true;
@@ -49,31 +48,61 @@ final PageStorageBucket bucket = PageStorageBucket();
         image3profile=true;
         break;
     }
+  
+    print('selected photos : ' + appData.currentUser.selectedImages.toString());
+    print('imagedownloadlinks : ' + appData.currentUser.imagedownloadlinks.toString());
+    print('profile index : ' + profileIndex.toString());
+     print('image1profile after : ' + image1profile.toString() + ', image2profile :' + image2profile.toString() + ', image3profile : ' + image3profile.toString());
+  
+ 
+    print('selected images : '+ appData.currentUser.selectedImages.toString());
+    print('image type : ' + ImageUtil.Imagetype(appData.currentUser.selectedImages[0]));
+    print('image string ' + ImageUtil.ExtractImageStringByType(appData.currentUser.selectedImages[0],ImageUtil.Imagetype(appData.currentUser.selectedImages[0])));
+    
+    image1=appData.currentUser.selectedImages.length<1?null:appData.currentUser.selectedImages[0];
+    image2=appData.currentUser.selectedImages.length>1?appData.currentUser.selectedImages[1]:null;
+    image3=appData.currentUser.selectedImages.length>1?appData.currentUser.selectedImages[2]:null;
 
-    image1=null;
-    image2=null;
-    image3=null;
+/*
+   // print(appData.currentUser.selectedImages[0].toString()); 
+      if (appData.currentUser.selectedImages.length<1){
+        print('selectedImages[0] empty');
+      }else{
+        print('selectedImages[0] not empty');
+        print(appData.currentUser.selectedImages[0]);
+        print('image type : ' + ImageUtil.Imagetype(appData.currentUser.selectedImages[0]));
+        String imageString = ImageUtil.ExtractImageStringByType(appData.currentUser.selectedImages[0], 'AssetImage');
+        print('image string : ' + imageString);
+//        image1=Image.asset('images/addphoto.png');
+//        image1=appData.currentUser.selectedImages[0];
+//        image1=new Image.asset(imageString);
+       // print(image1.toString());
+      }
+*/
+//    image1=appData.currentUser.selectedImages.length<1?null:appData.currentUser.selectedImages[0];
+ //   image2=appData.currentUser.selectedImages.length>1?appData.currentUser.selectedImages[1]:null;
+ //   image3=appData.currentUser.selectedImages.length>1?appData.currentUser.selectedImages[2]:null;
 
+
+/*
     if (appData.currentUser.selectedImages.length<1){
-
     if (appData.currentUser.imagedownloadlinks.length>0){
       image1=new Image.network(appData.currentUser.imagedownloadlinks[0]);
     }
-
     if (appData.currentUser.imagedownloadlinks.length>1){
       image2=new Image.network(appData.currentUser.imagedownloadlinks[1]);
     }
-
     if (appData.currentUser.imagedownloadlinks.length>2){
       image3=new Image.network(appData.currentUser.imagedownloadlinks[2]);
     }
+    }    
+     else{
 
-    }
-    
-    else{
-
-      if (appData.currentUser.selectedImages.length>0){
-        if (ImageUtil.IsAssetImage(image1)==false)
+       if (appData.currentUser.selectedImages.length>0){
+        if (ImageUtil.IsAssetImage(appData.currentUser.selectedImages[0])==true)
+        print('image1 is asset image');
+         image1=null;
+      }else{
           image1=appData.currentUser.selectedImages[0];
       }
       if (appData.currentUser.selectedImages.length>1){
@@ -84,9 +113,8 @@ final PageStorageBucket bucket = PageStorageBucket();
         if (ImageUtil.IsAssetImage(image1)==false)
           image3=appData.currentUser.selectedImages[2];
       }
-
     }
-  
+*/
   
     super.initState();
  
@@ -123,7 +151,7 @@ final PageStorageBucket bucket = PageStorageBucket();
     else
      appData.currentUser.selectedImages.add(Image.asset('images/addphoto.png'));
 
-    appData.currentUser.selectedProfilePhotoIndex=0;
+   // appData.currentUser.selectedProfilePhotoIndex=0;
 
     profileIndex=0;
     if (image1profile==true)
@@ -136,10 +164,14 @@ final PageStorageBucket bucket = PageStorageBucket();
       profileIndex=2;
 
   //  print("selected profile photo : " + appData.currentUser.selectedProfilePhotoIndex.toString());
-   
+   appData.currentUser.selectedProfilePhotoIndex=profileIndex;
    print('************** USER PHOTOS DISPOSE ********************');
-     print('selected photos : ' + appData.currentUser.selectedImages.toString());
+    print('selected photos : ' + appData.currentUser.selectedImages.toString());
     print('imagedownloadlinks : ' + appData.currentUser.imagedownloadlinks.toString());
+    print('profile photo : ' + profileIndex.toString());
+    print('image1profile : ' + image1profile.toString() + ', image2profile :' + image2profile.toString() + ', image3profile : ' + image2profile.toString());
+    print('changed : ' + changed.toString());
+
     
 
     super.dispose();
@@ -162,6 +194,54 @@ Container photoFrame (File inImage){
 Container photoFrameFromImage (Image inImage){
 
   var retimage;
+
+  switch(ImageUtil.ExtractImageString(inImage)){
+
+    // this code crashes a crash
+    case 'AssetImage':
+      retimage=inImage;
+        return new Container(
+        decoration: new BoxDecoration(
+          image: new DecorationImage(
+              image: retimage,
+          )
+        ));
+    break;
+
+    case 'NetworkImage':
+      retimage = new NetworkImage(ImageUtil.ExtractImageString(inImage));
+      return new Container(
+        decoration: new BoxDecoration(
+          border: new Border.all(
+            color: Colors.green,
+            width: 3.0,
+            style: BorderStyle.solid
+          ),
+          image: new DecorationImage(
+              image: retimage,
+          )
+        ));
+    break;
+
+    case 'FileImage':
+      retimage = new FileImage(ImageUtil.FileFromImage(inImage));
+       return new Container(
+        decoration: new BoxDecoration(
+          border: new Border.all(
+            color: Colors.green,
+            width: 3.0,
+            style: BorderStyle.solid
+          ),
+          image: new DecorationImage(
+              image: retimage,
+          )
+        ));
+    break;
+
+  }
+
+
+
   if (inImage.toString().contains('NetworkImage')){
     retimage = new NetworkImage(ImageUtil.ExtractImageString(inImage));
   }else{
@@ -339,8 +419,16 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
         children: <Widget>[
      
             GestureDetector(
-            child: image1==null?Image.asset('images/addphoto.png'):
+
+//               child: Image.asset('images/addphoto.png'),
+           child: 
+            image1==null?
+            Image.asset('images/addphoto.png'):
+            ImageUtil.Imagetype(image1)=='AssetImage'?Image.asset('images/addphoto.png'):
             image1profile==true?photoFrameFromImage(image1):image1,
+
+
+  //          image1profile==true?photoFrameFromImage(image1):image1,
             
             onTap: () {
               _asyncSimpleDialog(context,1);
@@ -348,17 +436,28 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
             ),
             
             GestureDetector(
-            child: image2==null?Image.asset('images/addphoto.png'):
+            child: 
+            
+            image2==null?
+            Image.asset('images/addphoto.png'):
+            ImageUtil.Imagetype(image2)=='AssetImage'?Image.asset('images/addphoto.png'):
             image2profile==true?photoFrameFromImage(image2):image2,
+
+            
+            
             onTap: () {
                 _asyncSimpleDialog(context,2);
             },
             ),
 
             GestureDetector(
-            child: image3==null?Image.asset('images/addphoto.png'):
+            child: 
+            
+            image3==null?
+            Image.asset('images/addphoto.png'):
+            ImageUtil.Imagetype(image3)=='AssetImage'?Image.asset('images/addphoto.png'):
             image3profile==true?photoFrameFromImage(image3):image3,
- 
+
             onTap: () {
             
                 _asyncSimpleDialog(context,3);

@@ -223,7 +223,7 @@ _getAddressFromLatLng() async {
                     child: RaisedButton(
                       child: Text("Login with Facebook"),
                       onPressed: () {
-                         
+                     
                           LoginUtil login = LoginUtil();
                           login.LoginWithFB().then((ret){
                               User currentUser = User();
@@ -231,12 +231,10 @@ _getAddressFromLatLng() async {
                                
                                 appData.currentUser = currentUser;
                               
-                                print(appData.currentUser.name);
-                                print(appData.currentUser.country);
-                                print(appData.currentUser.city);
-                                print(appData.currentUser.dob);
+                  
                                 appData.currentUser.initialiseUserSettings();
-                                print(appData.currentUser.selectedUserSettings);
+                                appData.currentUser.initialiseUserPhotos();
+                                appData.currentUser.printUserSettings();
                                 
                                
 

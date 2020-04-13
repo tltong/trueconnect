@@ -32,9 +32,24 @@ class UserProfileState extends State<UserProfile> {
         print('database updated');
         });
     }else{
-      print('no change');
+      print('no change to user details');
     }
   
+  if (UserPhotosPageState.changed==true)
+            {
+               print('update database');
+              appData.currentUser.processSelectedPhotos().then((id){
+             //   print('profile photo index : ' + appData.currentUser.profilePhotoIndex.toString());
+                appData.currentUser.updateUserDB();
+                print('database updated');
+                appData.currentUser.initialiseUserPhotos();
+//                UserPhotosPageState.profileIndex=appData.currentUser.profilePhotoIndex;
+              });
+          }
+             else{
+              print('no change to user photos');
+            }
+
 
     super.dispose();
  
@@ -58,33 +73,40 @@ class UserProfileState extends State<UserProfile> {
     ),
     
     body: 
+
+  //    ListView(
+  //    children:[
+    ListView(
+    children:
+    [
+         Image.asset(
+              'images/jap.jpg',
+              width: 600,
+              height: 240,
+              fit: BoxFit.cover,
+            ),
+
        new Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            
+            /*
              RaisedButton(
               onPressed: () {
-              
-            
             if (UserPhotosPageState.changed==true)
-            
             {
                print('update database');
               appData.currentUser.processSelectedPhotos().then((id){
              //   print('profile photo index : ' + appData.currentUser.profilePhotoIndex.toString());
                 appData.currentUser.updateUserDB();
                 print('database updated');
-                UserPhotosPageState.changed=false;
-                UserPhotosPageState.profileIndex=appData.currentUser.profilePhotoIndex;
+                appData.currentUser.initialiseUserPhotos();
+//                UserPhotosPageState.profileIndex=appData.currentUser.profilePhotoIndex;
               });
           }
              else{
               print('no change');
             }
-
-                 
-
               },
             child: Text('Update Photo Database'),
            ),
@@ -98,26 +120,44 @@ class UserProfileState extends State<UserProfile> {
               },
             child: Text('Update User Settings'),
            ),
-
+*/
            RaisedButton(
               onPressed: () {
-              
         //      print('Change :  ' + UserPhotosPageState.changed.toString());
-        //      print('Profile photo :  ' + UserPhotosPageState.profileIndex.toString());
+          //    print('********** PRINT PARAMETERS **********');
+          //    print('selected photos on photopage : ' + appData.currentUser.selectedImages.toString());
+          //    print('Profile photo on photopage : ' + UserPhotosPageState.profileIndex.toString());
+          //    print('Profile photo on user selectedProfilePhotoIndex : ' + appData.currentUser.selectedProfilePhotoIndex.toString());
+              
+
          //     var userdetails = EditUseSettingsPageState.ExtractUserSettings();
         //      print (userdetails);
-                print(appData.currentUser.selectedUserSettings);
+     //           print('Selected user settings : ' + appData.currentUser.selectedUserSettings.toString());
+       //         appData.currentUser.printUserSettings();
              //   print(appData.currentUser.name);
-                bool ret = appData.currentUser.UserSettingsChanged();
-                print('user settings changed? ' + ret.toString());
+           //     bool ret = appData.currentUser.UserSettingsChanged();
+            //    print('user settings changed? ' + ret.toString());
+
+              print('***** Print parameters *****');
+              appData.currentUser.printPhotosParameters();
+//              appData.currentUser.processPhotosSelected();
               },
             child: Text('Print parameters'),
+           ),
+
+                   RaisedButton(
+              onPressed: () {
+                appData.currentUser.processPhotosSelected();
+              },
+            child: Text('Process photos'),
            ),
 
           ],
         )
       ),
     
+    ]),
+
         );
     
   }

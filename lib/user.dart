@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter/foundation.dart';
@@ -9,6 +8,19 @@ import 'dart:io';
 import './utils/image_util.dart';
 import 'dart:math';
 import './pages/user_profile/user_photos.dart';
+
+
+
+class Photos {
+  int profilePhotoIndex;
+  Image image1,image2,image3;
+  Image selectedImage1,selectedImage2,selectedImage3;
+
+  String image1uploadpath,image2uploadpath,image3uploadpath;
+  String image1downloadpath,image2downloadpath,image3downloadpath;
+
+
+}
 
 
 class User extends ChangeNotifier {
@@ -23,6 +35,7 @@ class User extends ChangeNotifier {
   String dob;
 
   String id;
+  Photos photos;
 
   String testName = 'test';
   Map fbuserprofile;
@@ -41,9 +54,9 @@ class User extends ChangeNotifier {
   String last_name;
   int profilePhotoIndex;
   int selectedProfilePhotoIndex=-1;
-  
 
-  File image1,image2;
+
+  Image image1,image2,image3;
   List<Image> selectedImages = new List<Image>();
   List<File> images = new List<File>();
   List<String> imagepaths = new List<String>();
@@ -64,6 +77,278 @@ class User extends ChangeNotifier {
 
     FS_Util fs = new FS_Util();
   }
+
+void initialisePhotos(){
+  photos.selectedImage1=photos.image1downloadpath==null?null:(ImageUtil.NetworkImageFromLink(photos.image1downloadpath));
+
+  photos.selectedImage2=photos.image2downloadpath==null?null:(ImageUtil.NetworkImageFromLink(photos.image2downloadpath));
+
+  photos.selectedImage3=photos.image3downloadpath==null?null:(ImageUtil.NetworkImageFromLink(photos.image3downloadpath));
+
+}
+
+Photos getPhotos(){
+
+  Photos ret = new Photos();
+
+  print('*** from user get photos *** ');
+
+  print('photos.selectedImage1');
+  print(photos.selectedImage1);
+
+  print('photos.selectedImage2');
+  print(photos.selectedImage2);
+  
+  print('photos.selectedImage3');
+  print(photos.selectedImage3);
+
+
+  ret.image1=photos.selectedImage1;
+
+  ret.image2=photos.selectedImage2;
+  ret.image3=photos.selectedImage3;
+
+
+ // ret.image1 = photos.selectedImage1==null?
+ // (imagedownloadlinks.length>0?ImageUtil.NetworkImageFromLink(imagedownloadlinks[0]):null):(photos.selectedImage1);
+ 
+ // ret.image2 = photos.selectedImage2==null?
+ // (imagedownloadlinks.length>1?ImageUtil.NetworkImageFromLink(imagedownloadlinks[1]):null):(photos.selectedImage2);
+
+ // ret.image3 = photos.selectedImage3==null?
+ // (imagedownloadlinks.length>2?ImageUtil.NetworkImageFromLink(imagedownloadlinks[2]):null):(photos.selectedImage3);
+
+  return ret;
+}
+
+void UserPhotoPageCallBack(Photos inphotos){
+
+  photos.selectedImage1=inphotos.image1;
+  photos.selectedImage2=inphotos.image2;
+  photos.selectedImage3=inphotos.image3;
+
+}
+void printPhotosParameters(){
+    print('selectedImage1 : ' + photos.selectedImage1.toString());
+    print('selectedImage2 : ' + photos.selectedImage2.toString());
+    print('selectedImage3 : ' + photos.selectedImage3.toString());
+}
+
+Future<String> processImage(Image image, String path) async {
+ 
+ 
+  String retstring;
+ if (image==null) return null;
+
+  switch(ImageUtil.Imagetype(image)){
+    case 'AssetImage':
+    case 'NetworkImage':
+     // print('AssetImage or NetworkImage');
+      retstring=null;
+      break;
+
+    case 'FileImage':
+  //    print('FileImage');
+       File file = ImageUtil.FileFromImage(image);
+      
+       FS_Util fs = new FS_Util();
+
+       await fs.uploadFile(path,file).then((id){
+    //     print('uploading done : ' + id);
+       
+        retstring=id;
+       });
+
+      break;
+  }
+  return retstring;
+
+}
+
+String generateFilePath(){
+  var rng = new Random();
+  int index = rng.nextInt(10000);  
+  String path = 'memberphotos/'+appData.currentUser.id+'/'+'image'+index.toString();
+  return path;
+}
+
+
+Future<String> processImageFull(Image inImage, String oldpath, String newpath) async {
+
+  FS_Util fs = new FS_Util();
+  String retstring;
+  
+  if(inImage==null){
+    if(oldpath!=null){
+      await fs.deleteFile(oldpath).then((id){
+        retstring=null;
+      });
+    }
+  }else{
+    await processImage(inImage,newpath).then((id) async {
+    if (oldpath!=null) {
+        await fs.deleteFile(oldpath).then((ret){});
+    }
+    retstring=id;
+  
+  });
+
+  }
+  return retstring;
+
+}
+
+Future<void> processPhotosSelected() async {
+  
+  // image1
+
+  String image1uploadpath = generateFilePath();
+  await processImageFull(photos.selectedImage1,photos.image1uploadpath,image1uploadpath).then((id){
+    if (id==null){
+      photos.image1uploadpath=null;
+      photos.image1downloadpath=null;
+    }else{
+      photos.image1uploadpath=image1uploadpath;
+      photos.image1downloadpath=id;
+    }
+  });
+
+  // image2
+
+  String image2uploadpath = generateFilePath();
+  await processImageFull(photos.selectedImage2,photos.image2uploadpath,image2uploadpath).then((id){
+    if (id==null){
+      photos.image2uploadpath=null;
+      photos.image2downloadpath=null;
+    }else{
+      photos.image2uploadpath=image2uploadpath;
+      photos.image2downloadpath=id;
+    }
+  });
+
+  // image3
+
+  String image3uploadpath = generateFilePath();
+  await processImageFull(photos.selectedImage3,photos.image3uploadpath,image3uploadpath).then((id){
+    if (id==null){
+      photos.image3uploadpath=null;
+      photos.image3downloadpath=null;
+    }else{
+      photos.image3uploadpath=image3uploadpath;
+      photos.image3downloadpath=id;
+    }
+  });
+
+  /*
+  FS_Util fs = new FS_Util();
+  
+  if (photos.selectedImage1==null){
+    if (photos.image1uploadpath!=null){
+      await fs.deleteFile(photos.image1uploadpath).then((id){
+        photos.image1uploadpath=null;
+        photos.image1downloadpath=null;
+      });
+    }
+  }else{
+    String image1uploadpath = generateFilePath();
+    await processImage(photos.selectedImage1,image1uploadpath).then((id) async {
+    if (photos.image1uploadpath!=null) {
+        await fs.deleteFile(photos.image1uploadpath).then((ret){});
+    }
+    photos.image1uploadpath=image1uploadpath;
+    photos.image1downloadpath=id;
+  
+  });
+  }
+*/
+  // image2
+    /*
+  if (photos.selectedImage2==null){
+    if (photos.image2uploadpath!=null){
+      FS_Util fs = new FS_Util();
+      await fs.deleteFile(photos.image2uploadpath).then((id){
+        photos.image2uploadpath=null;
+        photos.image2downloadpath=null;
+      });
+    }
+  }else
+
+  {
+  String image2uploadpath = generateFilePath();
+  await processImage(photos.selectedImage2,image2uploadpath).then((id){
+  
+    photos.image2uploadpath=image2uploadpath;
+    photos.image2downloadpath=id;
+  
+  });
+  }
+  
+  // image3
+
+  if (photos.selectedImage3==null){
+    if (photos.image3uploadpath!=null){
+      FS_Util fs = new FS_Util();
+      await fs.deleteFile(photos.image3uploadpath).then((id){
+        photos.image3uploadpath=null;
+        photos.image3downloadpath=null;
+      });
+    }
+  }else
+  {
+  String image3uploadpath = generateFilePath();
+  await processImage(photos.selectedImage3,image3uploadpath).then((id){
+    if (id != null){
+    if(id.contains('http')){
+        FS_Util fs = new FS_Util();
+        fs.deleteFile(photos.image3uploadpath);
+      }
+    photos.image3uploadpath=image3uploadpath;
+    photos.image3downloadpath=id;
+  }
+  });
+  }
+*/
+
+
+  print('after uploads');
+/*
+  print(photos.image1downloadpath);
+  print(photos.image2downloadpath);
+  print(photos.image3downloadpath);
+*/
+  await updateUserDB();
+  initialisePhotos();
+
+
+}
+
+void printUserSettings()
+{
+  print('name : ' + name);
+  print('country :' + country);
+  print('city : ' + city);
+  print('dob : ' + dob);
+  print('gender : ' + gender);
+  print('about : ' + about);
+  print('height : ' + height);
+  print('occupation : ' + occupation);
+  print('education : ' + education);
+  print('mobile : ' + mobile);
+ // print('imagepaths : ' + imagepaths.toString());
+ // print('imagedownloadlinks : ' + imagedownloadlinks.toString());
+ // print('profilePhotoIndex : ' + profilePhotoIndex.toString());
+  
+  print('image1uploadpath : ' + photos.image1uploadpath.toString());
+
+  print('image1downloadpath : ' + photos.image1downloadpath.toString());
+  print('image2uploadpath : ' + photos.image2uploadpath.toString());
+  print('image2downloadpath : ' + photos.image2downloadpath.toString());
+  print('image3uploadpath : ' + photos.image3uploadpath.toString());
+  print('image3downloadpath : ' + photos.image3downloadpath.toString());
+
+
+
+}
 
 // return true if settings are changed
   bool UserSettingsChanged()
@@ -115,7 +400,17 @@ class User extends ChangeNotifier {
     appData.currentUser.selectedUserSettings["education"] = education;
     appData.currentUser.selectedUserSettings["mobile"] = mobile;
 
+    initialisePhotos();
+  }
 
+  void initialiseUserPhotos(){
+    selectedProfilePhotoIndex=profilePhotoIndex;
+    UserPhotosPageState.changed=false;
+
+    selectedImages.clear();
+    for(int i=0; i<imagedownloadlinks.length;i++){
+      selectedImages.add(Image.network(appData.currentUser.imagedownloadlinks[i]));
+    }
 
   }
 
@@ -234,8 +529,8 @@ class User extends ChangeNotifier {
     imagepaths=temp_imagepaths;
 
     selectedImages.clear();
-   // print('profile photo index : ' + appData.currentUser.profilePhotoIndex.toString());
-
+    
+    initialiseUserPhotos();
 
   }
 
@@ -279,7 +574,12 @@ class User extends ChangeNotifier {
     profile.putIfAbsent("occupation", ()=> occupation);   
     profile.putIfAbsent("education", ()=> education);
     profile.putIfAbsent("mobile", ()=> mobile);
-  
+    profile.putIfAbsent("image1uploadpath", ()=> photos.image1uploadpath);
+    profile.putIfAbsent("image1downloadpath", ()=> photos.image1downloadpath);
+    profile.putIfAbsent("image2uploadpath", ()=> photos.image2uploadpath);
+    profile.putIfAbsent("image2downloadpath", ()=> photos.image2downloadpath);
+    profile.putIfAbsent("image3uploadpath", ()=> photos.image3uploadpath);
+    profile.putIfAbsent("image3downloadpath", ()=> photos.image3downloadpath);
 
   /*
 
@@ -318,7 +618,7 @@ class User extends ChangeNotifier {
 
   Future<void> initialise(Map profile) async {
 
-
+    photos= new Photos();
     fbuserprofile = profile;
     this.id=profile["id"];
 
@@ -352,11 +652,24 @@ class User extends ChangeNotifier {
       this.email=doc[0]['email'];
       this.mobile=doc[0]['mobile'];
       this.documentID=doc[0]['documentID'];
+
+
+      this.photos.image1uploadpath=doc[0]['image1uploadpath'];
+      this.photos.image1downloadpath=doc[0]['image1downloadpath'];
+
+      this.photos.image2uploadpath=doc[0]['image2uploadpath'];
+      this.photos.image2downloadpath=doc[0]['image2downloadpath'];
+
+      this.photos.image3uploadpath=doc[0]['image3uploadpath'];
+      this.photos.image3downloadpath=doc[0]['image3downloadpath'];
+
+      initialisePhotos();
       
       for (int i=0;i<doc[0]['imagedownloadlinks'].length;i++){
         imagedownloadlinks.add(doc[0]['imagedownloadlinks'][i]);
         imagepaths.add(doc[0]['imagepaths'][i]);
       }
+      this.profilePhotoIndex=doc[0]['profilePhotoIndex'];
    
       
     

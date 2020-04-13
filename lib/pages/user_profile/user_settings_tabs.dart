@@ -14,6 +14,7 @@ import '../../utils/location_util.dart';
 import '../../utils/appdata.dart';
 import 'edit_user_settings.dart';
 import 'user_photos.dart';
+import './user_photo_page.dart';
 
 enum photoSelection { Gallery, Facebook }
 
@@ -139,7 +140,8 @@ class UserSettingsTabsState extends State<UserSettingsTabs>  {
               
               //PhotoGrid(context),
               //Icon(Icons.directions_walk),
-              UserPhotosPage(),
+              UserPhotoPage(),
+    //          UserPhotosPage(),
               EditUseSettingsPage(),
               //UserDetails(),
               Icon(Icons.directions_bike),

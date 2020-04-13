@@ -19,14 +19,71 @@ static Future<File> pickImageFromGallery() async {
     return tempImage;
   }
 
-static bool IsAssetImage(Image image){
 
+static String Imagetype(Image image){
+
+  if (IsAssetImage(image)==true)
+    return 'AssetImage';
+
+  if (IsFileImage(image)==true)
+    return 'FileImage';
+
+  if (IsNetworkImage(image)==true)
+    return 'NetworkImage';
+}
+
+static String ExtractImageStringByType(Image image, String imagetype){
+
+  switch(imagetype){
+    case 'AssetImage':
+      int index1 = image.toString().indexOf("images");
+      if (index1==-1) return null;
+      int index2 = image.toString().lastIndexOf("\"");
+      return image.toString().substring(index1,index2).toString();
+    break;
+
+    case 'FileImage':
+      int index1 = image.toString().indexOf("/data");
+      if (index1==-1) return null;
+      int index2 = image.toString().lastIndexOf("\"");
+      return image.toString().substring(index1,index2).toString();
+    break;
+
+    case 'NetworkImage':
+      int index1 = image.toString().indexOf("http");
+      if (index1==-1) return null;
+      int index2 = image.toString().lastIndexOf("\"");
+      return image.toString().substring(index1,index2).toString();
+    break;
+  }
+}
+
+static bool IsAssetImage(Image image){
   if(image.toString().contains('AssetImage')){
     return true;
   }else{
     return false;
   }
+}
+static bool IsFileImage(Image image){
+  if(image.toString().contains('FileImage')){
+    return true;
+  }else{
+    return false;
+  }
+}
+static bool IsNetworkImage(Image image){
+  if(image.toString().contains('NetworkImage')){
+    return true;
+  }else{
+    return false;
+  }
+}
 
+static Image NetworkImageFromLink (String link){
+    Image ret;
+    ret = new Image.network(link);
+    return ret;
 }
 
 static String ExtractImageString (Image image){
@@ -54,9 +111,7 @@ static File FileFromImage (Image image){
 
   File file = new File(filepath);
   
-  
   return file;
-  
                  
 }
 
