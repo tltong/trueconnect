@@ -19,6 +19,35 @@ class Photos {
   String image1uploadpath,image2uploadpath,image3uploadpath;
   String image1downloadpath,image2downloadpath,image3downloadpath;
 
+  test(){
+    print(selectedImage1);
+  }
+
+  List<Image> getSelectedPhotos(){
+    List<Image> ret = new  List<Image>();
+
+    ret.add(selectedImage1);
+    ret.add(selectedImage2);
+    ret.add(selectedImage3);
+
+    if(profilePhotoIndex!=0){
+      Image profileImage = ret[profilePhotoIndex-1];
+      ret.remove(profileImage);
+      ret.insert(0, profileImage);
+    }else{
+      //no photo selected
+      ret.removeWhere((item) => item == null);
+    }
+    return ret;
+  }
+
+  void printPhotosParameters(){
+    print('selectedImage1 : ' + selectedImage1.toString());
+    print('selectedImage2 : ' + selectedImage2.toString());
+    print('selectedImage3 : ' + selectedImage3.toString());
+    print('profile photo index : ' + profilePhotoIndex.toString());
+}
+
 
 }
 
@@ -80,7 +109,29 @@ class User extends ChangeNotifier {
 
 bool photosChanged(){
 
+  // first check profile pic
 
+  bool ret=false;
+  
+  if (photos.profilePhotoIndex!=photos.profilePhotoIndexDB) return true;
+
+  if (ImageUtil.Imagetype(photos.selectedImage1)=='FileImage') return true;
+  if (ImageUtil.Imagetype(photos.selectedImage2)=='FileImage') return true;
+  if (ImageUtil.Imagetype(photos.selectedImage3)=='FileImage') return true;
+  
+  int i=0;
+  if (photos.image1downloadpath!=null) i++;
+  if (photos.image2downloadpath!=null) i++;
+  if (photos.image3downloadpath!=null) i++;
+  
+  int j=0;
+  if (photos.selectedImage1!=null) j++;
+  if (photos.selectedImage2!=null) j++;
+  if (photos.selectedImage3!=null) j++;
+
+  if (i!=j) ret=true;
+
+  return ret;
 
 }
 
@@ -113,8 +164,10 @@ void UserPhotoPageCallBack(Photos inphotos){
   photos.selectedImage1=inphotos.image1;
   photos.selectedImage2=inphotos.image2;
   photos.selectedImage3=inphotos.image3;
-//  print('inside user profile photo index : ' + photos.profilePhotoIndex.toString());
   photos.profilePhotoIndex=inphotos.profilePhotoIndex;
+ // print('inside user function : ');
+ // printPhotosParameters();
+ 
 
 }
 void printPhotosParameters(){

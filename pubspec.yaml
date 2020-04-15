@@ -39,6 +39,8 @@ dependencies:
   geolocator: ^5.2.1
   flutter_facebook_image_picker: ^0.0.13
   image_downloader: ^0.19.2
+  carousel_slider: ^1.4.1
+
 
   
    

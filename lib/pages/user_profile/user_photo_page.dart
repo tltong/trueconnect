@@ -27,7 +27,7 @@ class UserPhotoPageState extends State<UserPhotoPage>{
 
 @override
   void initState() {
-    print('**** init from new user photo page ****');
+   // print('**** init from new user photo page ****');
     
     photos = appData.currentUser.getPhotos();
     
@@ -35,31 +35,30 @@ class UserPhotoPageState extends State<UserPhotoPage>{
     image2=photos.image2;
     image3=photos.image3;
     profileIndex=photos.profilePhotoIndex;
-    print(image1);
-    print(image2);
-    print(image3);
-    print('profile photo : ' + profileIndex.toString());
+    //print(image1);
+    //print(image2);
+    //print(image3);
+    //print('profile photo : ' + profileIndex.toString());
     super.initState();
   }
 
 @override
   void dispose() {
 
-  print('**** dispose from new user photo page ****');
-  print(image1);
-  print(image2);
-  print(image3);
+ // print('**** dispose from new user photo page ****');
+  updateCentralPhotos();
+  
+  super.dispose();
+}
+
+void updateCentralPhotos(){
   photos.image1=image1;
   photos.image2=image2;
   photos.image3=image3;
   photos.profilePhotoIndex=profileIndex;
-  print('profile photo : ' + profileIndex.toString());
   appData.currentUser.UserPhotoPageCallBack(photos);
 
-  super.dispose();
 }
-
-
 
 
 Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) async {
@@ -88,8 +87,10 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
                       if (image3!=null) profileIndex=3;
                       break;
                   }
+                     updateCentralPhotos();
 
                   });
+               
                 Navigator.pop(context);
               },
               child: const Text('Make profile photo'),
@@ -106,14 +107,14 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
                     break;
                   case 2:
                     image2=null;
-                    if (profileIndex==2) profileIndex=2;
+                    if (profileIndex==2) profileIndex=0;
                     break;
                   case 3:
                     image3=null;
-                    if (profileIndex==3) profileIndex=3;
+                    if (profileIndex==3) profileIndex=0;
                     break;
                   }
-                
+                  updateCentralPhotos();
                   });
               
               Navigator.pop(context); 
@@ -141,8 +142,10 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
                     image3=Image.file(retimage);
                   break;
                 }
+                updateCentralPhotos();
                   });
               });
+              
               Navigator.pop(context); 
               },
               child: const Text('Choose new photo'),
