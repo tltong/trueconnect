@@ -27,7 +27,7 @@ class UserPhotoPageState extends State<UserPhotoPage>{
 
 @override
   void initState() {
-   // print('**** init from new user photo page ****');
+    print('**** init from new user photo page ****');
     
     photos = appData.currentUser.getPhotos();
     
@@ -45,7 +45,7 @@ class UserPhotoPageState extends State<UserPhotoPage>{
 @override
   void dispose() {
 
- // print('**** dispose from new user photo page ****');
+  print('**** dispose from new user photo page ****');
   updateCentralPhotos();
   
   super.dispose();

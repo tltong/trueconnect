@@ -31,11 +31,14 @@ class Photos {
     ret.add(selectedImage3);
 
     if(profilePhotoIndex!=0){
+     // print('profile photo seleted');
       Image profileImage = ret[profilePhotoIndex-1];
       ret.remove(profileImage);
       ret.insert(0, profileImage);
+      ret.removeWhere((item) => item == null);
     }else{
       //no photo selected
+   //   print('no profile photo seleted');
       ret.removeWhere((item) => item == null);
     }
     return ret;
@@ -99,6 +102,32 @@ class User extends ChangeNotifier {
   //User(this._id,this._name, this._email, this._age, this._mobile);
   User();
 
+
+  int calculateAge(DateTime birthDate) {
+  DateTime currentDate = DateTime.now();
+  int age = currentDate.year - birthDate.year;
+  int month1 = currentDate.month;
+  int month2 = birthDate.month;
+  if (month2 > month1) {
+    age--;
+  } else if (month1 == month2) {
+    int day1 = currentDate.day;
+    int day2 = birthDate.day;
+    if (day2 > day1) {
+      age--;
+    }
+  }
+  return age;
+}
+
+int getAge(String dobstring){
+
+  int age;
+  DateTime doblocal = DateTime.tryParse(dobstring);
+
+  age = calculateAge(doblocal);
+  return age;
+}
 
   Future<void> updateUserFS(Map profile){
 
@@ -174,7 +203,9 @@ void printPhotosParameters(){
     print('selectedImage1 : ' + photos.selectedImage1.toString());
     print('selectedImage2 : ' + photos.selectedImage2.toString());
     print('selectedImage3 : ' + photos.selectedImage3.toString());
+    
     print('profile photo index : ' + photos.profilePhotoIndex.toString());
+  
 }
 
 Future<String> processImage(Image image, String path) async {
@@ -313,7 +344,7 @@ void printUserSettings()
   print('name : ' + name);
   print('country :' + country);
   print('city : ' + city);
-  print('dob : ' + dob);
+  print('dob : ' + dob.toString());
   print('gender : ' + gender);
   print('about : ' + about);
   print('height : ' + height);

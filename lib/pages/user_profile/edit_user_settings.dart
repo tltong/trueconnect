@@ -33,13 +33,6 @@ class EditUseSettingsPageState extends State<EditUseSettingsPage>{
 
   
 
-String parsedob(String inDob)
-{
-  var parseStr = inDob.split('-');
-  return parseStr[2]+'-'+parseStr[1]+'-'+parseStr[0];
-  
-}
-
 
 @override
   void initState() {
@@ -68,10 +61,38 @@ String parsedob(String inDob)
  
   }
 
+void updateUserDetailsDOB(String dobin){
+ // print('from updateUserDetailsDOB : ' + dobin);
+  dobctrl.text=dobin;
+  updateUserDetails();
+}
+
+void updateUserDetails(){
+  print('update user details - ' + ' dob : ' + dobctrl.text);
+
+ appData.currentUser.selectedUserSettings.clear();
+    appData.currentUser.selectedUserSettings.putIfAbsent("name", ()=> namectrl.text);
+    appData.currentUser.selectedUserSettings.putIfAbsent("country", ()=> countryctrl.text);
+    appData.currentUser.selectedUserSettings.putIfAbsent("city", ()=> cityctrl.text);
+    appData.currentUser.selectedUserSettings.putIfAbsent("dob", ()=> dobctrl.text);
+    
+    
+    appData.currentUser.selectedUserSettings.putIfAbsent("gender", ()=> genderString);
+    appData.currentUser.selectedUserSettings.putIfAbsent("aboutme", ()=> aboutctrl.text);
+    appData.currentUser.selectedUserSettings.putIfAbsent("height", ()=> heightctrl.text);
+    appData.currentUser.selectedUserSettings.putIfAbsent("occupation", ()=> occupationctrl.text);
+    appData.currentUser.selectedUserSettings.putIfAbsent("education", ()=> educationString);
+     appData.currentUser.selectedUserSettings.putIfAbsent("mobile", ()=> mobilectrl.text);
+
+}
 
 @override
   void dispose() {
+    print('edit user page dispose');
 
+    updateUserDetails();
+
+    /*
     appData.currentUser.selectedUserSettings.clear();
     appData.currentUser.selectedUserSettings.putIfAbsent("name", ()=> namectrl.text);
     appData.currentUser.selectedUserSettings.putIfAbsent("country", ()=> countryctrl.text);
@@ -83,8 +104,8 @@ String parsedob(String inDob)
     appData.currentUser.selectedUserSettings.putIfAbsent("occupation", ()=> occupationctrl.text);
     appData.currentUser.selectedUserSettings.putIfAbsent("education", ()=> educationString);
      appData.currentUser.selectedUserSettings.putIfAbsent("mobile", ()=> mobilectrl.text);
-  
-  print(appData.currentUser.selectedUserSettings);
+  */
+  //print(appData.currentUser.selectedUserSettings);
   
    // print(appData.currentUser.selectedUserSettings);
   /*  
@@ -113,6 +134,7 @@ String parsedob(String inDob)
 
  @override
   Widget build(BuildContext context) {
+    print('edit user page build');
 
  return Scaffold(
    /*
@@ -138,6 +160,7 @@ String parsedob(String inDob)
 
 
           FormBuilder(
+            onChanged: (value) => ( updateUserDetails()),
   key: _fbKey,
   autovalidate: true,
   child: Column(
@@ -202,7 +225,12 @@ String parsedob(String inDob)
                //       onChanged: (value) => (appData.currentUser.city=value),
                     ),
                       FormBuilderDateTimePicker(
-                      
+                        onChanged: (value) => ( 
+                          
+                          updateUserDetailsDOB(value.toString())
+//                          print('from timedatepicker ' + value.toString())
+                        
+                         ),
                        initialValue:dobctrl.text.length>0?DateTime.tryParse(dobctrl.text):null,
                        initialDate:dobctrl.text.length>0?DateTime.tryParse(dobctrl.text):DateTime(1990,01,01),
 //                      initialDate:appData.currentUser.dob==null?DateTime(1990,01,01):
@@ -347,7 +375,9 @@ Row(
          
         ) // Column
         
-          )) ),  // Center
+          )
+          ) 
+          ),  // Center
    
       
     );  // Scaffold

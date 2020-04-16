@@ -7,7 +7,7 @@ import './edit_user_settings.dart';
 import '../../utils/image_util.dart';
 import '../../user.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 
 class UserProfile extends StatefulWidget {
@@ -20,37 +20,154 @@ class UserProfile extends StatefulWidget {
 
 class UserProfileState extends State<UserProfile> {
 
-Image profileimage;
 Photos photos;
+List<Image> images;
+List child;
+BuildContext contextcopy;
+Map<String,String> userDetails;
 
-final List<String> imageList = [
-  "https://cdn.pixabay.com/photo/2017/12/03/18/04/christmas-balls-2995437_960_720.jpg",
-  "https://cdn.pixabay.com/photo/2017/12/13/00/23/christmas-3015776_960_720.jpg",
-  "https://cdn.pixabay.com/photo/2019/12/19/10/55/christmas-market-4705877_960_720.jpg",
-  "https://cdn.pixabay.com/photo/2019/12/20/00/03/road-4707345_960_720.jpg",
-  "https://cdn.pixabay.com/photo/2019/12/22/04/18/x-mas-4711785__340.jpg",
-  "https://cdn.pixabay.com/photo/2016/11/22/07/09/spruce-1848543__340.jpg"
-];
+String name,country,city,age;
 
 
+BoxConstraints bx = new BoxConstraints();
+  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
+
+List<T> map<T>(List list, Function handler) {
+  List<T> result = [];
+ // print('images length in map :' + list.length.toString());
+//  print('images in map' + list.toString());
+  for (var i = 0; i < list.length; i++) {
+    result.add(handler(i, list[i]));
+  //  print('map');
+  //  print(i.toString());
+  }
+ 
+  return result;
+}
+
+final Widget placeholder = Container(color: Colors.grey);
+
+
+
+Widget _Dialog(BuildContext context, Image displayImage) {
+    return new AlertDialog(
+      //title: const Text('About Pop up'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          displayImage,
+          //Image.asset('images/addphoto.png'),
+          
+        ],
+      )
+     
+    );
+}
+
+void initialiseUserDetails(){
+
+  setState(() {
+    
+  
+  userDetails = appData.currentUser.selectedUserSettings;
+  print('initialise user details from profile page : ' + userDetails.toString());
+  
+  name = userDetails["name"];
+  country = userDetails["country"];
+  city = userDetails["city"];
+
+  String dobstring = userDetails["dob"];
+
+  if (dobstring!=null)
+    {
+        if (dobstring.length>0)
+          age = (appData.currentUser.getAge(dobstring)).toString();
+        else
+             age = 'Not specified';
+    }
+  else{
+//    print('dobstring null');
+   age = 'Not specified';
+  }  
+  
+  print('age : ' + age);
+  });
+}
+
+
+void initialiseChild(){
+
+print('initialise child');
+//print(images);
+//print(photos.profilePhotoIndex);
+//print(images.length);
+
+List<Image> imageslocal;
+imageslocal=images;
+if (imageslocal.length==0) imageslocal.add(Image.asset('images/no-image.png'));
+
+
+child = map<Widget>(
+  images,
+  (index, i) {
+    return 
+    GestureDetector(
+       onTap: () {
+              showDialog(
+            context: contextcopy,
+            builder: (BuildContext contextcopy) => _Dialog(contextcopy,i),
+          );
+
+            },
+    child: Container(
+      margin: EdgeInsets.all(5.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+        child: Stack(children: <Widget>[
+            i,
+           // Image.asset('images/addphoto.png'),
+           // Image.network(i, fit: BoxFit.scaleDown, width: 1000.0),
+
+          Positioned(
+            bottom: 0.0,
+            left: 0.0,
+            right: 0.0,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color.fromARGB(200, 0, 0, 0), Color.fromARGB(0, 0, 0, 0)],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
+              ),
+              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              
+            ),
+          ),
+        ]),
+      ),
+    )
+
+
+    
+
+    );
+    
+  },
+).toList();
+
+}
 
 @override
   void initState() {
 
-  //  print('user profile page init');
-
-   
-
-    
-
-/*
-    profileimage= new Image.asset(
-              'images/jap.jpg',
-              width: 600,
-              height: 240,
-              fit: BoxFit.scaleDown,
-            );
-*/
+    print('***** user profile page init *****');
+    photos = appData.currentUser.getPhotos();
+     images = appData.currentUser.photos.getSelectedPhotos();
+  //   print(images);
+     initialiseChild();
+     initialiseUserDetails();
     super.initState();
 
   }
@@ -58,7 +175,7 @@ final List<String> imageList = [
 @override
   void dispose() {
 
-    print('user profile page dispose');
+    print('***** user profile page dispose *****');
 
     if (appData.currentUser.UserSettingsChanged()==true){
 
@@ -96,11 +213,14 @@ final List<String> imageList = [
 
   @override
   Widget build(BuildContext context) {
-   // print('***** user profile page build *****');
-     photos = appData.currentUser.getPhotos();
-    List<Image> images = appData.currentUser.photos.getSelectedPhotos();
+    print('***** user profile page build *****');
+     contextcopy=context;
+    photos = appData.currentUser.getPhotos();
+     images = appData.currentUser.photos.getSelectedPhotos();
+    initialiseChild();
+    initialiseUserDetails();
   //  print('image length : '+ images.length.toString());
-    profileimage=images.length<1?Image.asset('images/no-image.png'):images[0];
+   // profileimage=images.length<1?Image.asset('images/no-image.png'):images[0];
     
     //appData.currentUser.photos.printPhotosParameters();
     return Scaffold(
@@ -122,26 +242,83 @@ final List<String> imageList = [
     ListView(
     children:
     [
-     
-     new CarouselSlider(
-  items: [1,2,3,4,5].map((i) {
-    return new Builder(
-      builder: (BuildContext context) {
-        return new Container(
-          width: MediaQuery.of(context).size.width,
-          margin: new EdgeInsets.symmetric(horizontal: 5.0),
-          decoration: new BoxDecoration(
-            color: Colors.amber
-          ),
-          child: new Text('text $i', style: new TextStyle(fontSize: 16.0),)
-        );
-      },
-    );
-  }).toList(),
-  height: 400.0,
-  autoPlay: true
-),
-     //  profileimage,
+
+ new CarouselSlider(//                      controller: namectrl
+
+      items: child,
+      autoPlay: false,
+      enlargeCenterPage: true,
+      viewportFraction: 0.9,
+      aspectRatio: 2.0,
+    ),
+
+ new Center(
+           child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: bx.minHeight,
+            ),
+
+        child: Column(
+          children: <Widget>[
+
+             FormBuilderTextField(
+                      attribute: 'age',
+                      initialValue: age,
+                      readOnly: true,
+                      decoration: InputDecoration(labelText: "Age"),
+                    ),
+
+          // start of formbuilder
+
+          FormBuilder(
+  key: _fbKey,
+  autovalidate: true,
+  child: Column(
+    children: <Widget>[
+        
+         FormBuilderTextField(
+                      attribute: 'name',
+                      initialValue: name,
+                      readOnly: true,
+                      decoration: InputDecoration(labelText: "Name"),
+                    ),
+     FormBuilderTextField(
+                      attribute: 'country',
+                      initialValue: country,
+                      readOnly: true,
+                      decoration: InputDecoration(labelText: "Country"),
+                    ),
+
+   FormBuilderTextField(
+                      attribute: 'city',
+                      initialValue: city,
+                      readOnly: true,
+                      decoration: InputDecoration(labelText: "City"),
+                    ),
+
+    FormBuilderTextField(
+                      attribute: 'age',
+                      initialValue: age,
+                      readOnly: true,
+                      decoration: InputDecoration(labelText: "Age"),
+                    ),
+                    
+                    
+
+
+
+
+     ],
+  ),  // Column
+),          ],
+         ) // Column
+                )
+          ) 
+          ), 
+
+
+
 
        new Center(
         child: Column(
@@ -152,7 +329,9 @@ final List<String> imageList = [
               onPressed: () {
   
               print('***** Print parameters *****');
-              appData.currentUser.photos.printPhotosParameters();
+              print('central user settings : '+ appData.currentUser.selectedUserSettings.toString());
+              print('page user settings : '+ userDetails.toString());
+
               },
             child: Text('Print parameters'),
            ),
@@ -175,6 +354,8 @@ final List<String> imageList = [
         )
       ),
     
+
+
     ]),
 
         );
