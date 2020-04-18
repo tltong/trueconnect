@@ -28,6 +28,19 @@ Map<String,String> userDetails;
 
 String name,country,city,age;
 
+var namectrl = TextEditingController();
+var countryctrl = TextEditingController();
+var cityctrl = TextEditingController();
+var agectrl = TextEditingController();
+
+var genderctrl = TextEditingController();
+var aboutctrl = TextEditingController();
+var heightctrl = TextEditingController();
+
+var occupationctrl = TextEditingController();
+var educationctrl = TextEditingController();
+var mobilectrl = TextEditingController();
+
 
 BoxConstraints bx = new BoxConstraints();
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
@@ -67,15 +80,15 @@ Widget _Dialog(BuildContext context, Image displayImage) {
 
 void initialiseUserDetails(){
 
-  setState(() {
+
     
   
   userDetails = appData.currentUser.selectedUserSettings;
   print('initialise user details from profile page : ' + userDetails.toString());
   
-  name = userDetails["name"];
-  country = userDetails["country"];
-  city = userDetails["city"];
+  namectrl.text = userDetails["name"];
+  countryctrl.text = userDetails["country"];
+  cityctrl.text = userDetails["city"];
 
   String dobstring = userDetails["dob"];
 
@@ -87,12 +100,18 @@ void initialiseUserDetails(){
              age = 'Not specified';
     }
   else{
-//    print('dobstring null');
    age = 'Not specified';
   }  
+  agectrl.text=age;
   
-  print('age : ' + age);
-  });
+  genderctrl.text=appData.currentUser.selectedUserSettings["gender"];
+  aboutctrl.text=appData.currentUser.selectedUserSettings["aboutme"];
+  heightctrl.text=appData.currentUser.selectedUserSettings["height"] + 'cm';
+  occupationctrl.text=appData.currentUser.selectedUserSettings["occupation"];
+  educationctrl.text=appData.currentUser.selectedUserSettings["education"];
+  mobilectrl.text=appData.currentUser.selectedUserSettings["mobile"];
+
+ 
 }
 
 
@@ -262,57 +281,98 @@ child = map<Widget>(
         child: Column(
           children: <Widget>[
 
-             FormBuilderTextField(
-                      attribute: 'age',
-                      initialValue: age,
-                      readOnly: true,
-                      decoration: InputDecoration(labelText: "Age"),
-                    ),
+TextField(
+  controller: namectrl,
+  readOnly: true,
+  decoration: InputDecoration(
+    border: InputBorder.none,
+    labelText: 'Name'
+  ),
+),
 
-          // start of formbuilder
+TextField(
+  controller: countryctrl,
+  readOnly: true,
+  decoration: InputDecoration(
+    border: InputBorder.none,
+    labelText: 'Country'
+  ),
+),
 
-          FormBuilder(
-  key: _fbKey,
-  autovalidate: true,
-  child: Column(
-    children: <Widget>[
-        
-         FormBuilderTextField(
-                      attribute: 'name',
-                      initialValue: name,
-                      readOnly: true,
-                      decoration: InputDecoration(labelText: "Name"),
-                    ),
-     FormBuilderTextField(
-                      attribute: 'country',
-                      initialValue: country,
-                      readOnly: true,
-                      decoration: InputDecoration(labelText: "Country"),
-                    ),
+TextField(
+  controller: cityctrl,
+  readOnly: true,
+  decoration: InputDecoration(
+    border: InputBorder.none,
+    labelText: 'Country'
+  ),
+),
 
-   FormBuilderTextField(
-                      attribute: 'city',
-                      initialValue: city,
-                      readOnly: true,
-                      decoration: InputDecoration(labelText: "City"),
-                    ),
+TextField(
+  controller: agectrl,
+  readOnly: true,
+  decoration: InputDecoration(
+    border: InputBorder.none,
+    labelText: 'Age'
+  ),
+),
 
-    FormBuilderTextField(
-                      attribute: 'age',
-                      initialValue: age,
-                      readOnly: true,
-                      decoration: InputDecoration(labelText: "Age"),
-                    ),
-                    
-                    
+TextField(
+  controller: genderctrl,
+  readOnly: true,
+  decoration: InputDecoration(
+    border: InputBorder.none,
+    labelText: 'Gender'
+  ),
+),
+       
+TextField(
+  controller: aboutctrl,
+  readOnly: true,
+  decoration: InputDecoration(
+    border: InputBorder.none,
+    labelText: 'About me'
+  ),
+),
 
+TextField(
+  controller: heightctrl,
+  readOnly: true,
+  decoration: InputDecoration(
+    border: InputBorder.none,
+    labelText: 'Height'
+  ),
+),
 
+TextField(
+  controller: occupationctrl,
+  readOnly: true,
+  decoration: InputDecoration(
+    border: InputBorder.none,
+    labelText: 'Occupation'
+  ),
+),
+       
+TextField(
+  controller: educationctrl,
+  readOnly: true,
+  decoration: InputDecoration(
+    border: InputBorder.none,
+    labelText: 'Education'
+  ),
+),
 
+TextField(
+  controller: mobilectrl,
+  readOnly: true,
+  decoration: InputDecoration(
+    border: InputBorder.none,
+    labelText: 'Mobile'
+  ),
+),
 
-     ],
-  ),  // Column
-),          ],
-         ) // Column
+         ],
+         ) 
                 )
           ) 
           ), 

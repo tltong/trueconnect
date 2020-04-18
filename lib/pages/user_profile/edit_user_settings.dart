@@ -61,8 +61,17 @@ class EditUseSettingsPageState extends State<EditUseSettingsPage>{
  
   }
 
+void updateUserDetailsGender(String genderin){
+  genderString=genderin;
+  updateUserDetails();
+}
+
+void updateUserDetailsEducation(String educationin){
+  educationString=educationin;
+  updateUserDetails();
+}
+
 void updateUserDetailsDOB(String dobin){
- // print('from updateUserDetailsDOB : ' + dobin);
   dobctrl.text=dobin;
   updateUserDetails();
 }
@@ -225,12 +234,7 @@ void updateUserDetails(){
                //       onChanged: (value) => (appData.currentUser.city=value),
                     ),
                       FormBuilderDateTimePicker(
-                        onChanged: (value) => ( 
-                          
-                          updateUserDetailsDOB(value.toString())
-//                          print('from timedatepicker ' + value.toString())
-                        
-                         ),
+                        onChanged: (value) => (    updateUserDetailsDOB(value.toString()) ),
                        initialValue:dobctrl.text.length>0?DateTime.tryParse(dobctrl.text):null,
                        initialDate:dobctrl.text.length>0?DateTime.tryParse(dobctrl.text):DateTime(1990,01,01),
 //                      initialDate:appData.currentUser.dob==null?DateTime(1990,01,01):
@@ -248,7 +252,7 @@ void updateUserDetails(){
                         FormBuilderDropdown(
                       attribute: "gender",
                       initialValue: genderString,
-                      onChanged: (value) => (genderString=value),
+                      onChanged: (value) => (updateUserDetailsGender(value)),
                       decoration: InputDecoration(labelText: "Gender"),
                       // initialValue: 'Male',
                       hint: Text('Select Gender'),
@@ -293,7 +297,7 @@ void updateUserDetails(){
                     FormBuilderDropdown(
                       attribute: "education",
                       decoration: InputDecoration(labelText: "Education"),
-                      onChanged: (value) => (educationString=value),
+                      onChanged: (value) => (  updateUserDetailsEducation(value)),
                       initialValue: educationString,
                        items: ['High School', 'College', 'University', 'Master', 'PhD']
                           .map((education) => DropdownMenuItem(
