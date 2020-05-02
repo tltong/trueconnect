@@ -9,7 +9,7 @@ import 'package:flutter_facebook_image_picker/flutter_facebook_image_picker.dart
 import 'package:image_downloader/image_downloader.dart';
 import 'package:http/http.dart' show get;
 import './fs_util.dart';
-
+import '../data/image_struct.dart';
 
 
 class ImageUtil {
@@ -18,6 +18,29 @@ static Future<File> pickImageFromGallery() async {
     File tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
     return tempImage;
   }
+
+
+static Future<List<ImageStruct>> uploadImages(List<ImageStruct> inImages) async{
+
+  List<ImageStruct> ret = new List<ImageStruct>();
+
+  FS_Util fs = new FS_Util();
+
+  for (int i=0;i<inImages.length;i++){
+
+    if (inImages[i].downloadlink!=null){    // no need to do upload
+      ret.add(inImages[i]);
+      continue;
+    }else{
+       await fs.uploadFile(inImages[i].uploadpath,FileFromImage(inImages[i].image)).then((link)
+      {
+        ImageStruct imagestruct = ImageStruct(inImages[i].image,inImages[i].uploadpath,link);
+        ret.add(imagestruct);
+      });
+    }
+  }
+  return ret;
+}
 
 
 static String Imagetype(Image image){

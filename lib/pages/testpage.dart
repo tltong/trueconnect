@@ -5,6 +5,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import '../user.dart';
 import '../utils/image_util.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import '../data/image_struct.dart';
+import 'dart:math';
 
 class TestPage extends StatefulWidget {
   @override
@@ -15,8 +17,6 @@ class TestPage extends StatefulWidget {
 }
 
 class TestPageState extends State<TestPage>{
-
-
 
 
 final Widget placeholder = Container(color: Colors.grey);
@@ -84,6 +84,32 @@ ProgressDialog buildProgressDialog(){
                });
                },
             child: Text('Test progress dialog'),
+           ),
+
+           RaisedButton(
+             onPressed: () {
+                ImageUtil.pickImageFromGallery().then((ret){  // returns a file
+                  Image image = Image.file(ret);
+
+                  var rng = new Random();
+                  int index = rng.nextInt(100000);  
+       
+                  String path = 'testphotos/'+index.toString();
+                 
+                  ImageStruct imagestruct = new ImageStruct(image,path,null);
+
+                  List<ImageStruct> inimages = new List<ImageStruct>();
+                  inimages.add(imagestruct);
+
+                  ImageUtil.uploadImages(inimages).then((id){
+                    print(id[0].downloadlink);
+                  });
+
+
+
+                });
+               },
+            child: Text('Test image upload'),
            ),
     
 

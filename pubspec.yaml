@@ -41,6 +41,7 @@ dependencies:
   image_downloader: ^0.19.2
   carousel_slider: ^1.4.1
   progress_dialog: ^1.2.0
+  random_string: ^2.0.1
 
 
   
