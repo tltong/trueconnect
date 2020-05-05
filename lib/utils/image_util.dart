@@ -34,7 +34,8 @@ static Future<List<ImageStruct>> uploadImages(List<ImageStruct> inImages) async{
     }else{
        await fs.uploadFile(inImages[i].uploadpath,FileFromImage(inImages[i].image)).then((link)
       {
-        ImageStruct imagestruct = ImageStruct(inImages[i].image,inImages[i].uploadpath,link);
+        
+        ImageStruct imagestruct = ImageStruct(NetworkImageFromLink(link),inImages[i].uploadpath,link);
         ret.add(imagestruct);
       });
     }

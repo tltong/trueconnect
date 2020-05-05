@@ -9,7 +9,7 @@ class VenueFactory{
   static Venue CreateVenue(List<ImageStruct> imagestructs, String name, String address, String description, Type type, int splurge){
 
     String userid = appData.currentUser.id;
-    String id = randomString(10);
+    String id = randomAlphaNumeric(15);
 
     Venue ret = new Venue(imagestructs,name,address,description,type,splurge,userid,id);
     return ret;
