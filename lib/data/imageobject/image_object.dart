@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trueconnect/utils/image_util.dart';
 import '../../utils/misc_util.dart';
 import '../common_strings.dart';
 
@@ -8,6 +9,7 @@ class ImageObject {
   String uploadpath;
   String downloadlink;
 
+  //constructor
   ImageObject(Image image, String uploadpath, String downloadlink){
     this.image=image;
     
@@ -18,8 +20,12 @@ class ImageObject {
       this.uploadpath=uploadpath;
     }
 
+    if (image==null){
+      this.image=ImageUtil.NetworkImageFromLink(downloadlink);
+    }
 
     this.downloadlink=downloadlink;
+
   }
 
   String returnID(){
@@ -31,14 +37,14 @@ class ImageObject {
 
     serialisedObj['uploadpath']=uploadpath;
     serialisedObj['downloadlink']=downloadlink;
-
+  
     return serialisedObj;
 
   }
 
 
 
-  bool IsImageObjectEqual (ImageObject inImageObject){
+  bool IsEqual (ImageObject inImageObject){
 
 /*
     if (this.image != inImageObject)

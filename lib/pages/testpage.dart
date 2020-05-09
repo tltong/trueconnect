@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:trueconnect/data/imageobject/image_fileimage_state.dart';
+import 'package:trueconnect/data/imageobject/image_networkimage_state.dart';
 import 'package:trueconnect/data/imageobject/image_object.dart';
+import 'package:trueconnect/data/imageobject/image_state.dart';
+import 'package:trueconnect/data/imageobject/image_state_controller.dart';
+import 'package:trueconnect/data/imageobject/image_state_controller_dao.dart';
 import 'package:trueconnect/utils/appdata.dart';
 import '../utils/fs_util.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -7,6 +12,7 @@ import '../user.dart';
 import '../utils/image_util.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import '../data/image_struct.dart';
+import '../data/imageobject/image_mediator.dart';
 import 'dart:math';
 
 import '../data/venue/venue.dart';
@@ -159,8 +165,32 @@ ProgressDialog buildProgressDialog(){
                   await ImageUtil.pickImageFromGallery().then((ret) async {  // returns a file
                   image1 = Image.file(ret);
 
+                  //Step 1 : create image object
                   imageobject1 = new ImageObject(image1, null, null);
-                  print('image 1 : ' + image1.toString());
+                
+                  //Step 2 : create state object
+                  ImageState imagestate = new FileImageState(imageobject1);                 
+                  
+                  //Step 3 : create image controller
+                  ImageStateController statecontroller = new ImageStateController(imagestate);
+
+                  //Step 4 : create controllerdao and add controller
+                  ImageStateControllerDao statedao = new ImageStateControllerDao();
+                  statedao.addController(statecontroller);
+
+                  //Step 5 : upload photo
+                  statedao.processControllers().then((id){
+                    print('upload done');
+
+                    //Step 6 : check serialised data
+                    List<Map> serialisedData = statedao.serialise();
+                    print('serialised data :');
+                    print(serialisedData);
+
+                  });
+
+
+
                 });
                },
             child: Text('Get Image 1'),
@@ -172,12 +202,26 @@ ProgressDialog buildProgressDialog(){
                   await ImageUtil.pickImageFromGallery().then((ret) async {  // returns a file
                   image2 = Image.file(ret);
 
-                  imageobject2 = new ImageObject(image1, null, null);
-                  print('image 2 : ' + image2.toString());
+                  List<Image> imageList = new List<Image>();
+                  imageList.add(image2);
 
+                  ImageMediator mediator = new ImageMediator(imageList);
+                  List<Image> retList = mediator.getImages();
+                  for (Image img in retList){
+                    print(img.toString());
+                  }
                 });
                },
             child: Text('Get Image 2'),
+           ),
+
+                    RaisedButton(
+             onPressed: () async {
+                           
+
+
+               },
+            child: Text('Test stuff'),
            ),
 
            
