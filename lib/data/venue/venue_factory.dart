@@ -1,17 +1,17 @@
 import 'venue.dart';
 import '../../utils/appdata.dart';
-import '../image_struct.dart';
 import 'package:flutter/material.dart'; 
-import 'package:random_string/random_string.dart';
+import '../../data/imageobject/image_mediator.dart';
+import '../../utils/misc_util.dart';
 
 class VenueFactory{
 
-  static Venue CreateVenue(List<ImageStruct> imagestructs, String name, String address, String description, Type type, int splurge){
+  static Venue CreateVenue(ImageMediator inImgMediator, String name, String address, String description, Type type, int splurge){
 
     String userid = appData.currentUser.id;
-    String id = randomAlphaNumeric(15);
+    String id = MiscUtil.GenerateRandomString(15);
 
-    Venue ret = new Venue(imagestructs,name,address,description,type,splurge,userid,id);
+    Venue ret = new Venue(inImgMediator,name,address,description,type,splurge,userid,id);
     return ret;
   }
 

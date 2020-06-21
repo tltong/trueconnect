@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:trueconnect/data/imageobject/image_fileimage_state.dart';
 import 'package:trueconnect/data/imageobject/image_networkimage_state.dart';
@@ -22,6 +24,9 @@ import '../data/common_strings.dart';
 
 
 class TestPage extends StatefulWidget {
+
+
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -33,6 +38,7 @@ class TestPageState extends State<TestPage>{
 
 
 final Widget placeholder = Container(color: Colors.grey);
+ImageObject pageImgObj;
 
 
 BuildContext contextcopy;
@@ -70,14 +76,25 @@ ProgressDialog buildProgressDialog(){
   }
 
 @override
+void didChangeDependencies() {
+  print('did change dependencies');
+  super.didChangeDependencies();
+}
+
+@override
   void dispose() {
-    super.dispose();
+    print('dispose');
+     super.dispose();
+  //  Navigator.pop(context, pageImgObj);
+   
  
   }
 
  @override
   Widget build(BuildContext context) {
     contextcopy=context;
+    final ImageObject imgObj = ModalRoute.of(context).settings.arguments;
+    pageImgObj = imgObj;
 
  return Scaffold(
       appBar: AppBar(
@@ -145,7 +162,7 @@ ProgressDialog buildProgressDialog(){
                 });
 
             print('next to upload data');
-
+/*
                 Venue venue = VenueFactory.CreateVenue(photos, 'asia square', '12 Marina View, Singapore 018961',null, null, null);
              
                 VenueDao vdao = new VenueDao(venue);
@@ -153,7 +170,7 @@ ProgressDialog buildProgressDialog(){
                 await vdao.upload().then((id){
                     print('database updated');
                 });
-
+*/
 
                },
             child: Text('Test venue upload'),
@@ -216,12 +233,27 @@ ProgressDialog buildProgressDialog(){
            ),
 
                     RaisedButton(
-             onPressed: () async {
-                           
+             onPressed: () 
 
+             async {
+              List<Image> images; 
+               images = await ImageUtil.pickMultipleImages();     
+ 
+              for (Image image in images){
+                print(image.toString());
+              }
 
                },
-            child: Text('Test stuff'),
+            child: Text('Test multiple images'),
+           ),
+                    RaisedButton(
+             onPressed: () 
+
+             async {
+              print(pageImgObj.serialise());
+
+               },
+            child: Text('Test parameter passing'),
            ),
 
            

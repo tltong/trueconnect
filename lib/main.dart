@@ -7,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:trueconnect/data/imageobject/image_mediator.dart';
+import 'package:trueconnect/data/imageobject/image_object.dart';
 
 import 'package:trueconnect/user.dart';
 import 'package:trueconnect/create_user.dart';
@@ -22,6 +24,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_facebook_image_picker/flutter_facebook_image_picker.dart';
+import './pages/test_pages/test_willpop.dart';
+import './pages/venue_page/venue_page.dart';
+
 
 
 void main() => runApp(MyApp());
@@ -191,6 +196,8 @@ _getAddressFromLatLng() async {
       '/viewuser': (context) => ViewUser(),
       '/userprofile': (context) => UserProfile(),
       '/testpage': (context) => TestPage(),
+      '/testwillpop' : (context) =>TestWillPop(),
+      '/venuepage' : (context) =>VenuePage(),
     },
    title: 'Project Pimp',
       home: new Scaffold(
@@ -279,16 +286,128 @@ _getAddressFromLatLng() async {
               child: Text('User profile'),
             ),
         ),
+
+          Builder(
+        builder: (context) => 
+        RaisedButton(
+              onPressed: () async {
+
+
+                List<Image> inImages = await ImageUtil.pickMultipleImages();
+                 for (Image image in inImages){
+            //      print(image.image.toString());
+                }
+
+/*
+                ImageMediator imgMediator = new ImageMediator(inImages);
+                List<Image> retImages = imgMediator.getImages();
+                for (Image image in retImages){
+                  print(image.toString());
+                }
+*/
+                /*
+                ImageUtil.pickImageFromGallery().then((id){
+                  File imgFile = id;
+                  Image img = Image.file(imgFile);
+                 List<Image> inImages = new List<Image>();
+                  inImages.add(img);
+
+                 ImageMediator imgMediator = new ImageMediator(inImages);
+                 
+                });*/
+
+
+
+              },
+              child: Text('Test gallery'),
+            ),
+        ),
+
  Builder(
         builder: (context) => 
         RaisedButton(
-              onPressed: () {
+              onPressed: () async {
 
-                Navigator.pushNamed(context,'/testpage');
+//             File imgFile = await ImageUtil.pickImageFromGallery();
+  //              Image img = Image.file(imgFile);
+//                List<Image> inImages = new List<Image>();
+    //            inImages.add(img);
+
+              List<Image> inImages = await ImageUtil.pickMultipleImages();
+              
+        //      print(inImages.length);
+              /*
+              for (Image image in inImages){
+                print (image);
+              }*/
+              
+              ImageMediator imgMediator = new ImageMediator(inImages);
+              List<Image> img2 = imgMediator.getImages();
+         //     print(img2.length);
+              ImageMediator retMediator;
+              
+              retMediator = await Navigator.pushNamed(context,'/venuepage',arguments: imgMediator) as ImageMediator;
+              List<Image> outImages = retMediator.getImages();
+              /*
+              for (Image image in outImages){
+                print('outimage:');
+                print(image.toString());
+              }*/
+
+              },
+              child: Text('Test venue page'),
+            ),
+        ),
+        /*
+Builder(
+        builder: (context) => 
+        RaisedButton(
+              onPressed: () async {
+
+               // Navigator.pushNamed(context,'/testwillpop');
+
+              String imgStr = '//media/external/images/media/37';
+              
+              Uri imgUri=Uri.file(imgStr);
+              File imgFile = File.fromUri(imgUri);
+              Image img = Image.file(imgFile);
+              ImageObject imgObj = new ImageObject(img, null, null);
+
+              final dataFromTestPage = await Navigator.pushNamed(context,
+              '/testwillpop',
+              arguments: imgObj,
+              ) as ImageObject;
+
+              print('returned from testwillpop : ' + dataFromTestPage.serialise().toString());
+
+              },
+              child: Text('Test willpop'),
+            ),
+        ),
+        */
+        /*
+ Builder(
+        builder: (context) => 
+        RaisedButton(
+              onPressed: () async {
+
+              String imgStr = '//media/external/images/media/37';
+              
+              Uri imgUri=Uri.file(imgStr);
+              File imgFile = File.fromUri(imgUri);
+              Image img = Image.file(imgFile);
+              ImageObject imgObj = new ImageObject(img, null, null);
+
+              final dataFromTestPage = await Navigator.pushNamed(context,
+              '/testpage',
+              arguments: imgObj,
+              ) as ImageObject;
              },
               child: Text('Test stateful page'),
             ),
             ),
+*/
+/*
 Builder(
         builder: (context) => 
         RaisedButton(
@@ -319,7 +438,7 @@ Builder(
               child: Text('Select Image'),
             ),
             
-
+*/
     
     
     

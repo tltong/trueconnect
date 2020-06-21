@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'dart:async';
@@ -10,14 +12,69 @@ import 'package:image_downloader/image_downloader.dart';
 import 'package:http/http.dart' show get;
 import './fs_util.dart';
 import '../data/image_struct.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 
 
 class ImageUtil {
 
+
+// Example usage :
+// File imgFile = await ImageUtil.pickImageFromGallery();
 static Future<File> pickImageFromGallery() async {
     File tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
     return tempImage;
   }
+
+
+static Future<List<Image>> pickMultipleImages() async {
+
+  List<Asset> resultList = List<Asset>();
+
+  try{
+    resultList = await MultiImagePicker.pickImages(
+        maxImages: 3,
+        enableCamera: true,
+      //  selectedAssets: images,
+        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+        materialOptions: MaterialOptions(
+          actionBarColor: "#abcdef",
+          actionBarTitle: "Pick Photos",
+         // allViewTitle: "All Photos",
+          useDetailsView: false,
+          selectCircleStrokeColor: "#000000",
+        ),
+      );
+  } on Exception catch (e){
+    
+  }
+  List<Image> ret = new List<Image>();
+
+  for (Asset asset in resultList){
+
+
+   var path = await FlutterAbsolutePath.getAbsolutePath(asset.identifier);
+
+   Uri imgUri=Uri.file(path);
+   File imgFile = File.fromUri(imgUri);
+
+
+ //  print(path);
+/*
+    ByteData imgByteData = await asset.getByteData();
+    ByteBuffer imgByteBuffer = imgByteData.buffer;
+    Uint8List list =  imgByteBuffer.asUint8List();
+    Image img2 = Image.memory(list);
+*/
+      
+
+    Image img = Image.file(imgFile);
+ 
+    ret.add(img);
+  }
+
+  return ret;
+}
 
 
 static Future<List<ImageStruct>> uploadImages(List<ImageStruct> inImages) async{
@@ -54,6 +111,10 @@ static String Imagetype(Image image){
 
   if (IsNetworkImage(image)==true)
     return 'NetworkImage';
+
+  if (IsMemoryImage(image)==true)
+    return 'MemoryImage';
+
 }
 
 static String ExtractImageStringByType(Image image, String imagetype){
@@ -98,6 +159,13 @@ static bool IsFileImage(Image image){
 }
 static bool IsNetworkImage(Image image){
   if(image.toString().contains('NetworkImage')){
+    return true;
+  }else{
+    return false;
+  }
+}
+static bool IsMemoryImage(Image image){
+  if(image.toString().contains('MemoryImage')){
     return true;
   }else{
     return false;

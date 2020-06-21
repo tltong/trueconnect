@@ -67,7 +67,7 @@ class ImageStateControllerDao {
 
     for (int i=0;i<controllers.length;i++){
       ImageState state = controllers[i].getState();
-      if (state.runtimeType.toString()=='NetworkImageState' ||state.runtimeType.toString()=='FileImageState'){
+      if (state.runtimeType.toString()=='NetworkImageState' ||state.runtimeType.toString()=='FileImageState' || state.runtimeType.toString()=='MemoryImageState'){
         retControllers.add(controllers[i]);
       }
     }
@@ -85,7 +85,7 @@ class ImageStateControllerDao {
 
     for (int i=0;i<controllers.length;i++){
       ImageState state = controllers[i].getState();
-      if (state.runtimeType.toString()=='NetworkImageState' ||state.runtimeType.toString()=='FileImageState'){
+      if (state.runtimeType.toString()=='NetworkImageState' ||state.runtimeType.toString()=='FileImageState' || state.runtimeType.toString()=='MemoryImageState'){
         updatedControllers.add(controllers[i]);
       }
     }

@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:trueconnect/data/imageobject/image_fileimage_state.dart';
 import 'package:trueconnect/data/imageobject/image_networkimage_state.dart';
+import './image_memoryimage_state.dart';
 import 'package:trueconnect/data/imageobject/image_networkimagedelete_state.dart';
 import 'package:trueconnect/utils/image_util.dart';
 import './image_object.dart';
@@ -113,6 +114,9 @@ class ImageMediator {
         stateList.add(imgState);
       }else if (imagetype == 'NetworkImage'){
         ImageState imgState = new NetworkImageState(imgObj);
+        stateList.add(imgState);
+      }else if (imagetype == 'MemoryImage'){
+        ImageState imgState = new MemoryImageState(imgObj);
         stateList.add(imgState);
       }
     }

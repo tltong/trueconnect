@@ -144,7 +144,7 @@ class UserSettingsTabsState extends State<UserSettingsTabs>  {
     //          UserPhotosPage(),
               EditUseSettingsPage(),
               //UserDetails(),
-              Icon(Icons.directions_bike),
+              Icon(Icons.access_alarm),
               
             ],
           )),
