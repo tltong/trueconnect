@@ -341,18 +341,26 @@ _getAddressFromLatLng() async {
                 print (image);
               }*/
               
-              ImageMediator imgMediator = new ImageMediator(inImages);
-              List<Image> img2 = imgMediator.getImages();
+            //  ImageMediator imgMediator = new ImageMediator(inImages);
+        //      List<Image> img2 = imgMediator.getImages();
          //     print(img2.length);
-              ImageMediator retMediator;
-              
-              retMediator = await Navigator.pushNamed(context,'/venuepage',arguments: imgMediator) as ImageMediator;
-              List<Image> outImages = retMediator.getImages();
-              /*
-              for (Image image in outImages){
-                print('outimage:');
-                print(image.toString());
-              }*/
+
+          //    ImageMediator retMediator;
+              List<Image> retImage;
+          
+              //retMediator = await Navigator.pushNamed(context,'/venuepage',arguments: imgMediator) as ImageMediator;
+          
+              retImage = await Navigator.pushNamed(context,'/venuepage',arguments: inImages) as List<Image>;
+          
+          //    retImage = await Navigator.pushNamed(context,'/venuepage',arguments: imgMediator) as List<Image>;
+          
+             // List<Image> outImages = retMediator.getImages();
+            //  print('main : return from venue_page');
+              print('main : return from venue_page; retImage number : ' + retImage.length.toString());
+                            
+              for (Image image in retImage){
+                 print(image.toString());
+              }
 
               },
               child: Text('Test venue page'),

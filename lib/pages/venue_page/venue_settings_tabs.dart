@@ -30,28 +30,21 @@ class VenueSettingsTabsState extends State<VenueSettingsTabs>  {
 final PageStorageBucket bucket = PageStorageBucket();
 
 void initState() {
-/*
-    print('VenueSettingsTabs init : ');
-    for (int i=0;i<images.length;i++){
-      print(images[i].toString());
-    }
-*/
+
     super.initState();
   }
 
 @override
   void dispose() {
-    print('Vphotos number : ' + VenueSettingsPhotos.vPhotos.length.toString());
-    for (int i=0;i<VenueSettingsPhotos.vPhotos.length;i++){
-      print(VenueSettingsPhotos.vPhotos[i]);
-    }
 
     super.dispose();
   }
 
 @override
 Widget build(BuildContext context) {
-  return MaterialApp(
+  return 
+
+  MaterialApp(
       home: DefaultTabController(
         length: 2,
         child: 
@@ -66,7 +59,12 @@ Widget build(BuildContext context) {
             ),
             title: Text('Venue'),
             leading: IconButton(icon:Icon(Icons.arrow_back),
-             onPressed:() => Navigator.pop(context, false),
+             onPressed:() async{  
+          //     print('venue_settings_tabs : returning vPhotos length : ' + VenueSettingsPhotos.vPhotos.length.toString());
+               Navigator.pop(context,VenueSettingsPhotos.vPhotos);
+               },
+           
+           
             )
           ),
           body: 
@@ -75,7 +73,6 @@ Widget build(BuildContext context) {
           child:
           TabBarView(
             children: [
-              //VenueSettingsPhotos(images),
               vPhotos,
               Icon(Icons.directions_bike),
               
@@ -83,10 +80,12 @@ Widget build(BuildContext context) {
           ),
         ),
       ),
+    )
 
-        
+  )
+ 
+  ;
 
-    ));
 
 
  }

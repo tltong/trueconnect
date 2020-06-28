@@ -21,15 +21,21 @@ class VenuePageState extends State<VenuePage>{
 
 ImageMediator pgImgMediator;
 List child;
+
+
+// return values
 List<Image> images;
+List<Image> retImage;
 
 @override
   void initState() {
+//    print('venue_page : initstate');
     super.initState();
   }
 
 @override
   void dispose() {
+ //   print('venue_page : dispose');
      super.dispose();
    }
 
@@ -57,10 +63,31 @@ Widget _Dialog(BuildContext context, Image displayImage) {
 
 List _initialiseChild(BuildContext context, List<Image> inImages){
 
-List<Image> imageslocal;
+//print('venue_page : initialiseChild');
 
-imageslocal=inImages;
+//if (retImage!=null)
+//print('venue_page : retImage length at start of initialiseChild: ' + retImage.length.toString());
+
+List<Image> imageslocal = new List<Image>();
+
+
+//if (retImage!=null)
+//print('venue_page : retImage length in the 1st middle part of initialiseChild: ' + retImage.length.toString());
+
+
+for (int i=0;i<inImages.length;i++){
+  imageslocal.add(inImages[i]);
+}
+//print('venue_page : initialiseChild; imageslocal length : ' + imageslocal.length.toString());
+//imageslocal=inImages;
+
+
 if (imageslocal.length==0) imageslocal.add(Image.asset('images/no-image.png'));
+
+
+//if (retImage!=null)
+//print('venue_page : retImage length in the 2nd middle part of initialiseChild: ' + retImage.length.toString());
+
 
 List child = map<Widget>(
   imageslocal,
@@ -107,6 +134,11 @@ List child = map<Widget>(
   },
 ).toList();
 
+//if (retImage!=null)
+//print('venue_page : retImage length at end of initialiseChild: ' + retImage.length.toString());
+
+//print('venue_page : initialiseChild; this.child length : '+child.length.toString());
+
 return child;
 
 }
@@ -116,23 +148,55 @@ return child;
 @override
   Widget build(BuildContext context) {
 
-  ImageMediator imgMediator=ModalRoute.of(context).settings.arguments;
-  pgImgMediator = imgMediator;
-
-  List<Image> inImages = imgMediator.getImages();
-
-
-  List images=_initialiseChild(context, inImages);
+  //print('venue_page : build');
+ // if (retImage !=null)
+ //   print('venue_page : retImage length : ' + retImage.length.toString());
 
 
-  this.child=images;
+      //ImageMediator imgMediator=ModalRoute.of(context).settings.arguments;
 
-        return WillPopScope(
+
+     // pgImgMediator = imgMediator;
+
+      List<Image> argImages = ModalRoute.of(context).settings.arguments;
+
+
+      List<Image> inImages;
+
+      if (retImage==null){
+       // inImages = imgMediator.getImages();
+        inImages = argImages;
+   //     print('venue_page : inImages reset from imgMediator. length : ' + inImages.length.toString());
+      }else{
+        inImages=retImage;
+     //   print('venue_page : inImages updated with retImage. length : ' + inImages.length.toString());
+      }
+    if (this.child==null){
+      
+
+      List images=_initialiseChild(context, inImages);
+      this.child=images;
+    }
+   
+  return 
+        
+   WillPopScope(
     onWillPop: () async {
-           Navigator.pop(context, pgImgMediator);
+     //     print('venue_page : willpopscope');
+          /*
+          if (inImages!=null)
+           print('venue page : inImages length : ' + inImages.length.toString());
+
+          if (retImage!=null)
+            print('venue page : retImage length : ' + retImage.length.toString());
+          */
+          //Navigator.pop(context, pgImgMediator);
+          Navigator.pop(context, inImages);
           return false;
         },
-    child: new Scaffold(
+    child: 
+     
+     new Scaffold(
       appBar: new AppBar(
         title: new Text(
           "Venue",
@@ -140,11 +204,31 @@ return child;
         ),
       ),
        floatingActionButton: FloatingActionButton(
-      onPressed: () {
-          Navigator.push(
+      onPressed: () async {
+          
+
+      retImage = await
+ 
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => VenueSettingsTabs(inImages)),
         );
+
+//      print('venue_page : returned length from navigator pop : '+ retImage.length.toString());
+
+      inImages=retImage;
+      
+
+  //  print('return value at venue_page : ' + retImage.length.toString());
+
+  setState(() {
+
+  //  print('venue_page : initialisechild with retImage; retImage length : ' + retImage.length.toString());
+    this.child=_initialiseChild(context, retImage);
+  //  print('venue_page : after initialisechild; retImage length : ' + retImage.length.toString());
+  
+  });
+  
       },
       child: const Icon(Icons.edit),
     ),
@@ -152,37 +236,39 @@ return child;
 
         children:
         [
-          
-          new CarouselSlider(
+          CarouselSlider(
 
       items: child,
+      
       autoPlay: false,
       enlargeCenterPage: true,
       viewportFraction: 0.9,
       aspectRatio: 2.0,
     ),
+
+
        RaisedButton(
              onPressed: () 
 
              async {
-                List<Image> imgList = imgMediator.getImages();
-                for (Image image in imgList){
-                  print (image.toString());
-                }
+                
+                
+
+                setState(() {
+
+           //       print('rebuild widget : ' + this.child.length.toString());
+
+                });
     
                },
             child: Text('Test'),
            ),
         ]
       )
-      
-      
-     
-    ),
+    ),  
+
+
   );
-
-
-
   }
 
 }

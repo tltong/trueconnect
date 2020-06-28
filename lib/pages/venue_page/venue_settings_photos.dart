@@ -16,14 +16,13 @@ List<Image> images;
 class VenueSettingsPhotos extends StatefulWidget {
 
   static String testString;
-  static List<Image> vPhotos;
+  static List<Image> vPhotos;       // return value
 
   VenueSettingsPhotos(List<Image> inImages){
 
     images=inImages;
     vPhotos = new List<Image>();
 
-  //  print('create venue settings photos ');
   }
 
   @override
@@ -41,12 +40,35 @@ class VenueSettingsPhotosState extends State<VenueSettingsPhotos>{
   Image image1,image2,image3;
   int profileIndex;
 
+updateVphotos(Image inImage1, Image inImage2, Image inImage3){
+
+  if (VenueSettingsPhotos.vPhotos != null)
+    VenueSettingsPhotos.vPhotos.clear();
+  
+  if (images!=null)
+    images.clear();
+
+  if (inImage1!=null){
+    VenueSettingsPhotos.vPhotos.add(inImage1);
+    images.add(inImage1);
+  }
+
+  if (inImage2!=null){
+    VenueSettingsPhotos.vPhotos.add(inImage2);
+    images.add(inImage2);
+  }
+
+  if (inImage3!=null){
+    VenueSettingsPhotos.vPhotos.add(inImage3);
+    images.add(inImage3);
+  }
+}
+
+
+
 @override
   void initState() {
-//    print('VenueSettingsPhotosState ');
-
-   // VenueSettingsPhotos.vPhotos = new List<Image>();
-
+  
     if (images!=null){
 
       if (images.length>0) {
@@ -61,20 +83,16 @@ class VenueSettingsPhotosState extends State<VenueSettingsPhotos>{
 
     }
 
+    updateVphotos(image1,image2,image3);
+
+
 
     super.initState();
   }
 
 @override
   void dispose() {
-    VenueSettingsPhotos.testString='test';
-
-    if (image1!=null)
-      VenueSettingsPhotos.vPhotos.add(image1);
-    if (image2!=null)
-      VenueSettingsPhotos.vPhotos.add(image2);
-    if (image3!=null)
-      VenueSettingsPhotos.vPhotos.add(image3);
+    
 
   super.dispose();
 }
@@ -111,7 +129,7 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
                   }
            
                   });
-              
+              updateVphotos(image1,image2,image3);
               Navigator.pop(context); 
               },
               child: const Text('Remove photo'),
@@ -139,6 +157,7 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
                 }
        
                   });
+              updateVphotos(image1,image2,image3);
               });
               
               Navigator.pop(context); 
@@ -153,10 +172,11 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-     
+    return  
+
+    
+    Scaffold(
       body: 
-      
       PageStorage(  
       bucket: bucket, 
       child:
@@ -193,9 +213,11 @@ Future<photoSelection> _asyncSimpleDialog(BuildContext context, int imageindex) 
         ],
       ),
     )
-    
-    
-    );
+    )
+
+      //WillPopScope
+     
+     ;
   }
 
 
