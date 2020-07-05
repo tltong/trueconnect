@@ -1,12 +1,14 @@
 
 import 'package:flutter/material.dart';
 import 'venue_settings_photos.dart';
+import 'venue_settings_details.dart';
 //import '../user_profile/user_photo_page.dart';
 //import 'venue_settings_photos_backup.dart';
 
 
 List<Image> images;
 VenueSettingsPhotos vPhotos;
+VenueSettingsDetails vDetails;
 
 class VenueSettingsTabs extends StatefulWidget {
 
@@ -14,6 +16,8 @@ VenueSettingsTabs(List<Image> inImages){
 
   images = inImages;
   vPhotos = new VenueSettingsPhotos(inImages);
+  vDetails = new VenueSettingsDetails();
+
 }
 
 @override
@@ -74,7 +78,8 @@ Widget build(BuildContext context) {
           TabBarView(
             children: [
               vPhotos,
-              Icon(Icons.directions_bike),
+              vDetails
+//              Icon(Icons.directions_bike),
               
             ],
           ),
