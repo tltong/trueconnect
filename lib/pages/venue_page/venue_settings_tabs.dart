@@ -70,7 +70,7 @@ Widget build(BuildContext context) {
              onPressed:() async{  
            //    print('venue_settings_tabs : returning vDetails : ' + VenueSettingsDetails.retVenueName + '; ' + VenueSettingsDetails.retVenueAddress + '; ' + VenueSettingsDetails.retActivity + '; ' + VenueSettingsDetails.retSplurge + '; ' + VenueSettingsDetails.retNotes);
            
-                print('venue_settings_tabs page : ' + 'return');
+             //   print('venue_settings_tabs page : ' + 'return');
               VenueData retVenueData = new VenueData(VenueSettingsPhotos.vPhotos, 
                                                      VenueSettingsDetails.retVenueName, 
                                                      VenueSettingsDetails.retVenueAddress,
@@ -78,8 +78,9 @@ Widget build(BuildContext context) {
                                                      VenueSettingsDetails.retSplurge,
                                                      VenueSettingsDetails.retNotes);
 
-
-               Navigator.pop(context,VenueSettingsPhotos.vPhotos);
+    
+//               Navigator.pop(context,VenueSettingsPhotos.vPhotos);
+              Navigator.pop(context,retVenueData);
                },
            
            

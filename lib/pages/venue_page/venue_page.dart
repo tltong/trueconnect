@@ -24,10 +24,22 @@ class VenuePageState extends State<VenuePage>{
 ImageMediator pgImgMediator;
 List child;
 
+TextEditingController namectrl = new TextEditingController();
+TextEditingController addressctrl = new TextEditingController();
+TextEditingController typectrl = new TextEditingController();
+TextEditingController splurgectrl = new TextEditingController();
+TextEditingController notesctrl = new TextEditingController();
+
 
 // return values
 List<Image> images;
 List<Image> retImage;
+
+String retVenueName;
+String retVenueAddress;
+String retVenueType;
+String retVenueSplurge;
+String retVenueNotes;
 
 @override
   void initState() {
@@ -150,28 +162,42 @@ return child;
 @override
   Widget build(BuildContext context) {
 
-  //print('venue_page : build');
- // if (retImage !=null)
- //   print('venue_page : retImage length : ' + retImage.length.toString());
+
+//      List<Image> argImages = ModalRoute.of(context).settings.arguments;
+      VenueData argVenueData = ModalRoute.of(context).settings.arguments;
+     List<Image> argImages = argVenueData.images;
+
+    if (retVenueName==null)
+      retVenueName = argVenueData.name;
+    
+    if (retVenueAddress==null)
+      retVenueAddress=argVenueData.address;
+
+    if (retVenueType==null)
+      retVenueType=argVenueData.type;
+
+    if (retVenueSplurge==null)
+      retVenueSplurge=argVenueData.splurge;
+
+    if (retVenueNotes==null)
+      retVenueNotes=argVenueData.notes;
+
+    namectrl.text=retVenueName;
+    addressctrl.text=retVenueAddress;
+    typectrl.text=retVenueType;
+    splurgectrl.text=retVenueSplurge;
+    notesctrl.text=retVenueNotes;
 
 
-      //ImageMediator imgMediator=ModalRoute.of(context).settings.arguments;
-
-
-     // pgImgMediator = imgMediator;
-
-      List<Image> argImages = ModalRoute.of(context).settings.arguments;
-
+     print('venue page build : ' + retVenueName + '; ' + retVenueAddress + '; ' + retVenueType + '; ' + retVenueSplurge + '; ' + retVenueNotes);
 
       List<Image> inImages;
 
       if (retImage==null){
-       // inImages = imgMediator.getImages();
+ 
         inImages = argImages;
-   //     print('venue_page : inImages reset from imgMediator. length : ' + inImages.length.toString());
       }else{
         inImages=retImage;
-     //   print('venue_page : inImages updated with retImage. length : ' + inImages.length.toString());
       }
     if (this.child==null){
       
@@ -184,14 +210,7 @@ return child;
         
    WillPopScope(
     onWillPop: () async {
-     //     print('venue_page : willpopscope');
-          /*
-          if (inImages!=null)
-           print('venue page : inImages length : ' + inImages.length.toString());
-          if (retImage!=null)
-            print('venue page : retImage length : ' + retImage.length.toString());
-          */
-          //Navigator.pop(context, pgImgMediator);
+    
           Navigator.pop(context, inImages);
           return false;
         },
@@ -207,12 +226,14 @@ return child;
        floatingActionButton: FloatingActionButton(
       onPressed: () async {
           
-      VenueData venuedata = new VenueData(inImages, 'John', 'Miami', 'Meal', '\$\$\$', 'nice');
+      VenueData venuedata = new VenueData(inImages, retVenueName, retVenueAddress, retVenueType, retVenueSplurge, retVenueNotes);
 
       VenueData retVenueData;
-      
-      retImage = await
+
+      //retImage = await
+      retVenueData = await
  
+
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => VenueSettingsTabs(venuedata)),
@@ -224,8 +245,11 @@ return child;
 
 //      print('venue_page : returned length from navigator pop : '+ retImage.length.toString());
 
-      inImages=retImage;
-      
+   //   inImages=retImage;
+
+         inImages=retVenueData.images;
+        retImage=retVenueData.images;
+   //    print('venue_page : ' + retVenueData.name + '; ' + retVenueData.address);
 
   //  print('return value at venue_page : ' + retImage.length.toString());
 
@@ -235,6 +259,12 @@ return child;
     this.child=_initialiseChild(context, retImage);
   //  print('venue_page : after initialisechild; retImage length : ' + retImage.length.toString());
   
+    retVenueName = retVenueData.name;
+    retVenueAddress = retVenueData.address;
+    retVenueType = retVenueData.type;
+    retVenueSplurge = retVenueData.splurge;
+    retVenueNotes = retVenueData.notes;
+
   });
   
       },
@@ -254,23 +284,65 @@ return child;
       aspectRatio: 2.0,
     ),
 
+    TextField(
+      controller: namectrl,
+      readOnly: true,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        labelText: 'Name'
+      ),
+    ),
 
+    TextField(
+      controller: addressctrl,
+      readOnly: true,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        labelText: 'Address'
+      ),
+    ),
+
+    TextField(
+      controller: typectrl,
+      readOnly: true,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        labelText: 'Type'
+      ),
+    ),
+
+  TextField(
+      controller: splurgectrl,
+      readOnly: true,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        labelText: 'Splurge'
+      ),
+    ),
+
+   TextField(
+      controller: notesctrl,
+      readOnly: true,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        labelText: 'Notes'
+      ),
+    ),
+
+
+/*
        RaisedButton(
              onPressed: () 
 
              async {
-                
-                
-
                 setState(() {
-
-           //       print('rebuild widget : ' + this.child.length.toString());
-
                 });
     
                },
             child: Text('Test'),
            ),
+*/
+
         ]
       )
     ),  

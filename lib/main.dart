@@ -26,6 +26,7 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_facebook_image_picker/flutter_facebook_image_picker.dart';
 import './pages/test_pages/test_willpop.dart';
 import './pages/venue_page/venue_page.dart';
+import './data/venuedata/venuedata.dart';
 
 
 
@@ -328,39 +329,16 @@ _getAddressFromLatLng() async {
         RaisedButton(
               onPressed: () async {
 
-//             File imgFile = await ImageUtil.pickImageFromGallery();
-  //              Image img = Image.file(imgFile);
-//                List<Image> inImages = new List<Image>();
-    //            inImages.add(img);
 
               List<Image> inImages = await ImageUtil.pickMultipleImages();
               
-        //      print(inImages.length);
-              /*
-              for (Image image in inImages){
-                print (image);
-              }*/
-              
-            //  ImageMediator imgMediator = new ImageMediator(inImages);
-        //      List<Image> img2 = imgMediator.getImages();
-         //     print(img2.length);
+              VenueData argVenueData = new VenueData(inImages, 'John', 'Miami', 'Meal', '\$\$\$', 'nice');
 
-          //    ImageMediator retMediator;
               List<Image> retImage;
-          
-              //retMediator = await Navigator.pushNamed(context,'/venuepage',arguments: imgMediator) as ImageMediator;
-          
-              retImage = await Navigator.pushNamed(context,'/venuepage',arguments: inImages) as List<Image>;
-          
-          //    retImage = await Navigator.pushNamed(context,'/venuepage',arguments: imgMediator) as List<Image>;
-          
-             // List<Image> outImages = retMediator.getImages();
-            //  print('main : return from venue_page');
-              print('main : return from venue_page; retImage number : ' + retImage.length.toString());
-                            
-              for (Image image in retImage){
-                 print(image.toString());
-              }
+                    
+//              retImage = await Navigator.pushNamed(context,'/venuepage',arguments: inImages) as List<Image>;
+              Navigator.pushNamed(context,'/venuepage',arguments: argVenueData);
+                         
 
               },
               child: Text('Test venue page'),
