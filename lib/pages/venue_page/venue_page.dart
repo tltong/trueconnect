@@ -189,13 +189,14 @@ return child;
     notesctrl.text=retVenueNotes;
 
 
-     print('venue page build : ' + retVenueName + '; ' + retVenueAddress + '; ' + retVenueType + '; ' + retVenueSplurge + '; ' + retVenueNotes);
+     //print('venue page build : ' + retVenueName + '; ' + retVenueAddress + '; ' + retVenueType + '; ' + retVenueSplurge + '; ' + retVenueNotes);
 
       List<Image> inImages;
 
       if (retImage==null){
  
         inImages = argImages;
+        retImage = argImages;
       }else{
         inImages=retImage;
       }
@@ -211,7 +212,10 @@ return child;
    WillPopScope(
     onWillPop: () async {
     
-          Navigator.pop(context, inImages);
+      //  print('venue page : ' + 'images in onwillpop :' + retImage.toString());
+        VenueData retVenueData = new VenueData(retImage,retVenueName,retVenueAddress,retVenueType,retVenueSplurge,retVenueNotes);
+
+          Navigator.pop(context, retVenueData);
           return false;
         },
     child: 
@@ -251,7 +255,7 @@ return child;
         retImage=retVenueData.images;
    //    print('venue_page : ' + retVenueData.name + '; ' + retVenueData.address);
 
-  //  print('return value at venue_page : ' + retImage.length.toString());
+  //  print('venue_page (return from venue settings): ' + retImage.toString());
 
   setState(() {
 

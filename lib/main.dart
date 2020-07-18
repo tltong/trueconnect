@@ -333,12 +333,17 @@ _getAddressFromLatLng() async {
               List<Image> inImages = await ImageUtil.pickMultipleImages();
               
               VenueData argVenueData = new VenueData(inImages, 'John', 'Miami', 'Meal', '\$\$\$', 'nice');
-
+              VenueData retVenueData;
               List<Image> retImage;
                     
 //              retImage = await Navigator.pushNamed(context,'/venuepage',arguments: inImages) as List<Image>;
-              Navigator.pushNamed(context,'/venuepage',arguments: argVenueData);
-                         
+              retVenueData = await Navigator.pushNamed(context,'/venuepage',arguments: argVenueData) as VenueData;
+              
+//              print ('main page : ' + 'image :' + retVenueData.images.toString());
+                print ('main page : ' + 'venue details :' + retVenueData.name + ';' +
+                 retVenueData.address + ';' + retVenueData.type + ';' 
+                 + retVenueData.splurge + ';' + retVenueData.notes);
+           
 
               },
               child: Text('Test venue page'),

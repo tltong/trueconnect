@@ -7,17 +7,17 @@ import 'package:trueconnect/utils/image_util.dart';
 import '../../utils/appdata.dart';
 import '../../user.dart';
 
-TextEditingController namectrl;
+//TextEditingController namectrl = new TextEditingController();
 String venueName;
 
-TextEditingController addressctrl;
+//TextEditingController addressctrl = new TextEditingController();
 String venueAddress;
 
 String activityType;
 
 String splurge;
 
-TextEditingController notesctrl;
+//TextEditingController notesctrl =new TextEditingController();
 String notes;
 
 class VenueSettingsDetails extends StatefulWidget {
@@ -32,13 +32,17 @@ class VenueSettingsDetails extends StatefulWidget {
 
   VenueSettingsDetails(String inName, String inAddress, String inType, String inSplurge, String inNotes  ){
 
-      namectrl = new TextEditingController();
-      namectrl.text=inName;
-      retVenueName=inName;
+  // print('venue_settings_details_page : VenueSettingsDetails constructor');
 
-      addressctrl = new TextEditingController();
-      addressctrl.text=inAddress;
+  //    namectrl = new TextEditingController();
+   //   namectrl.text=inName;
+      retVenueName=inName;
+      venueName=inName;
+
+    //  addressctrl = new TextEditingController();
+    //  addressctrl.text=inAddress;
       retVenueAddress=inAddress;
+      venueAddress=inAddress;
 
       activityType = inType;
       retActivity = inType;
@@ -46,11 +50,14 @@ class VenueSettingsDetails extends StatefulWidget {
       splurge = inSplurge;
       retSplurge = inSplurge;
 
-      notesctrl = new TextEditingController();
-      notesctrl.text = inNotes;
+    //  notesctrl = new TextEditingController();
+   //   notesctrl.text = inNotes;
       retNotes = inNotes;
+      notes = inNotes;
 
   }
+
+
 
   @override
   State<StatefulWidget> createState() {
@@ -68,13 +75,25 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
 
 @override
   void initState() {
+  //print('venue_settings_details_page : initState');
+/*
+    if (namectrl==null)
+      namectrl = new TextEditingController();
+    
+    if (addressctrl==null)
+      addressctrl = new TextEditingController();
+
+    if (notesctrl==null)
+      notesctrl = new TextEditingController();
+*/
+
     super.initState();
   }
 
 @override
   void dispose() {
 
-    //print('venue_settings_details_page : ' + namectrl.text.toString());
+   // print('venue_settings_details_page : dispose');
 
     super.dispose();
 }
@@ -105,25 +124,28 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
               child: Column(
             children: <Widget>[
 
+     
+
+
               FormBuilderTextField(
                       attribute: 'name',
-                      initialValue: namectrl.text,
+                      initialValue: venueName,
                     onChanged: (value) => (VenueSettingsDetails.retVenueName = value),
                       enabled:true,
                      // readOnly: true,
                       validators: [FormBuilderValidators.required()],
                       decoration: InputDecoration(labelText: "Venue Name"),
-                      controller: namectrl
+                   //   controller: namectrl
                     ),
 
               FormBuilderTextField(
                       attribute: 'address',
-                      initialValue: namectrl.text,
+                      initialValue: venueAddress,
                     onChanged: (value) => (VenueSettingsDetails.retVenueAddress = value),
                       enabled:true,
                       validators: [FormBuilderValidators.required()],
                       decoration: InputDecoration(labelText: "Address"),
-                      controller: addressctrl
+                   //   controller: addressctrl
                     ),
 
 
@@ -152,11 +174,11 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
               FormBuilderTextField(
                       attribute: 'Notes',
                       onChanged: (value) => (  VenueSettingsDetails.retNotes = value),
-                      initialValue: notesctrl.text,
+                      initialValue: notes,
                       enabled:true,
 //                      validators: [FormBuilderValidators.required()],
                       decoration: InputDecoration(labelText: "Notes"),
-                      controller: notesctrl
+                   //   controller: notesctrl
                     ),
 
 
