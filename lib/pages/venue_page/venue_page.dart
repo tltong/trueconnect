@@ -1,3 +1,4 @@
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import '../../data/venue/venue.dart';
@@ -5,6 +6,7 @@ import '../../data/venue/venue_factory.dart';
 import '../../data/imageobject/image_mediator.dart';
 import './venue_settings_tabs.dart';
 import './venue_settings_photos.dart';
+import '../../data/venuedata/venuedata.dart';
 
 
 class VenuePage extends StatefulWidget {
@@ -186,7 +188,6 @@ return child;
           /*
           if (inImages!=null)
            print('venue page : inImages length : ' + inImages.length.toString());
-
           if (retImage!=null)
             print('venue page : retImage length : ' + retImage.length.toString());
           */
@@ -206,12 +207,19 @@ return child;
        floatingActionButton: FloatingActionButton(
       onPressed: () async {
           
+      VenueData venuedata = new VenueData(inImages, 'John', 'Miami', 'Meal', '\$\$\$', 'nice');
 
+      VenueData retVenueData;
+      
       retImage = await
  
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => VenueSettingsTabs(inImages)),
+        MaterialPageRoute(builder: (context) => VenueSettingsTabs(venuedata)),
+
+      //  MaterialPageRoute(builder: (context) => VenueSettingsTabs(inImages)),
+
+
         );
 
 //      print('venue_page : returned length from navigator pop : '+ retImage.length.toString());
@@ -272,3 +280,4 @@ return child;
   }
 
 }
+

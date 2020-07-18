@@ -7,10 +7,48 @@ import 'package:trueconnect/utils/image_util.dart';
 import '../../utils/appdata.dart';
 import '../../user.dart';
 
+TextEditingController namectrl;
+String venueName;
+
+TextEditingController addressctrl;
+String venueAddress;
+
+String activityType;
+
+String splurge;
+
+TextEditingController notesctrl;
+String notes;
+
 class VenueSettingsDetails extends StatefulWidget {
 
 
-  VenueSettingsDetails(){
+  static String retVenueName;
+  static String retVenueAddress;
+  static String retActivity;
+  static String retSplurge;
+  static String retNotes;
+  
+
+  VenueSettingsDetails(String inName, String inAddress, String inType, String inSplurge, String inNotes  ){
+
+      namectrl = new TextEditingController();
+      namectrl.text=inName;
+      retVenueName=inName;
+
+      addressctrl = new TextEditingController();
+      addressctrl.text=inAddress;
+      retVenueAddress=inAddress;
+
+      activityType = inType;
+      retActivity = inType;
+
+      splurge = inSplurge;
+      retSplurge = inSplurge;
+
+      notesctrl = new TextEditingController();
+      notesctrl.text = inNotes;
+      retNotes = inNotes;
 
   }
 
@@ -26,10 +64,6 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
   final PageStorageBucket bucket = PageStorageBucket();
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   BoxConstraints bx = new BoxConstraints();
-  TextEditingController namectrl = TextEditingController();
-  TextEditingController addressctrl = TextEditingController();
-  TextEditingController notesctrl = TextEditingController();
-  
 
 
 @override
@@ -39,18 +73,18 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
 
 @override
   void dispose() {
+
+    //print('venue_settings_details_page : ' + namectrl.text.toString());
+
     super.dispose();
 }
 
   @override
   Widget build(BuildContext context) {
   
-
     return 
 
-
-
- Scaffold(
+  Scaffold(
 
       body: 
        new Center(
@@ -73,7 +107,8 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
 
               FormBuilderTextField(
                       attribute: 'name',
-                    //  initialValue: namectrl.text,
+                      initialValue: namectrl.text,
+                    onChanged: (value) => (VenueSettingsDetails.retVenueName = value),
                       enabled:true,
                      // readOnly: true,
                       validators: [FormBuilderValidators.required()],
@@ -83,7 +118,8 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
 
               FormBuilderTextField(
                       attribute: 'address',
-                    //  initialValue: namectrl.text,
+                      initialValue: namectrl.text,
+                    onChanged: (value) => (VenueSettingsDetails.retVenueAddress = value),
                       enabled:true,
                       validators: [FormBuilderValidators.required()],
                       decoration: InputDecoration(labelText: "Address"),
@@ -94,17 +130,19 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
              FormBuilderDropdown(
                       attribute: "activity",
                       decoration: InputDecoration(labelText: "Actvity type"),
-            //          onChanged: (value) => (  updateUserDetailsEducation(value)),
-               //       initialValue: educationString,
+                      onChanged: (value) => (  VenueSettingsDetails.retActivity = value),
+                      initialValue: activityType,
                        items: ['Meal', 'Drinks', 'Outdoors', 'Nightlife','Sports','Getaway','Others']
                           .map((activity) => DropdownMenuItem(
                           value: activity, child: Text("$activity")))
                           .toList(),
                     ),
+
             FormBuilderDropdown(
                       attribute: "splurge",
                       decoration: InputDecoration(labelText: "Splurge"),
-               //       initialValue: educationString,
+                      onChanged: (value) => (  VenueSettingsDetails.retSplurge = value),
+                      initialValue: splurge,
                        items: ['\$', '\$\$', '\$\$\$',]
                           .map((splurge) => DropdownMenuItem(
                           value: splurge, child: Text("$splurge")))
@@ -113,7 +151,8 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
 
               FormBuilderTextField(
                       attribute: 'Notes',
-                    //  initialValue: namectrl.text,
+                      onChanged: (value) => (  VenueSettingsDetails.retNotes = value),
+                      initialValue: notesctrl.text,
                       enabled:true,
 //                      validators: [FormBuilderValidators.required()],
                       decoration: InputDecoration(labelText: "Notes"),

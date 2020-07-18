@@ -1,10 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'venue_settings_photos.dart';
 import 'venue_settings_details.dart';
-//import '../user_profile/user_photo_page.dart';
-//import 'venue_settings_photos_backup.dart';
-
+import '../../data/venuedata/venuedata.dart';
 
 List<Image> images;
 VenueSettingsPhotos vPhotos;
@@ -12,11 +9,18 @@ VenueSettingsDetails vDetails;
 
 class VenueSettingsTabs extends StatefulWidget {
 
-VenueSettingsTabs(List<Image> inImages){
+//VenueSettingsTabs(List<Image> inImages){
 
-  images = inImages;
-  vPhotos = new VenueSettingsPhotos(inImages);
-  vDetails = new VenueSettingsDetails();
+VenueSettingsTabs(VenueData inVenueData){
+
+
+//  images = inImages;
+  images = inVenueData.images;
+
+//  vPhotos = new VenueSettingsPhotos(inImages);
+vPhotos = new VenueSettingsPhotos(images);
+
+  vDetails = new VenueSettingsDetails(inVenueData.name,inVenueData.address,inVenueData.type,inVenueData.splurge,inVenueData.notes);
 
 }
 
@@ -64,7 +68,17 @@ Widget build(BuildContext context) {
             title: Text('Venue'),
             leading: IconButton(icon:Icon(Icons.arrow_back),
              onPressed:() async{  
-          //     print('venue_settings_tabs : returning vPhotos length : ' + VenueSettingsPhotos.vPhotos.length.toString());
+           //    print('venue_settings_tabs : returning vDetails : ' + VenueSettingsDetails.retVenueName + '; ' + VenueSettingsDetails.retVenueAddress + '; ' + VenueSettingsDetails.retActivity + '; ' + VenueSettingsDetails.retSplurge + '; ' + VenueSettingsDetails.retNotes);
+           
+                print('venue_settings_tabs page : ' + 'return');
+              VenueData retVenueData = new VenueData(VenueSettingsPhotos.vPhotos, 
+                                                     VenueSettingsDetails.retVenueName, 
+                                                     VenueSettingsDetails.retVenueAddress,
+                                                     VenueSettingsDetails.retActivity,
+                                                     VenueSettingsDetails.retSplurge,
+                                                     VenueSettingsDetails.retNotes);
+
+
                Navigator.pop(context,VenueSettingsPhotos.vPhotos);
                },
            
@@ -95,7 +109,3 @@ Widget build(BuildContext context) {
 
  }
 }
-
-
-
-
