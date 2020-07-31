@@ -9,6 +9,7 @@ import './venue_settings_photos.dart';
 import '../../data/venuedata/venuedata.dart';
 
 
+
 class VenuePage extends StatefulWidget {
 
   @override
@@ -162,9 +163,7 @@ return child;
 @override
   Widget build(BuildContext context) {
 
-
-//      List<Image> argImages = ModalRoute.of(context).settings.arguments;
-      VenueData argVenueData = ModalRoute.of(context).settings.arguments;
+    VenueData argVenueData = ModalRoute.of(context).settings.arguments;
      List<Image> argImages = argVenueData.images;
 
     if (retVenueName==null)
@@ -188,9 +187,6 @@ return child;
     splurgectrl.text=retVenueSplurge;
     notesctrl.text=retVenueNotes;
 
-
-     //print('venue page build : ' + retVenueName + '; ' + retVenueAddress + '; ' + retVenueType + '; ' + retVenueSplurge + '; ' + retVenueNotes);
-
       List<Image> inImages;
 
       if (retImage==null){
@@ -212,7 +208,6 @@ return child;
    WillPopScope(
     onWillPop: () async {
     
-      //  print('venue page : ' + 'images in onwillpop :' + retImage.toString());
         VenueData retVenueData = new VenueData(retImage,retVenueName,retVenueAddress,retVenueType,retVenueSplurge,retVenueNotes);
 
           Navigator.pop(context, retVenueData);
@@ -231,37 +226,20 @@ return child;
       onPressed: () async {
           
       VenueData venuedata = new VenueData(inImages, retVenueName, retVenueAddress, retVenueType, retVenueSplurge, retVenueNotes);
-
       VenueData retVenueData;
 
-      //retImage = await
       retVenueData = await
- 
-
-      Navigator.push(
+       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => VenueSettingsTabs(venuedata)),
-
-      //  MaterialPageRoute(builder: (context) => VenueSettingsTabs(inImages)),
-
-
         );
-
-//      print('venue_page : returned length from navigator pop : '+ retImage.length.toString());
-
-   //   inImages=retImage;
 
          inImages=retVenueData.images;
         retImage=retVenueData.images;
-   //    print('venue_page : ' + retVenueData.name + '; ' + retVenueData.address);
-
-  //  print('venue_page (return from venue settings): ' + retImage.toString());
 
   setState(() {
 
-  //  print('venue_page : initialisechild with retImage; retImage length : ' + retImage.length.toString());
     this.child=_initialiseChild(context, retImage);
-  //  print('venue_page : after initialisechild; retImage length : ' + retImage.length.toString());
   
     retVenueName = retVenueData.name;
     retVenueAddress = retVenueData.address;
@@ -332,20 +310,6 @@ return child;
         labelText: 'Notes'
       ),
     ),
-
-
-/*
-       RaisedButton(
-             onPressed: () 
-
-             async {
-                setState(() {
-                });
-    
-               },
-            child: Text('Test'),
-           ),
-*/
 
         ]
       )

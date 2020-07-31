@@ -27,6 +27,8 @@ import 'package:flutter_facebook_image_picker/flutter_facebook_image_picker.dart
 import './pages/test_pages/test_willpop.dart';
 import './pages/venue_page/venue_page.dart';
 import './data/venuedata/venuedata.dart';
+import './pages/calendar_page/calendar_page.dart';
+import './pages/calendar_page/calendar_page_tabs.dart';
 
 
 
@@ -199,6 +201,7 @@ _getAddressFromLatLng() async {
       '/testpage': (context) => TestPage(),
       '/testwillpop' : (context) =>TestWillPop(),
       '/venuepage' : (context) =>VenuePage(),
+      '/calendarpagetabs' : (context) =>CalendarPagesTabs()
     },
    title: 'Project Pimp',
       home: new Scaffold(
@@ -349,6 +352,19 @@ _getAddressFromLatLng() async {
               child: Text('Test venue page'),
             ),
         ),
+
+ Builder(
+        builder: (context) => 
+        RaisedButton(
+              onPressed: () async {
+           
+                  Navigator.pushNamed(context,'/calendarpagetabs');
+              },
+              child: Text('Test calendar page'),
+            ),
+        ),
+
+
         /*
 Builder(
         builder: (context) => 

@@ -9,15 +9,9 @@ VenueSettingsDetails vDetails;
 
 class VenueSettingsTabs extends StatefulWidget {
 
-//VenueSettingsTabs(List<Image> inImages){
-
 VenueSettingsTabs(VenueData inVenueData){
-
-
-//  images = inImages;
   images = inVenueData.images;
 
-//  vPhotos = new VenueSettingsPhotos(inImages);
 vPhotos = new VenueSettingsPhotos(images);
 
   vDetails = new VenueSettingsDetails(inVenueData.name,inVenueData.address,inVenueData.type,inVenueData.splurge,inVenueData.notes);
@@ -68,22 +62,14 @@ Widget build(BuildContext context) {
             title: Text('Venue'),
             leading: IconButton(icon:Icon(Icons.arrow_back),
              onPressed:() async{  
-           //    print('venue_settings_tabs : returning vDetails : ' + VenueSettingsDetails.retVenueName + '; ' + VenueSettingsDetails.retVenueAddress + '; ' + VenueSettingsDetails.retActivity + '; ' + VenueSettingsDetails.retSplurge + '; ' + VenueSettingsDetails.retNotes);
-           
-             //   print('venue_settings_tabs page : ' + 'return');
               VenueData retVenueData = new VenueData(VenueSettingsPhotos.vPhotos, 
                                                      VenueSettingsDetails.retVenueName, 
                                                      VenueSettingsDetails.retVenueAddress,
                                                      VenueSettingsDetails.retActivity,
                                                      VenueSettingsDetails.retSplurge,
                                                      VenueSettingsDetails.retNotes);
-
-    
-//               Navigator.pop(context,VenueSettingsPhotos.vPhotos);
               Navigator.pop(context,retVenueData);
                },
-           
-           
             )
           ),
           body: 
@@ -94,19 +80,16 @@ Widget build(BuildContext context) {
             children: [
               vPhotos,
               vDetails
-//              Icon(Icons.directions_bike),
-              
+  //            Icon(Icons.directions_bike),
             ],
           ),
         ),
       ),
     )
 
-  )
- 
-  ;
+  );
 
 
 
- }
+ }  // build
 }
