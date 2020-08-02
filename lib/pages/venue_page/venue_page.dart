@@ -25,6 +25,8 @@ class VenuePageState extends State<VenuePage>{
 ImageMediator pgImgMediator;
 List child;
 
+TextEditingController datectrl = new TextEditingController();
+TextEditingController hostctrl = new TextEditingController();
 TextEditingController namectrl = new TextEditingController();
 TextEditingController addressctrl = new TextEditingController();
 TextEditingController typectrl = new TextEditingController();
@@ -41,6 +43,11 @@ String retVenueAddress;
 String retVenueType;
 String retVenueSplurge;
 String retVenueNotes;
+
+DateTime retStartDateTime;
+DateTime retEndDateTime;
+String retUserName;
+String retUserID;
 
 @override
   void initState() {
@@ -158,8 +165,6 @@ return child;
 
 }
 
-
-
 @override
   Widget build(BuildContext context) {
 
@@ -181,6 +186,45 @@ return child;
     if (retVenueNotes==null)
       retVenueNotes=argVenueData.notes;
 
+    if (retStartDateTime==null)
+      retStartDateTime=argVenueData.startTime;
+
+    if (retEndDateTime==null)
+      retEndDateTime=argVenueData.endTime;
+
+    if (retUserName==null)
+      retUserName=argVenueData.userName;
+
+    if (retUserID==null)
+      retUserID=argVenueData.userID;
+
+ 
+    var DayOfWeek = new List(8);
+    DayOfWeek[0]='None';
+    DayOfWeek[1]='Mon';
+    DayOfWeek[2]='Tues';
+    DayOfWeek[3]='Wed';
+    DayOfWeek[4]='Thurs';
+    DayOfWeek[5]='Fri';
+    DayOfWeek[6]='Sat';
+    DayOfWeek[7]='Sun';
+
+
+    String dateString =
+    
+    retStartDateTime.day.toString()+'-'+retStartDateTime.month.toString()+'-'+retStartDateTime.year.toString()
+    + " (" + DayOfWeek[retStartDateTime.weekday] + ") " + 
+    
+    retStartDateTime.hour.toString()+':'+ retStartDateTime.minute.toString()
+    + ' - ';
+
+    dateString += retEndDateTime.day.toString() 
+    +'-'+retEndDateTime.month.toString()+'-'+retEndDateTime.year.toString()
+    + " (" + DayOfWeek[retEndDateTime.weekday] + ") "
+     +   retEndDateTime.hour.toString()+':'+ retEndDateTime.minute.toString();
+
+    datectrl.text=dateString;
+    hostctrl.text=retUserName;
     namectrl.text=retVenueName;
     addressctrl.text=retVenueAddress;
     typectrl.text=retVenueType;
@@ -208,7 +252,16 @@ return child;
    WillPopScope(
     onWillPop: () async {
     
-        VenueData retVenueData = new VenueData(retImage,retVenueName,retVenueAddress,retVenueType,retVenueSplurge,retVenueNotes);
+        VenueData retVenueData = new VenueData(retImage,
+         retUserName,
+        retUserID,
+        retStartDateTime,
+        retEndDateTime,
+        retVenueName,
+        retVenueAddress,
+        retVenueType,
+        retVenueSplurge,
+        retVenueNotes);
 
           Navigator.pop(context, retVenueData);
           return false;
@@ -225,7 +278,17 @@ return child;
        floatingActionButton: FloatingActionButton(
       onPressed: () async {
           
-      VenueData venuedata = new VenueData(inImages, retVenueName, retVenueAddress, retVenueType, retVenueSplurge, retVenueNotes);
+      VenueData venuedata = new VenueData(inImages,
+          retUserName,
+        retUserID,
+        retStartDateTime,
+        retEndDateTime,
+      retVenueName, 
+      retVenueAddress, 
+      retVenueType, 
+      retVenueSplurge, 
+      retVenueNotes);
+      
       VenueData retVenueData;
 
       retVenueData = await
@@ -265,6 +328,32 @@ return child;
       viewportFraction: 0.9,
       aspectRatio: 2.0,
     ),
+
+  TextField(
+      controller: datectrl,
+      readOnly: true,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        labelText: 'Date '
+      ),
+    ),
+
+
+  GestureDetector(
+
+  onTap: () {
+   //print('venue_page : ontap hosted by');
+  },
+  child:
+  new TextField(
+      controller: hostctrl,
+      readOnly: true,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        labelText: 'Hosted by '
+      ),
+    ),    
+  ),
 
     TextField(
       controller: namectrl,

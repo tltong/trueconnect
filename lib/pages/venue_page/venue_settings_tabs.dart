@@ -12,9 +12,18 @@ class VenueSettingsTabs extends StatefulWidget {
 VenueSettingsTabs(VenueData inVenueData){
   images = inVenueData.images;
 
-vPhotos = new VenueSettingsPhotos(images);
+  vPhotos = new VenueSettingsPhotos(images);
 
-  vDetails = new VenueSettingsDetails(inVenueData.name,inVenueData.address,inVenueData.type,inVenueData.splurge,inVenueData.notes);
+  vDetails = new VenueSettingsDetails(
+  inVenueData.userName,
+  inVenueData.userID,
+  inVenueData.startTime,
+  inVenueData.endTime,
+  inVenueData.name,
+  inVenueData.address,
+  inVenueData.type,
+  inVenueData.splurge,
+  inVenueData.notes);
 
 }
 
@@ -62,12 +71,19 @@ Widget build(BuildContext context) {
             title: Text('Venue'),
             leading: IconButton(icon:Icon(Icons.arrow_back),
              onPressed:() async{  
-              VenueData retVenueData = new VenueData(VenueSettingsPhotos.vPhotos, 
+              VenueData retVenueData = new VenueData(VenueSettingsPhotos.vPhotos,
+                                                    'TL',
+                                                    '003',
+                                                     DateTime.now(),
+                                                     DateTime.now(), 
                                                      VenueSettingsDetails.retVenueName, 
                                                      VenueSettingsDetails.retVenueAddress,
                                                      VenueSettingsDetails.retActivity,
                                                      VenueSettingsDetails.retSplurge,
                                                      VenueSettingsDetails.retNotes);
+          //    print('venue_settings_tabs page : start time : ' + VenueSettingsDetails.retStartDateTime.toString());
+          //    print('venue_settings_tabs page : end time : ' + VenueSettingsDetails.retEndDateTime.toString());
+   
               Navigator.pop(context,retVenueData);
                },
             )

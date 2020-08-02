@@ -6,22 +6,24 @@ import 'package:intl/intl.dart';
 import 'package:trueconnect/utils/image_util.dart';
 import '../../utils/appdata.dart';
 import '../../user.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
-//TextEditingController namectrl = new TextEditingController();
+String startTimeString;
+
+String endTimeString;
+
 String venueName;
 
-//TextEditingController addressctrl = new TextEditingController();
 String venueAddress;
 
 String activityType;
 
 String splurge;
 
-//TextEditingController notesctrl =new TextEditingController();
 String notes;
 
-class VenueSettingsDetails extends StatefulWidget {
 
+class VenueSettingsDetails extends StatefulWidget {
 
   static String retVenueName;
   static String retVenueAddress;
@@ -29,18 +31,43 @@ class VenueSettingsDetails extends StatefulWidget {
   static String retSplurge;
   static String retNotes;
   
+  static DateTime retStartDateTime;
+  static DateTime retEndDateTime;
+  
+  VenueSettingsDetails(
+  String inHostName,
+  String inUserID,
+  DateTime inStartTime,
+  DateTime inEndTime,
 
-  VenueSettingsDetails(String inName, String inAddress, String inType, String inSplurge, String inNotes  ){
+  String inName, 
+  String inAddress, 
+  String inType, 
+  String inSplurge, 
+  String inNotes  
+  ){
 
-  // print('venue_settings_details_page : VenueSettingsDetails constructor');
+    //  print('venue settings details : ' + inStartTime.toString());
+      retStartDateTime=inStartTime;
+      if(retStartDateTime!=null){
+        startTimeString='${retStartDateTime.day}-${retStartDateTime.month}-${retStartDateTime.year}  ${retStartDateTime.hour}:${retStartDateTime.minute}';
+      }
+      else
+        startTimeString='Not set';
 
-  //    namectrl = new TextEditingController();
-   //   namectrl.text=inName;
+      retEndDateTime=inEndTime;
+      if(retEndDateTime!=null){
+        endTimeString='${retEndDateTime.day}-${retEndDateTime.month}-${retEndDateTime.year}  ${retEndDateTime.hour}:${retEndDateTime.minute}';
+      }
+      else
+        endTimeString='Not set';
+
+
+
+
       retVenueName=inName;
       venueName=inName;
-
-    //  addressctrl = new TextEditingController();
-    //  addressctrl.text=inAddress;
+  
       retVenueAddress=inAddress;
       venueAddress=inAddress;
 
@@ -50,14 +77,10 @@ class VenueSettingsDetails extends StatefulWidget {
       splurge = inSplurge;
       retSplurge = inSplurge;
 
-    //  notesctrl = new TextEditingController();
-   //   notesctrl.text = inNotes;
       retNotes = inNotes;
       notes = inNotes;
 
   }
-
-
 
   @override
   State<StatefulWidget> createState() {
@@ -72,28 +95,19 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   BoxConstraints bx = new BoxConstraints();
 
+ String _startdate = startTimeString;
+
+
+ String _enddate = endTimeString;
+
 
 @override
   void initState() {
-  //print('venue_settings_details_page : initState');
-/*
-    if (namectrl==null)
-      namectrl = new TextEditingController();
-    
-    if (addressctrl==null)
-      addressctrl = new TextEditingController();
-
-    if (notesctrl==null)
-      notesctrl = new TextEditingController();
-*/
-
     super.initState();
   }
 
 @override
   void dispose() {
-
-   // print('venue_settings_details_page : dispose');
 
     super.dispose();
 }
@@ -124,8 +138,137 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
               child: Column(
             children: <Widget>[
 
-     
+    RaisedButton(
+          
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0)),
+                elevation: 4.0,
+          
+                onPressed: () {
+                  DatePicker.showDateTimePicker(context,
+                      theme: DatePickerTheme(
+                        containerHeight: 210.0,
+                      ),
+                      showTitleActions: true,
+                      minTime: DateTime(2020, 1, 1),
+                      maxTime: DateTime(2050, 12, 31), 
+                      onConfirm: (date) {
+               //     print('confirm $date');
+                    _startdate = '${date.day}-${date.month}-${date.year}  ${date.hour}:${date.minute}';
+                    VenueSettingsDetails.retStartDateTime = date;
+                   
+                    setState(() {});
+                  },currentTime: DateTime.now(), locale: LocaleType.en);
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 50.0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        "Start Time",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15.0),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.date_range,
+                                  size: 15.0,
+                                  color: Colors.black,
+                                ),
+                                Text(
+                                  
+                                  " $_startdate",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 15.0),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      
+                    ],
+                  ),
+                ),
+                color: Colors.white,
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
 
+   
+  RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0)),
+                elevation: 4.0,
+                onPressed: () {
+                  DatePicker.showDateTimePicker(context,
+                      theme: DatePickerTheme(
+                        containerHeight: 210.0,
+                      ),
+                      showTitleActions: true,
+                      minTime: DateTime(2020, 1, 1),
+                      maxTime: DateTime(2050, 12, 31), onConfirm: (date) {
+                //    print('confirm $date');
+                    _enddate = '${date.day}-${date.month}-${date.year}  ${date.hour}:${date.minute}';
+                    VenueSettingsDetails.retEndDateTime=date;
+                    setState(() {});
+                  }, currentTime: DateTime.now(), locale: LocaleType.en);
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 50.0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        "End Time",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15.0),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.date_range,
+                                  size: 15.0,
+                                  color: Colors.black,
+                                ),
+                                Text(
+                                  " $_enddate",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 15.0),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      
+                    ],
+                  ),
+                ),
+                color: Colors.white,
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
 
               FormBuilderTextField(
                       attribute: 'name',
