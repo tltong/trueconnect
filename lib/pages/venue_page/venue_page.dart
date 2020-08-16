@@ -306,6 +306,11 @@ return child;
   
     retVenueName = retVenueData.name;
     retVenueAddress = retVenueData.address;
+
+    retStartDateTime = retVenueData.startTime;
+
+    retEndDateTime = retVenueData.endTime;
+
     retVenueType = retVenueData.type;
     retVenueSplurge = retVenueData.splurge;
     retVenueNotes = retVenueData.notes;

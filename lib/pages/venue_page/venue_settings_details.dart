@@ -63,8 +63,6 @@ class VenueSettingsDetails extends StatefulWidget {
         endTimeString='Not set';
 
 
-
-
       retVenueName=inName;
       venueName=inName;
   
@@ -158,7 +156,9 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
                     VenueSettingsDetails.retStartDateTime = date;
                    
                     setState(() {});
-                  },currentTime: DateTime.now(), locale: LocaleType.en);
+                  }
+                  //,currentTime: DateTime.now(), locale: LocaleType.en
+                  );
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -223,7 +223,9 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
                     _enddate = '${date.day}-${date.month}-${date.year}  ${date.hour}:${date.minute}';
                     VenueSettingsDetails.retEndDateTime=date;
                     setState(() {});
-                  }, currentTime: DateTime.now(), locale: LocaleType.en);
+                  }
+                  //, currentTime: DateTime.now(), locale: LocaleType.en
+                  );
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -320,7 +322,7 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
                       initialValue: notes,
                       enabled:true,
 //                      validators: [FormBuilderValidators.required()],
-                      decoration: InputDecoration(labelText: "Notes"),
+                      decoration: InputDecoration(labelText: "Why go on this date?"),
                    //   controller: notesctrl
                     ),
 

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-
+import '../../utils/misc_util.dart';
 
 class VenueData{
+
+  static String VENUE_STATUS_PUBLISHED = "venue_status_published";
+  static String VENUE_STATUS_CONFIRMED = "venue_status_confirmed";
+  static String VENUE_STATUS_DRAFT = "venue_status_draft";
 
   List<Image> images;
 
@@ -16,7 +20,11 @@ class VenueData{
 
   String userName;
   String userID;
-  
+  String ID;
+
+  List<String> applicants;
+  String confirmedApplicant;  
+  String status;
 
   VenueData(List<Image> inImages, 
             String inUserName,
@@ -40,7 +48,42 @@ class VenueData{
     type=inType;
     splurge=inSplurge;
     notes=inNotes;
+
+    ID = MiscUtil.GenerateRandomString(12);
+
+    applicants = new List<String>();
   }
 
+  addApplicant (String applicantID){
+    if (applicants.contains(applicantID)==false){
+        applicants.add(applicantID);
+    }
+  }
+
+  removeApplicant(String applicantID){
+    if(applicants.contains(applicantID)){
+      applicants.remove(applicantID);
+    }
+  }
+
+  setConfirmedApplicant(String applicantID){
+    confirmedApplicant=applicantID;
+  }
+
+  cancelConfirmation(){
+    confirmedApplicant=null;
+  }
+  
+  setConfirmedStatus(){
+    status=VENUE_STATUS_CONFIRMED;
+  }
+
+  setPublishedStatus(){
+    status=VENUE_STATUS_PUBLISHED;
+  }
+
+  setDraftStatus(){
+    status=VENUE_STATUS_DRAFT;
+  }
 
 }
