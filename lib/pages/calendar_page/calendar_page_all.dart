@@ -9,7 +9,7 @@ import '../../data/venuedata/venuedata_dao.dart';
 VenueDataDao vDataDao;
 //final _pairList = <String>[];
   final _pairList = <String>[];
-
+  final _vdatalist = <VenueData>[];
 
 class CalendarPageAll extends StatefulWidget {
 
@@ -21,6 +21,7 @@ CalendarPageAll(VenueDataDao inVDataDao){
  // print('calendar_page_all constructor');
   vDataDao= inVDataDao;
   _pairList.clear();
+  _vdatalist.clear();
  // vDataDao.resetIndex();
 
  // vdataList = vDataDao.retrieveVenueData(vDataDao.retrieveCount());
@@ -47,15 +48,17 @@ class _ItemFetcher {
   // *******
 
   // This async function simulates fetching results from Internet, etc.
-//  Future<List<WordPair>> fetch() async {
-    Future<List<String>> fetch() async {
+
+    Future<List<VenueData>> fetch() async {
+
+   // Future<List<String>> fetch() async {
  //   print ('calendar_page_all : fetch start1 index : '+ index.toString());
     
     var random = new Random();
     var ranIndex = random.nextInt(2);
     List<VenueData> retrievedVdatalist;
 
-   // final list = <WordPair>[];
+  
    final list = <String>[];
     final n = min(_itemsPerPage, _count - _currentPage * _itemsPerPage);
  //  print('calendar page : fetch n value ' + n.toString());
@@ -76,14 +79,13 @@ class _ItemFetcher {
 
       list.add(retrievedVdatalist[i].name.toString());
       index++;
-    
-    
+       
       }
     });
     _currentPage++;
-    print('calendar_page_all : fetch list : ' + list.toString());
-  
-    return list;
+  //  print('calendar_page_all : fetch list : ' + retrievedVdatalist.toString());
+    return retrievedVdatalist;
+   // return list;
   }
 }
 
@@ -120,11 +122,11 @@ void initState() {
 void _loadMore() {
    
     _isLoading = true;
-  //  print('calendar page all : loadmore before fetching : _pairList length ' + _pairList.length.toString() );
+ //   print('calendar page all : loadmore before fetching : _vdatalist length ' + _vdatalist.length.toString() );
 //    print('calendar page all : loadmore before fetching : vDataDao length ' + vDataDao.retrieveCount().toString() );
 
-    if (_pairList.length >= vDataDao.retrieveCount()){
-  
+//    if (_pairList.length >= vDataDao.retrieveCount()){
+    if (_vdatalist.length >= vDataDao.retrieveCount()){
           _isLoading = false;
           _hasMore = false;
         return;
@@ -132,8 +134,9 @@ void _loadMore() {
     }
 
     // ************
+     _itemFetcher.fetch().then((List<VenueData> fetchedList) {
 
-      _itemFetcher.fetch().then((List<String> fetchedList) {
+//      _itemFetcher.fetch().then((List<String> fetchedList) {
 
     //   print('calendar page all : fetchedlist length ' + fetchedList.length.toString() );
    
@@ -145,7 +148,7 @@ void _loadMore() {
       } else {
         setState(() {
           _isLoading = false;
-          _pairList.addAll(fetchedList);
+          _vdatalist.addAll(fetchedList);
 
       //     print('calendar page all : loadmore after fetching : _pairList length ' + _pairList.length.toString() );
    //         print('calendar page all : loadmore after fetching : vDataDao length ' + vDataDao.retrieveCount().toString() );
@@ -174,14 +177,17 @@ Widget build(BuildContext context) {
 
  return ListView.builder(
 
-      itemCount: _hasMore ? _pairList.length + 1 : _pairList.length,
+
+//      itemCount: _hasMore ? _pairList.length + 1 : _pairList.length,
+      itemCount: _hasMore ? _vdatalist.length + 1 : _vdatalist.length,
       itemBuilder: (BuildContext context, int index) {
       //print('calendar_page_all build : _pairList length : ' + _pairList.length.toString());
 
        // print('calendar_page_all build : index : ' + index.toString());
         // Uncomment the following line to see in real time how ListView.builder works
        //  print('ListView.builder is building index $index');
-        if (index >= _pairList.length) {
+//        if (index >= _pairList.length) {
+        if (index >= _vdatalist.length) {
           // Don't trigger if one async loading is already under way
           if (!_isLoading) {
             _loadMore();
@@ -190,8 +196,6 @@ Widget build(BuildContext context) {
           if ( _isLoading == false && _hasMore == false){
             return null;
           }
-
-
 
           return Center(
             child: SizedBox(
@@ -202,8 +206,16 @@ Widget build(BuildContext context) {
           );
         }
         return ListTile(
-          leading: Text(index.toString(), style: _biggerFont),
-          title: Text(_pairList[index], style: _biggerFont),
+
+            
+
+            leading: CircleAvatar(
+            backgroundImage: _vdatalist[index].images[0].image,
+            ),
+       //   leading: Text(index.toString(), style: _biggerFont),
+          title: Text(_vdatalist[index].name, style: _biggerFont),
+
+
         );
       },
     );
