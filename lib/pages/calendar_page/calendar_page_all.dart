@@ -1,19 +1,84 @@
 import 'package:flutter/material.dart';
-
-import 'package:english_words/english_words.dart';
 import 'dart:math';
 import '../../data/venuedata/venuedata.dart';
 import '../../data/venuedata/venuedata_dao.dart';
-
+import 'package:carousel_slider/carousel_slider.dart';
 
 VenueDataDao vDataDao;
 //final _pairList = <String>[];
   final _pairList = <String>[];
   final _vdatalist = <VenueData>[];
 
+class VenueListItem extends StatelessWidget {
+  const VenueListItem({
+    this.thumbnail,
+    this.title,
+
+  });
+
+  final Widget thumbnail;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Expanded(
+            flex: 2,
+            child: thumbnail,
+          ),
+          Expanded(
+            flex: 3,
+            child: _VenueDescription(
+              title: title,
+
+            ),
+          ),
+          const Icon(
+            Icons.more_vert,
+            size: 16.0,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _VenueDescription extends StatelessWidget {
+  const _VenueDescription({
+    Key key,
+    this.title,
+  }) : super(key: key);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 14.0,
+            ),
+          ),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+   
+        ],
+      ),
+    );
+  }
+}
+
+
 class CalendarPageAll extends StatefulWidget {
-
-
 
 //CalendarPageAll(List<VenueData> inVdataList){
 CalendarPageAll(VenueDataDao inVDataDao){
@@ -169,6 +234,39 @@ void _loadMore() {
     super.dispose();
   }
 
+
+Widget _Dialog(BuildContext context, List<Image> displayImages) {
+    return new AlertDialog(
+      //title: const Text('About Pop up'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+/*
+        children: <Widget>[
+          displayImage,
+        ],
+*/
+        children: <Widget>[
+
+ CarouselSlider(
+
+      items: displayImages,
+      
+      autoPlay: false,
+      enlargeCenterPage: true,
+      viewportFraction: 0.9,
+      aspectRatio: 2.0,
+    ),
+
+          
+        ],
+
+
+        
+      )
+    );
+}
+
 @override
 Widget build(BuildContext context) {
 
@@ -177,16 +275,13 @@ Widget build(BuildContext context) {
 
  return ListView.builder(
 
+    padding: const EdgeInsets.all(8.0),
+    itemExtent: 106.0,
 
-//      itemCount: _hasMore ? _pairList.length + 1 : _pairList.length,
       itemCount: _hasMore ? _vdatalist.length + 1 : _vdatalist.length,
-      itemBuilder: (BuildContext context, int index) {
-      //print('calendar_page_all build : _pairList length : ' + _pairList.length.toString());
 
-       // print('calendar_page_all build : index : ' + index.toString());
-        // Uncomment the following line to see in real time how ListView.builder works
-       //  print('ListView.builder is building index $index');
-//        if (index >= _pairList.length) {
+      itemBuilder: (BuildContext context, int index) {
+
         if (index >= _vdatalist.length) {
           // Don't trigger if one async loading is already under way
           if (!_isLoading) {
@@ -205,48 +300,57 @@ Widget build(BuildContext context) {
             ),
           );
         }
-        return ListTile(
-
-            
-
-            leading: CircleAvatar(
-            backgroundImage: _vdatalist[index].images[0].image,
-            ),
-       //   leading: Text(index.toString(), style: _biggerFont),
-          title: Text(_vdatalist[index].name, style: _biggerFont),
 
 
-        );
-      },
-    );
+      // reference : https://api.flutter.dev/flutter/material/ListTile-class.html
+        
+        return 
+
+  VenueListItem(
+        thumbnail: 
+         
+        
+        Container(
+
+          
+
+           child:  
+           
+           GestureDetector(
+             onTap: () {
+                
+                 showDialog(
+            context: context,
+            builder: (BuildContext contextcopy) => _Dialog(contextcopy,_vdatalist[index].images),
+          );
+                
+                },
+           child: Image(image:  _vdatalist[index].images[0].image),
+           )
+
 
 /*
-    return ListView.builder(
-      // Need to display a loading tile if more items are coming
-      itemCount: _hasMore ? _pairList.length + 1 : _pairList.length,
-      itemBuilder: (BuildContext context, int index) {
-        // Uncomment the following line to see in real time how ListView.builder works
-        // print('ListView.builder is building index $index');
-        if (index >= _pairList.length) {
-          // Don't trigger if one async loading is already under way
-          if (!_isLoading) {
-            _loadMore();
-          }
-          return Center(
-            child: SizedBox(
-              child: CircularProgressIndicator(),
-              height: 24,
-              width: 24,
-            ),
-          );
-        }
-        return ListTile(
-          leading: Text(index.toString(), style: _biggerFont),
-          title: Text(_pairList[index].asPascalCase, style: _biggerFont),
-        );
+          decoration: const BoxDecoration(color: Colors.blue,
+          image: 
+      const DecorationImage(
+     image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+      fit: BoxFit.cover,
+    ),
+          ),
+*/
+
+        
+        ),
+        title: _vdatalist[index].name,
+      );
+
+        
+
+
       },
     );
-*/
+
+
   }
 
 }

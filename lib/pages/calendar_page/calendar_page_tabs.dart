@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/icon.dart';
 import 'calendar_page_all.dart';
 import '../../data/venuedata/venuedata.dart';
 import '../../data/venuedata/venuedata_dao.dart';
+import '../../utils/misc_util.dart';
 
 CalendarPageAll cPageAll;
 
@@ -97,7 +98,8 @@ CalendarPagesTabs(){
     imagelist12.add(image12);
     VenueData vdata12 = new VenueData(imagelist12,'TL','004',DateTime.now(),DateTime.now(),'Chicago downtown 10', 'Chicago', 'City break', '\$\$', 'vibrant');
 
-
+    print('calendar_page_tabs : ' + MiscUtil.ExtractDateString(vdata12.startTime));
+  
 
     List<VenueData> venuedataList = new List<VenueData>();
     venuedataList.add(vdata1);
