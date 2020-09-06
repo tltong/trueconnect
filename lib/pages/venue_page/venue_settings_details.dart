@@ -20,6 +20,8 @@ String activityType;
 
 String splurge;
 
+String pay;
+
 String notes;
 
 
@@ -28,9 +30,11 @@ class VenueSettingsDetails extends StatefulWidget {
   static String retVenueName;
   static String retVenueAddress;
   static String retActivity;
+
   static String retSplurge;
+  static String retPay;
+
   static String retNotes;
-  
   static DateTime retStartDateTime;
   static DateTime retEndDateTime;
   
@@ -44,6 +48,7 @@ class VenueSettingsDetails extends StatefulWidget {
   String inAddress, 
   String inType, 
   String inSplurge, 
+  String inPay,
   String inNotes  
   ){
 
@@ -74,6 +79,9 @@ class VenueSettingsDetails extends StatefulWidget {
 
       splurge = inSplurge;
       retSplurge = inSplurge;
+
+      pay = inPay;
+      retPay = inPay;
 
       retNotes = inNotes;
       notes = inNotes;
@@ -313,6 +321,17 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
                        items: ['\$', '\$\$', '\$\$\$',]
                           .map((splurge) => DropdownMenuItem(
                           value: splurge, child: Text("$splurge")))
+                          .toList(),
+                    ),
+
+            FormBuilderDropdown(
+                      attribute: "pay",
+                      decoration: InputDecoration(labelText: "Who will pay"),
+                      onChanged: (value) => (  VenueSettingsDetails.retPay = value),
+                      initialValue: pay,
+                       items: ['I will pay', 'I want my date to pay', 'Go dutch',]
+                          .map((pay) => DropdownMenuItem(
+                          value: pay, child: Text("$pay")))
                           .toList(),
                     ),
 

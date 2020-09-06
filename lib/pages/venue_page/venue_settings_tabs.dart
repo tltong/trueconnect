@@ -23,6 +23,7 @@ VenueSettingsTabs(VenueData inVenueData){
   inVenueData.address,
   inVenueData.type,
   inVenueData.splurge,
+  inVenueData.pay,
   inVenueData.notes);
 
 }
@@ -80,6 +81,7 @@ Widget build(BuildContext context) {
                                                      VenueSettingsDetails.retVenueAddress,
                                                      VenueSettingsDetails.retActivity,
                                                      VenueSettingsDetails.retSplurge,
+                                                     VenueSettingsDetails.retPay,
                                                      VenueSettingsDetails.retNotes);
           //    print('venue_settings_tabs page : start time : ' + VenueSettingsDetails.retStartDateTime.toString());
           //    print('venue_settings_tabs page : end time : ' + VenueSettingsDetails.retEndDateTime.toString());

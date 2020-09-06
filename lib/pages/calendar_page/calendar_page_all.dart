@@ -3,6 +3,7 @@ import 'dart:math';
 import '../../data/venuedata/venuedata.dart';
 import '../../data/venuedata/venuedata_dao.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import '../../utils/misc_util.dart';
 
 VenueDataDao vDataDao;
 //final _pairList = <String>[];
@@ -13,11 +14,21 @@ class VenueListItem extends StatelessWidget {
   const VenueListItem({
     this.thumbnail,
     this.title,
+    this.time,
+    this.type,
+    this.host,
+   // this.pay
+    
 
   });
 
   final Widget thumbnail;
   final String title;
+  final String time;
+  final String type;
+  final String host;
+ // final String pay;
+
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +45,10 @@ class VenueListItem extends StatelessWidget {
             flex: 3,
             child: _VenueDescription(
               title: title,
+              time:time,
+              type:type,
+              host:host,
+     //         pay:pay
 
             ),
           ),
@@ -51,9 +66,18 @@ class _VenueDescription extends StatelessWidget {
   const _VenueDescription({
     Key key,
     this.title,
+    this.time,
+    this.type,
+    this.host,
+ //   this.pay
   }) : super(key: key);
 
   final String title;
+  final String time;
+  final String type;
+  final String host;
+  final String nothing=' ';
+ // final String pay;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +86,13 @@ class _VenueDescription extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+           Text(
+            time,
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 14.0,
+            ),
+          ),
           Text(
             title,
             style: const TextStyle(
@@ -69,6 +100,29 @@ class _VenueDescription extends StatelessWidget {
               fontSize: 14.0,
             ),
           ),
+           Text(
+            type,
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 12.0,
+            ),
+          ),
+           Text(
+            nothing,
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 12.0,
+            ),
+          ),
+          Text(
+            host,
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 12.0,
+            ),
+          ),
+   
+         
           const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
    
         ],
@@ -303,19 +357,29 @@ Widget build(BuildContext context) {
 
 
       // reference : https://api.flutter.dev/flutter/material/ListTile-class.html
-        
+
+      String payString;
+
+      if (_vdatalist[index].pay==VenueData.VENUE_GO_DUTCH){
+          payString = VenueData.VENUE_GO_DUTCH;
+      }
+      if (_vdatalist[index].pay==VenueData.VENUE_HOST_PAY){
+          payString = 'Your date will pay';
+      }
+      if (_vdatalist[index].pay==VenueData.VENUE_DATE_PAY){
+          payString = 'You will pay';
+      }
+
+
+
         return 
 
   VenueListItem(
         thumbnail: 
-         
-        
+                 
         Container(
 
-          
-
            child:  
-           
            GestureDetector(
              onTap: () {
                 
@@ -323,12 +387,9 @@ Widget build(BuildContext context) {
             context: context,
             builder: (BuildContext contextcopy) => _Dialog(contextcopy,_vdatalist[index].images),
           );
-                
                 },
            child: Image(image:  _vdatalist[index].images[0].image),
            )
-
-
 /*
           decoration: const BoxDecoration(color: Colors.blue,
           image: 
@@ -338,10 +399,14 @@ Widget build(BuildContext context) {
     ),
           ),
 */
-
-        
         ),
-        title: _vdatalist[index].name,
+        title: _vdatalist[index].name + ' ' + '(' + _vdatalist[index].type + ')',
+        time: MiscUtil.ExtractDateStringFromTo( _vdatalist[index].startTime, _vdatalist[index].endTime),
+        type: _vdatalist[index].splurge + '   ' + payString,
+
+
+        host: 'Hosted by : ' + _vdatalist[index].userName,
+//        pay: _vdatalist[index].pay
       );
 
         

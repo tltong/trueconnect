@@ -31,6 +31,7 @@ TextEditingController namectrl = new TextEditingController();
 TextEditingController addressctrl = new TextEditingController();
 TextEditingController typectrl = new TextEditingController();
 TextEditingController splurgectrl = new TextEditingController();
+TextEditingController payctrl = new TextEditingController();
 TextEditingController notesctrl = new TextEditingController();
 
 
@@ -42,6 +43,7 @@ String retVenueName;
 String retVenueAddress;
 String retVenueType;
 String retVenueSplurge;
+String retVenuePay;
 String retVenueNotes;
 
 DateTime retStartDateTime;
@@ -183,6 +185,9 @@ return child;
     if (retVenueSplurge==null)
       retVenueSplurge=argVenueData.splurge;
 
+    if (retVenuePay==null)
+      retVenuePay=argVenueData.pay;
+
     if (retVenueNotes==null)
       retVenueNotes=argVenueData.notes;
 
@@ -229,6 +234,7 @@ return child;
     addressctrl.text=retVenueAddress;
     typectrl.text=retVenueType;
     splurgectrl.text=retVenueSplurge;
+    payctrl.text=retVenuePay;
     notesctrl.text=retVenueNotes;
 
       List<Image> inImages;
@@ -261,6 +267,7 @@ return child;
         retVenueAddress,
         retVenueType,
         retVenueSplurge,
+        retVenuePay,
         retVenueNotes);
 
           Navigator.pop(context, retVenueData);
@@ -287,6 +294,7 @@ return child;
       retVenueAddress, 
       retVenueType, 
       retVenueSplurge, 
+      retVenuePay,
       retVenueNotes);
       
       VenueData retVenueData;
@@ -313,6 +321,7 @@ return child;
 
     retVenueType = retVenueData.type;
     retVenueSplurge = retVenueData.splurge;
+    retVenuePay = retVenueData.pay;
     retVenueNotes = retVenueData.notes;
 
   });
@@ -393,6 +402,15 @@ return child;
       decoration: InputDecoration(
         border: InputBorder.none,
         labelText: 'Splurge'
+      ),
+    ),
+
+  TextField(
+      controller: payctrl,
+      readOnly: true,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        labelText: 'Who pays'
       ),
     ),
 

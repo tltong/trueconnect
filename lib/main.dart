@@ -346,7 +346,10 @@ _getAddressFromLatLng() async {
               'Miami', 
               'Meal', 
               '\$\$\$', 
+              'Go dutch',
               'nice');
+
+
               VenueData retVenueData;
               List<Image> retImage;
                     

@@ -7,12 +7,19 @@ class VenueData{
   static String VENUE_STATUS_CONFIRMED = "venue_status_confirmed";
   static String VENUE_STATUS_DRAFT = "venue_status_draft";
 
+  static final String VENUE_HOST_PAY = 'I will pay';
+  static final String VENUE_DATE_PAY = 'I want my date to pay';
+  static final String VENUE_GO_DUTCH = 'Go dutch';
+
+
   List<Image> images;
 
   String name;
   String address;
   String type;
   String splurge;
+  String pay;
+
   String notes;
 
   DateTime startTime;
@@ -35,6 +42,7 @@ class VenueData{
             inAddress, 
             inType, 
             inSplurge, 
+            inPay,
             inNotes)
   {
     startTime=inStartTime;
@@ -47,6 +55,7 @@ class VenueData{
     address=inAddress;
     type=inType;
     splurge=inSplurge;
+    pay=inPay;
     notes=inNotes;
 
     ID = MiscUtil.GenerateRandomString(12);
