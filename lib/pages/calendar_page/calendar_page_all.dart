@@ -4,6 +4,8 @@ import '../../data/venuedata/venuedata.dart';
 import '../../data/venuedata/venuedata_dao.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../utils/misc_util.dart';
+import '../event_page/event_page.dart';
+import '../../data/venuedata/venuedata.dart';
 
 VenueDataDao vDataDao;
 //final _pairList = <String>[];
@@ -18,8 +20,6 @@ class VenueListItem extends StatelessWidget {
     this.type,
     this.host,
    // this.pay
-    
-
   });
 
   final Widget thumbnail;
@@ -32,9 +32,13 @@ class VenueListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0),
-      child: Row(
+      child: 
+                
+      
+      Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Expanded(
@@ -83,7 +87,10 @@ class _VenueDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
-      child: Column(
+      child: 
+      
+      
+       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
            Text(
@@ -127,6 +134,8 @@ class _VenueDescription extends StatelessWidget {
    
         ],
       ),
+
+    
     );
   }
 }
@@ -324,10 +333,13 @@ Widget _Dialog(BuildContext context, List<Image> displayImages) {
 @override
 Widget build(BuildContext context) {
 
-  
 
 
- return ListView.builder(
+
+ return 
+
+
+ ListView.builder(
 
     padding: const EdgeInsets.all(8.0),
     itemExtent: 106.0,
@@ -370,51 +382,66 @@ Widget build(BuildContext context) {
           payString = 'You will pay';
       }
 
-
-
         return 
 
-  VenueListItem(
-        thumbnail: 
-                 
-        Container(
+(
+Container(
+ child: GestureDetector(
+                
+   onTap: () async {
+//     print('calendar page all : on tap');
 
-           child:  
+final result = await
+Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EventPage(),
+            settings: RouteSettings(
+              arguments: _vdatalist[index],
+            ),
+          ),
+        );
+print('caledar page all : '+ result.toString());
+   },
+  
+  child: VenueListItem(
+        thumbnail: 
+        Container(
+          child:  
            GestureDetector(
              onTap: () {
                 
                  showDialog(
             context: context,
-            builder: (BuildContext contextcopy) => _Dialog(contextcopy,_vdatalist[index].images),
+            builder: (BuildContext contextcopy) => 
+            _Dialog(contextcopy,_vdatalist[index].images),
           );
                 },
            child: Image(image:  _vdatalist[index].images[0].image),
            )
-/*
-          decoration: const BoxDecoration(color: Colors.blue,
-          image: 
-      const DecorationImage(
-     image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
-      fit: BoxFit.cover,
-    ),
-          ),
-*/
         ),
-        title: _vdatalist[index].name + ' ' + '(' + _vdatalist[index].type + ')',
-        time: MiscUtil.ExtractDateStringFromTo( _vdatalist[index].startTime, _vdatalist[index].endTime),
-        type: _vdatalist[index].splurge + '   ' + payString,
-
-
-        host: 'Hosted by : ' + _vdatalist[index].userName,
-//        pay: _vdatalist[index].pay
-      );
 
         
+          title: _vdatalist[index].name + ' ' + '(' + _vdatalist[index].type + ')',
+        
+
+          time: MiscUtil.ExtractDateStringFromTo( _vdatalist[index].startTime, _vdatalist[index].endTime),
+          type: _vdatalist[index].splurge + '   ' + payString,
+          host: 'Hosted by : ' + _vdatalist[index].userName,
+
+      )
+
+)
+
+)
+
+
+);
 
 
       },
-    );
-
+    ); // ListView.builder
+  
 
   }
 
