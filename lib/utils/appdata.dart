@@ -6,8 +6,7 @@ class AppData {
   
   String fbtoken;
   User currentUser;
-  
-  
+    
   factory AppData() {
     return _appData;
   }

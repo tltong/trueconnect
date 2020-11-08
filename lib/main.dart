@@ -238,6 +238,8 @@ _getAddressFromLatLng() async {
                           LoginUtil login = LoginUtil();
                           login.LoginWithFB().then((ret){
                               User currentUser = User();
+
+                              print('main : '+ret.toString());
                               currentUser.initialise(ret).then((vo){
                                
                                 appData.currentUser = currentUser;

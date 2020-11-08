@@ -4,6 +4,7 @@ import '../../data/venue/venue.dart';
 import '../../data/venue/venue_factory.dart';
 import '../../data/imageobject/image_mediator.dart';
 import '../../data/venuedata/venuedata.dart';
+import './event_page_go.dart';
 
 class HostListItem extends StatelessWidget {
   const HostListItem({
@@ -294,9 +295,15 @@ return child;
 
 
    child: Scaffold(
+
       appBar: AppBar(
-        title: Text("Second Screen"),
+
+
+//        title: Text("Second Screen"),
+
       ),
+     
+     
       body: 
  
           ListView(children: 
@@ -319,7 +326,7 @@ return child;
             height: 10,
             thickness: 2,
             indent: 10,
-            endIndent: 0,
+            endIndent: 10,
           ),
 
     CarouselSlider(
@@ -394,6 +401,53 @@ TextField(
         labelText: 'Why you should go'
       ),
     ),
+
+
+   const Divider(
+            color: Colors.blueGrey,
+            height: 10,
+            thickness: 2,
+            indent: 10,
+            endIndent: 10,
+          ),
+
+
+SizedBox(
+  width: 50, // doesn't work
+  child: RaisedButton(
+          child: Text('I want to go!'),
+          color: Colors.red,
+          textColor: Colors.white,
+          onPressed: () async {
+            
+            VenueData result = await
+Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EventPageGo(),
+            settings: RouteSettings(
+              arguments: argVenueData,
+            ),
+          ),
+        );
+
+
+//print('caledar page all : '+ result.applicants.toString());
+//print('caledar page all : '+ result.applicant_comments.toString());
+
+
+
+
+
+          },
+        ),
+)
+
+
+
+
+
+
 
 
           ],)

@@ -29,7 +29,9 @@ class VenueData{
   String userID;
   String ID;
 
-  List<String> applicants;
+  List<String> applicants;      // contains appplicants' user IDs
+  Map<String,String> applicant_comments = new Map<String,String>();
+
   String confirmedApplicant;  
   String status;
 
@@ -67,6 +69,11 @@ class VenueData{
     if (applicants.contains(applicantID)==false){
         applicants.add(applicantID);
     }
+  }
+
+  addApplicantComment(String applicantID, String comment){
+    applicant_comments.remove(applicantID);
+    applicant_comments.putIfAbsent(applicantID, () => comment);
   }
 
   removeApplicant(String applicantID){

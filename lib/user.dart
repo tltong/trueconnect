@@ -120,6 +120,11 @@ class User extends ChangeNotifier {
   return age;
 }
 
+String getID(){
+  return id;
+}
+
+
 int getAge(String dobstring){
 
   int age;
