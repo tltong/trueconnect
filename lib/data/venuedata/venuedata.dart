@@ -76,6 +76,10 @@ class VenueData{
     applicant_comments.putIfAbsent(applicantID, () => comment);
   }
 
+  removeApplicantComment(String applicantID){
+    applicant_comments.remove(applicantID);
+  }
+
   removeApplicant(String applicantID){
     if(applicants.contains(applicantID)){
       applicants.remove(applicantID);

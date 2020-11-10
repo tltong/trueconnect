@@ -1,10 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:trueconnect/pages/event_page/event_page_cancel.dart';
 import '../../data/venue/venue.dart';
 import '../../data/venue/venue_factory.dart';
 import '../../data/imageobject/image_mediator.dart';
 import '../../data/venuedata/venuedata.dart';
 import './event_page_go.dart';
+import '../../utils/appdata.dart';
 
 class HostListItem extends StatelessWidget {
   const HostListItem({
@@ -233,8 +235,29 @@ return child;
 
     final VenueData argVenueData = ModalRoute.of(context).settings.arguments;
     List<Image> argImages = argVenueData.images;
-//    print('event page : ' + vdata.name.toString());
+    String userID = appData.currentUser.getID();
+  
+   // print('event page : ' + argVenueData.applicants.toString());
 
+    String buttonText;
+    if (argVenueData.applicants.contains(userID)){
+      buttonText='Cancel date';
+    }else {
+      buttonText='I want to go!';
+    }
+
+    String goingStatus;
+
+    goingStatus='You have not yet expressed interest in this date';
+
+    if (argVenueData.applicants.contains(userID)){
+      goingStatus='You have expressed interest in this date (pending confirmation)';
+    }
+
+    if (argVenueData.confirmedApplicant==userID){
+      goingStatus='You are going to this date (confirmed)';
+    }
+    
   var DayOfWeek = new List(8);
     DayOfWeek[0]='None';
     DayOfWeek[1]='Mon';
@@ -402,6 +425,9 @@ TextField(
       ),
     ),
 
+  Text('\n'),
+  Text(goingStatus),
+  Text('\n'),
 
    const Divider(
             color: Colors.blueGrey,
@@ -415,13 +441,17 @@ TextField(
 SizedBox(
   width: 50, // doesn't work
   child: RaisedButton(
-          child: Text('I want to go!'),
+          child: Text(buttonText),
           color: Colors.red,
           textColor: Colors.white,
           onPressed: () async {
             
-            VenueData result = await
-Navigator.push(
+            VenueData result;
+
+          if (buttonText=='I want to go!'){
+
+            result = await
+          Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => EventPageGo(),
@@ -430,31 +460,23 @@ Navigator.push(
             ),
           ),
         );
-
-
-//print('caledar page all : '+ result.applicants.toString());
-//print('caledar page all : '+ result.applicant_comments.toString());
-
-
-
-
-
+          }else{
+      result = await
+          Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EventPageCancel(),
+            settings: RouteSettings(
+              arguments: argVenueData,
+            ),
+          ),
+        );
+         }
           },
         ),
-)
-
-
-
-
-
-
-
+),
 
           ],)
-        
-  
-  
-      
     ), 
     
     
