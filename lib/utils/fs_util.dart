@@ -4,6 +4,8 @@ import 'dart:io';
 
 class FS_Util{
 
+  static String VENUE_COLLECTION = 'venues';
+
   final databaseReference = Firestore.instance;
 
 

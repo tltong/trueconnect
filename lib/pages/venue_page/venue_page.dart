@@ -7,6 +7,7 @@ import '../../data/imageobject/image_mediator.dart';
 import './venue_settings_tabs.dart';
 import './venue_settings_photos.dart';
 import '../../data/venuedata/venuedata.dart';
+import '../../data/venuedata/venuedata_dao.dart';
 
 
 
@@ -422,6 +423,32 @@ return child;
         labelText: 'Notes'
       ),
     ),
+
+     RaisedButton(
+              onPressed: () async {
+                
+        VenueData retVenueData = new VenueData(retImage,
+        retUserName,
+        retUserID,
+        retStartDateTime,
+        retEndDateTime,
+        retVenueName,
+        retVenueAddress,
+        retVenueType,
+        retVenueSplurge,
+        retVenuePay,
+        retVenueNotes);
+
+        VenueDataDao vdatadao = new VenueDataDao(1);
+        List<VenueData> lvdata = new List<VenueData>();
+        lvdata.add(retVenueData);
+
+        vdatadao.initialiseWithData(lvdata);
+        vdatadao.uploadRecord(0);
+
+              },
+              child: Text('Save'),
+            ),
 
         ]
       )

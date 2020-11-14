@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../utils/misc_util.dart';
+import '../../data/image_struct.dart';
 
 class VenueData{
 
@@ -13,6 +14,11 @@ class VenueData{
 
 
   List<Image> images;
+  List<ImageStruct> imagestructs;
+
+  List<String> applicants;      // contains appplicants' user IDs
+  Map<String,String> applicant_comments = new Map<String,String>();
+
 
   String name;
   String address;
@@ -29,8 +35,6 @@ class VenueData{
   String userID;
   String ID;
 
-  List<String> applicants;      // contains appplicants' user IDs
-  Map<String,String> applicant_comments = new Map<String,String>();
 
   String confirmedApplicant;  
   String status;

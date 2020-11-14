@@ -32,6 +32,7 @@ import './pages/calendar_page/calendar_page_tabs.dart';
 
 
 
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -340,8 +341,8 @@ _getAddressFromLatLng() async {
               print('main page: ' + inImages.toString());
 
               VenueData argVenueData = new VenueData(inImages,
-              'TL',
-              '003',
+              appData.currentUser.name,
+              appData.currentUser.id,
               DateTime.now(),
               DateTime.now(),
               'Sushi Tei', 
