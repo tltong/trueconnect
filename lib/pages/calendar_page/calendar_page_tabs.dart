@@ -116,7 +116,7 @@ CalendarPagesTabs(){
     venuedataList.add(vdata11);
     venuedataList.add(vdata12);
 
-    VenueDataDao vdatadao = new VenueDataDao(12);
+    VenueDataDao vdatadao = new VenueDataDao();
     vdatadao.initialiseWithData(venuedataList);
 
     cPageAll = new CalendarPageAll(vdatadao);

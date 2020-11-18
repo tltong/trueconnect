@@ -9,20 +9,21 @@ import '../../utils/misc_util.dart';
 class VenueDataDao {
 
   static String VENUE_STORATE_LOCATION = 'venuephotos/';
+  static String VENUE_COLLECTION = 'venues';
 
   int count;
   int index;
   List<VenueData> lVenueData;
 
-  VenueDataDao(int inCount){
-    count = inCount;
+  VenueDataDao(){
+  //  count = inCount;
     index=0;
     lVenueData = new List<VenueData>();
 
   }
 
   retrieveCount(){
-    return count;
+    return lVenueData.length;
   }
 
   initialiseWithData(List<VenueData> inlVenueData){ 
@@ -32,6 +33,7 @@ class VenueDataDao {
 
   List<VenueData> retrieveVenueData (int retrieveCount){
 
+  //  print ('venuedata_dao : index before : ' + index.toString());
     List<VenueData> retVenueDataList = new List<VenueData>();
     int orgIndex = index;
     int j=0;
@@ -43,6 +45,8 @@ class VenueDataDao {
       }
     }
     index=index+j;
+
+ //   print ('venuedata_dao : index after : ' + index.toString());
 
     return retVenueDataList;
   }
@@ -67,6 +71,36 @@ class VenueDataDao {
     return retImageStruct;
 
 
+
+  }
+
+  Future<List<VenueData>> getVenueData() async {
+
+
+
+    FS_Util fs = new FS_Util();
+
+    print('*** venudata_dao first query ***');
+    await fs.paginateQueryDoc(VENUE_COLLECTION,'userName','Tai-Loong Tong','name',2).then((doc){
+
+        for (int i=0;i<doc.length;i++){
+           print( doc[i].toString());
+        }
+
+
+      }
+      );
+    print('\n\n');
+    print('*** venudata_dao next query ***');
+
+    await fs.paginateQueryDocNext(VENUE_COLLECTION,'userName','Tai-Loong Tong','name',2).then((doc){
+
+        for (int i=0;i<doc.length;i++){
+           print( doc[i].toString());
+        }
+
+      }
+      );
 
   }
 
@@ -142,16 +176,6 @@ class VenueDataDao {
 
 
     });
-
-
-
-//    File file = File.
- //   print('venuedata_dao : '+ImageUtil.Imagetype(image));
-/*
-    fs.addRecord(FS_Util.VENUE_COLLECTION, venue_upload).then((id){
-      return id;
-    });
-*/
 
 
   }

@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "/home/tltong/flutterproj/trueconnect/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-watch-v20/values-watch-v20.xml",
+            "map": [
+                {
+                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/9b806cc71296e01a86c2cbc5d704cc19/appcompat-1.0.0/res/values-watch-v20/values-watch-v20.xml",
+                    "from": {
+                        "startLines": "2,5,8",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,214,385",
+                        "endLines": "4,7,10",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "209,380,553"
+                    }
+                }
+            ]
+        }
+    ]
+}

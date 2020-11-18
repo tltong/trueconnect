@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">225956849105-grtqg53s21k6ho1uqi1rd7cesln7jh9q.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://trueconnection-702ad.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">225956849105</string>
+    <string name="google_api_key" translatable="false">AIzaSyAmFFtTaTHDJh-6Nf3KYrpa7zZkAUGFDnw</string>
+    <string name="google_app_id" translatable="false">1:225956849105:android:810ec79c9ff0ea35c3ecf0</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAmFFtTaTHDJh-6Nf3KYrpa7zZkAUGFDnw</string>
+    <string name="google_storage_bucket" translatable="false">trueconnection-702ad.appspot.com</string>
+    <string name="project_id" translatable="false">trueconnection-702ad</string>
+</resources>

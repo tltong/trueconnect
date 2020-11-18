@@ -29,6 +29,10 @@ import './pages/venue_page/venue_page.dart';
 import './data/venuedata/venuedata.dart';
 import './pages/calendar_page/calendar_page.dart';
 import './pages/calendar_page/calendar_page_tabs.dart';
+import 'data/venuedata/venuedata_dao.dart';
+import './utils/FS_Util/fs_where_equal.dart';
+import './utils/FS_Util/fs_where_int.dart';
+
 
 
 
@@ -366,18 +370,92 @@ _getAddressFromLatLng() async {
             ),
         ),
 
+      Builder(
+              builder: (context) => 
+              RaisedButton(
+                  onPressed: () async {
+                  // contruct vdata1
+                    List<Image> imagelist1 = new  List<Image>();
+                    File file1 = new File('/data/user/0/com.trueconnect.launch/cache/IMG_1596943769468.png');
+                    Image image1 = Image.file(file1); 
+                    imagelist1.add(image1);
+                    VenueData vdata1 = new VenueData(imagelist1,'TL','003',DateTime.now(),DateTime.now(),'Status of Liberty', 'New York', 'Outdoors', '\$\$', VenueData.VENUE_HOST_PAY,'freedom');
+
+                  // contruct vdata2
+                    List<Image> imagelist2 = new  List<Image>();
+                    File file2 = new File('/data/user/0/com.trueconnect.launch/cache/IMG_1596943769547.png');
+                    Image image2 = Image.file(file2); 
+                    imagelist2.add(image2);
+                    VenueData vdata2 = new VenueData(imagelist2,'TL','003',DateTime.now(),DateTime.now(),'Waterfall', 'Niagara Falls', 'Outdoors', '\$', 'Go dutch','wet');
+
+
+
+                    List<VenueData> vdatalist = new List<VenueData>();
+                    vdatalist.add(vdata1);
+                    vdatalist.add(vdata2);
+
+                    VenueDataDao vdatadao = new VenueDataDao();
+                    vdatadao.initialiseWithData(vdatalist);
+
+                    vdatalist = vdatadao.retrieveVenueData(3);
+
+                    vdatadao.getVenueData();
+
+                      
+                    },
+                    child: Text('Test venue data'),
+                  ),
+              ),
+
+
+
+
  Builder(
         builder: (context) => 
         RaisedButton(
               onPressed: () async {
-           
-                  Navigator.pushNamed(context,'/calendarpagetabs');
+                FS_WHERE_EQUAL fseq = new FS_WHERE_EQUAL('userNames','Jason');
+                List<FS_WHERE_EQUAL> fseqList = new List<FS_WHERE_EQUAL>();
+                fseqList.add(fseq);
+
+                FS_Util fs =  FS_Util();
+
+
+              await fs.fetchFirstList(FS_Util.VENUE_COLLECTION, fseqList, 'name', 3).then((doc){
+/*
+                  for (int i=0;i<doc.length;i++){
+                    print( doc[i].toString());
+                  }
+*/
+                }
+                );
+
+
               },
-              child: Text('Test calendar page'),
+              child: Text('Test new query'),
             ),
         ),
 
 
+
+
+
+ Builder(
+        builder: (context) => 
+        RaisedButton(
+              onPressed: () async {
+            
+                 FS_Util fs =  FS_Util();
+                  fs.testquery2();
+/*
+                 await fs.testQuery(FS_Util.VENUE_COLLECTION, 'userName', 'Tai-Loong Tong').then((doc){
+                }
+                );
+*/
+              },
+              child: Text('Test new query 2'),
+            ),
+        ),
         /*
 Builder(
         builder: (context) => 
