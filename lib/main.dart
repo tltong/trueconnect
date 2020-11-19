@@ -32,7 +32,8 @@ import './pages/calendar_page/calendar_page_tabs.dart';
 import 'data/venuedata/venuedata_dao.dart';
 import './utils/FS_Util/fs_where_equal.dart';
 import './utils/FS_Util/fs_where_int.dart';
-
+import './utils/FS_Util/fs_query_factory.dart';
+import './utils/FS_Util/fs_query_int.dart';
 
 
 
@@ -395,67 +396,59 @@ _getAddressFromLatLng() async {
                     vdatalist.add(vdata2);
 
                     VenueDataDao vdatadao = new VenueDataDao();
+
+                    FS_WHERE_EQUAL fseq = new FS_WHERE_EQUAL('userName','Tai-Loong Tong');
+                    List<FS_WHERE_EQUAL> fseql = new List<FS_WHERE_EQUAL>();
+                    fseql.add(fseq);
+
+                    vdatadao.initialiseQuery(fseql);
+
+                    vdatadao.fetchVenueData(1);
+                    vdatadao.fetchVenueData(1);
+
+/*
                     vdatadao.initialiseWithData(vdatalist);
-
                     vdatalist = vdatadao.retrieveVenueData(3);
-
                     vdatadao.getVenueData();
-
+*/
                       
                     },
                     child: Text('Test venue data'),
                   ),
               ),
 
-
-
-
- Builder(
-        builder: (context) => 
-        RaisedButton(
-              onPressed: () async {
-                FS_WHERE_EQUAL fseq = new FS_WHERE_EQUAL('userNames','Jason');
-                List<FS_WHERE_EQUAL> fseqList = new List<FS_WHERE_EQUAL>();
-                fseqList.add(fseq);
-
-                FS_Util fs =  FS_Util();
-
-
-              await fs.fetchFirstList(FS_Util.VENUE_COLLECTION, fseqList, 'name', 3).then((doc){
 /*
-                  for (int i=0;i<doc.length;i++){
-                    print( doc[i].toString());
-                  }
-*/
-                }
-                );
-
-
-              },
-              child: Text('Test new query'),
-            ),
-        ),
-
-
-
-
-
- Builder(
+      Builder(
         builder: (context) => 
         RaisedButton(
               onPressed: () async {
             
+          
                  FS_Util fs =  FS_Util();
-                  fs.testquery2();
-/*
-                 await fs.testQuery(FS_Util.VENUE_COLLECTION, 'userName', 'Tai-Loong Tong').then((doc){
-                }
+
+                 await fs.testQueryEqDouble(FS_Util.VENUE_COLLECTION,'userName','Tai-Loong Tong','type','Outdoors').then((doc){
+                  }
                 );
-*/
+
               },
-              child: Text('Test new query 2'),
+              child: Text('Test equal double'),
             ),
         ),
+*/
+/*
+        Builder(
+        builder: (context) => 
+        RaisedButton(
+              onPressed: () async {
+
+                FS_Util fs = FS_Util();
+                fs.testFactory();
+
+              },
+              child: Text('Test query factory'),
+            ),
+        ),
+*/
         /*
 Builder(
         builder: (context) => 

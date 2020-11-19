@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:trueconnect/utils/FS_Util/fs_query_factory.dart';
+import 'package:trueconnect/utils/FS_Util/fs_query_int.dart';
+import 'package:trueconnect/utils/FS_Util/fs_where_int.dart';
 import 'venuedata.dart';
 import '../../utils/fs_util.dart';
 import '../../utils/image_util.dart';
@@ -10,10 +13,13 @@ class VenueDataDao {
 
   static String VENUE_STORATE_LOCATION = 'venuephotos/';
   static String VENUE_COLLECTION = 'venues';
+  static String VENUE_ORDERBY = 'name';
+  
 
   int count;
   int index;
   List<VenueData> lVenueData;
+  FS_QUERY_INT query;
 
   VenueDataDao(){
   //  count = inCount;
@@ -31,9 +37,14 @@ class VenueDataDao {
     count=lVenueData.length;
   }
 
+  initialiseQuery(List<FS_WHERE_INT> infswhereintlist){
+
+    query = FS_QUERY_FACTOR.createQUERY(VENUE_COLLECTION, infswhereintlist, VENUE_ORDERBY);
+
+  }
+
   List<VenueData> retrieveVenueData (int retrieveCount){
 
-  //  print ('venuedata_dao : index before : ' + index.toString());
     List<VenueData> retVenueDataList = new List<VenueData>();
     int orgIndex = index;
     int j=0;
@@ -74,9 +85,17 @@ class VenueDataDao {
 
   }
 
+
+  Future<List<VenueData>> fetchVenueData(int limit) async {
+
+    FS_Util fs = new FS_Util();
+    var doc = await query.executeQuery(fs.databaseReference, limit);
+
+
+
+  }
+
   Future<List<VenueData>> getVenueData() async {
-
-
 
     FS_Util fs = new FS_Util();
 

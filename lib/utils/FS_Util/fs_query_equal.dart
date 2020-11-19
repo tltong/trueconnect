@@ -1,5 +1,6 @@
 import './fs_query_int.dart';
 import './fs_where_equal.dart';
+import './fs_where_int.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
@@ -13,11 +14,11 @@ class FS_QUERY_EQUAL extends FS_QUERY_INT {
   String field;
   String value;
 
-  FS_QUERY_EQUAL(String inCollection, FS_WHERE_EQUAL inFSwhere, String inOrderby){
+  FS_QUERY_EQUAL(String inCollection, FS_WHERE_INT inFSwhere, String inOrderby){
     collection = inCollection;
     orderby = inOrderby;
-    field = inFSwhere.field;
-    value = inFSwhere.value;
+    field = (inFSwhere as FS_WHERE_EQUAL).field;
+    value = (inFSwhere as FS_WHERE_EQUAL).value;
   }
 
   Future<List<Map<String, dynamic>>> executeQuery(Firestore databaseReference,int limit) async {
@@ -61,11 +62,5 @@ class FS_QUERY_EQUAL extends FS_QUERY_INT {
 
   }
 
-  test(){
-     if (documentList==null){
-       print('documentList is null');
-     }else{
-       print('documentList is not null');
-     }
-  }
+
 }

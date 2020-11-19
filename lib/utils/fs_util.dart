@@ -4,7 +4,10 @@ import './FS_Util/fs_where_int.dart';
 import 'dart:io';
 
 import 'FS_Util/fs_query_equal.dart';
+import 'FS_Util/fs_query_factory.dart';
+import 'FS_Util/fs_query_int.dart';
 import 'FS_Util/fs_where_equal.dart';
+import 'FS_Util/fs_query_equal_double.dart';
 
 class FS_Util{
 
@@ -56,7 +59,6 @@ class FS_Util{
 
   Future<List<Map<String, dynamic>>> testQuery(String collection,String field, String value) async {
       
-
     List<Map<String, dynamic>> ret = new List();
 
     FS_WHERE_EQUAL fswhereeq = new FS_WHERE_EQUAL(field,value);
@@ -67,26 +69,59 @@ class FS_Util{
     print(doc.length.toString());
     print(doc.toString());
     
-   doc = await fsqueryeq.executeQuery(databaseReference, 3);
+     doc = await fsqueryeq.executeQuery(databaseReference, 1);
     print(doc.length.toString());
     print(doc.toString());
     
     return ret;
   }
 
-  void testquery2(){
-
-     FS_WHERE_EQUAL fswhereeq = new FS_WHERE_EQUAL("name","jack");
-     testfunction2(fswhereeq);
-
-   }
 
 
-  void testfunction2(FS_WHERE_INT fsint){
+    Future<void> testFactory() async {
 
-      (fsint as FS_WHERE_EQUAL).test();
+
+      FS_WHERE_EQUAL fswhereeq = new FS_WHERE_EQUAL("userName", "Tai-Loong Tong");
+      List<FS_WHERE_EQUAL> fswherelist = new List<FS_WHERE_EQUAL>();
+      fswherelist.add(fswhereeq);
+      
+
+      FS_QUERY_INT fsqueryint = FS_QUERY_FACTOR.createQUERY(FS_Util.VENUE_COLLECTION, fswherelist, "name");
+
+      
+      var doc = await fsqueryint.executeQuery(databaseReference, 2);
+      for (int i=0;i<doc.length;i++)
+        print(doc[i]);
+
+      doc = await fsqueryint.executeQuery(databaseReference, 1);
+      for (int i=0;i<doc.length;i++)
+        print(doc[i]);
+
+
+    }
+
+
+    Future<List<Map<String, dynamic>>> testQueryEqDouble(String collection,String field1, String value1,String field2, String value2) async {
+      
+    List<Map<String, dynamic>> ret = new List();
+
+    FS_WHERE_EQUAL fswhereeq1 = new FS_WHERE_EQUAL(field1,value1);
+    FS_WHERE_EQUAL fswhereeq2 = new FS_WHERE_EQUAL(field2,value2);
+
+    FS_QUERY_EQUAL_DOUBLE fsqueryeq = new FS_QUERY_EQUAL_DOUBLE(FS_Util.VENUE_COLLECTION,fswhereeq1,fswhereeq2,'name');
+
+    var doc = await fsqueryeq.executeQuery(databaseReference, 1);
+    
+    for (int i=0;i<doc.length;i++)
+      print(doc[i]);
+    
+    doc = await fsqueryeq.executeQuery(databaseReference, 1);
+
+    for (int i=0;i<doc.length;i++)
+      print(doc[i]);
+    
+    return ret;
   }
-
 
   List<Map<String, dynamic>> returnRet (var inQuery){
 
