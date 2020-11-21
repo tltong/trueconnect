@@ -403,8 +403,15 @@ _getAddressFromLatLng() async {
 
                     vdatadao.initialiseQuery(fseql);
 
-                    vdatadao.fetchVenueData(1);
-                    vdatadao.fetchVenueData(1);
+                    List<VenueData> vdatal = await vdatadao.fetchVenueData(1);
+  
+                    print('main : \n');
+                    for (int i=0;i<vdatal.length;i++){
+                      VenueData vdata = vdatal[i];
+                      print(vdata.name);
+                      print(vdata.userName);
+                      print(vdata.images);
+                    }
 
 /*
                     vdatadao.initialiseWithData(vdatalist);

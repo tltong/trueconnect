@@ -178,6 +178,21 @@ static Image NetworkImageFromLink (String link){
     return ret;
 }
 
+static List<Image> NetworkImagesFromLinks (List<String> links){
+
+
+  List<Image> ret = new List<Image>();
+ 
+
+  for (int i=0; i<links.length; i++){
+    Image image = NetworkImageFromLink(links[i]);
+    ret.add(image);
+  }
+
+  return ret;
+}
+
+
 static String ExtractImageString (Image image){
 
   int index1 = image.toString().indexOf("http");

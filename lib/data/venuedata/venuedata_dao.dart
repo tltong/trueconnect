@@ -91,7 +91,37 @@ class VenueDataDao {
     FS_Util fs = new FS_Util();
     var doc = await query.executeQuery(fs.databaseReference, limit);
 
+    List<VenueData> ret = new List<VenueData>();
 
+    for(int i=0;i<doc.length;i++){
+
+      Map<String,dynamic> entry = doc[i];
+   
+      List<String> imagelinks = new List<String>();
+      for (int j=0;j<entry['downloadlinks'].length;j++){
+        String link = entry['downloadlinks'][j].toString();
+        imagelinks.add(link);
+      }
+
+      List<Image> images = ImageUtil.NetworkImagesFromLinks(imagelinks);
+  
+
+      VenueData vdata = new VenueData(images,
+                                      entry['userName'],
+                                      entry['userID'],
+                                      entry['startTime'].toDate(),
+                                      entry['endTime'].toDate(),
+                                      entry['name'],
+                                      entry['address'],
+                                      entry['type'],
+                                      entry['splurge'],
+                                      entry['pay'],
+                                      entry['notes']                                  
+                                      );
+      // ********** TODO : applicants, applicant_comments, confirmed_applicant **********
+      ret.add(vdata);
+    }
+    return ret;  
 
   }
 
