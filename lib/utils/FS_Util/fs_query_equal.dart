@@ -4,12 +4,14 @@ import './fs_where_int.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
+
 class FS_QUERY_EQUAL extends FS_QUERY_INT {
 
   String collection;
   String orderby;
   int limit;
   List<DocumentSnapshot> documentList;  
+  
 
   String field;
   String value;
@@ -31,7 +33,7 @@ class FS_QUERY_EQUAL extends FS_QUERY_INT {
     }
 
     if (documentList==null){      // fetch first
-
+   
       query = await databaseReference.collection(collection).orderBy(orderby).where(field, isEqualTo: value).limit(limit).getDocuments();
       documentList = query.documents;
       return _processQuery(query);

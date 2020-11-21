@@ -261,7 +261,6 @@ class FS_Util{
   */
   Future<String> addRecord(String collection, Map<String, dynamic> mapDoc) async {
     DocumentReference ref = await databaseReference.collection(collection).add(mapDoc);
-    
     return ref.documentID;
   }
 

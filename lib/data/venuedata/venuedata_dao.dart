@@ -153,7 +153,7 @@ class VenueDataDao {
 
   }
 
-  Future<String> uploadRecord(int index){
+  Future<String> uploadRecord(int index) async {
 
     FS_Util fs = new FS_Util();
 
@@ -198,7 +198,7 @@ class VenueDataDao {
 
     List<ImageStruct> retImageStruct = constructImageStructs(lVenueData[index].images);
 
-    ImageUtil.uploadImages(retImageStruct).then((ret){
+    ImageUtil.uploadImages(retImageStruct).then((ret) async {
       lVenueData[index].imagestructs=ret;
 /*
       print ('venuedata_dao : number of imagestructs ' + lVenueData[index].imagestructs.length.toString());
@@ -218,9 +218,8 @@ class VenueDataDao {
       venue_upload.putIfAbsent("uploadpaths", ()=> uploadpaths);
       venue_upload.putIfAbsent("downloadlinks", ()=> downloadlinks);
 
-      fs.addRecord(FS_Util.VENUE_COLLECTION, venue_upload).then((id){
+      String id = await fs.addRecord(FS_Util.VENUE_COLLECTION, venue_upload);
       return id;
-    });
 
 
 

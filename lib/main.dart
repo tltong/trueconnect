@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:trueconnect/data/imageobject/image_mediator.dart';
 import 'package:trueconnect/data/imageobject/image_object.dart';
+import 'package:trueconnect/data/user/userdatadao.dart';
 
 import 'package:trueconnect/user.dart';
 import 'package:trueconnect/create_user.dart';
@@ -29,14 +30,16 @@ import './pages/venue_page/venue_page.dart';
 import './data/venuedata/venuedata.dart';
 import './pages/calendar_page/calendar_page.dart';
 import './pages/calendar_page/calendar_page_tabs.dart';
+import 'data/user/userdatadao.dart';
+import 'data/user/userdatadao.dart';
 import 'data/venuedata/venuedata_dao.dart';
 import './utils/FS_Util/fs_where_equal.dart';
 import './utils/FS_Util/fs_where_int.dart';
 import './utils/FS_Util/fs_query_factory.dart';
 import './utils/FS_Util/fs_query_int.dart';
 
-
-
+import './data/user/userdata.dart';
+import './data/user/userdatadao.dart';
 
 void main() => runApp(MyApp());
 
@@ -242,23 +245,30 @@ _getAddressFromLatLng() async {
                       onPressed: () {
                      
                           LoginUtil login = LoginUtil();
-                          login.LoginWithFB().then((ret){
-                              User currentUser = User();
+                          login.LoginWithFB().then((ret) async {
 
-                              print('main : '+ret.toString());
+                              UserData userdata = new UserData(ret);
+/*                              
+                              UserDataDao.uploadRecord(userdata).then((id) async {
+                                print('main');
+                              });
+*/                          
+                             /*
+                              if (retid == null)
+                                print('main : retid is null');
+                              */
+                            //  User currentUser = User();
+                              
+
+                            /*
                               currentUser.initialise(ret).then((vo){
                                
                                 appData.currentUser = currentUser;
-                              
-                  
                                 appData.currentUser.initialiseUserSettings();
                                 appData.currentUser.initialiseUserPhotos();
                                 appData.currentUser.printUserSettings();
-                                
-                               
-
                               });
-
+  */
 //                              appData.currentUser = currentUser;
                              // print('current user : ' + appData.currentUser.name);
                       
@@ -285,6 +295,7 @@ _getAddressFromLatLng() async {
           
           new Center(
               child: Column(children: <Widget>[
+                  
                   
   Builder(
         builder: (context) => 
@@ -424,38 +435,30 @@ _getAddressFromLatLng() async {
                   ),
               ),
 
-/*
-      Builder(
-        builder: (context) => 
-        RaisedButton(
-              onPressed: () async {
-            
-          
-                 FS_Util fs =  FS_Util();
 
-                 await fs.testQueryEqDouble(FS_Util.VENUE_COLLECTION,'userName','Tai-Loong Tong','type','Outdoors').then((doc){
-                  }
-                );
 
-              },
-              child: Text('Test equal double'),
-            ),
-        ),
-*/
-/*
         Builder(
         builder: (context) => 
         RaisedButton(
               onPressed: () async {
+                UserDataDao userdao = new UserDataDao();
 
-                FS_Util fs = FS_Util();
-                fs.testFactory();
+                FS_WHERE_EQUAL fseq = new FS_WHERE_EQUAL('name','Tai-Loong Tong');
+                List<FS_WHERE_EQUAL> fseql = new List<FS_WHERE_EQUAL>();
+                fseql.add(fseq);
+                userdao.initialiseQuery(fseql);
+
+                print('\n');
+                userdao.fetchUserData(5).then((doc){
+                  for (int i=0;i<doc.length;i++)
+                    print(doc[i].id);
+                });
 
               },
-              child: Text('Test query factory'),
+              child: Text('Test fetch user'),
             ),
         ),
-*/
+
         /*
 Builder(
         builder: (context) => 
