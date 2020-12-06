@@ -4,7 +4,7 @@
             "outputFile": "/home/tltong/flutterproj/trueconnect/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-bg/values-bg.xml",
             "map": [
                 {
-                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/3aaf6e5219b7f981ec263df919098c6f/core-1.1.0/res/values-bg/values-bg.xml",
+                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/35f29bb1a578f0319e9c3e21730b6b49/core-1.2.0/res/values-bg/values-bg.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/6eb14f512292913515d869914807ad40/play-services-base-17.1.0/res/values-bg/values.xml",
+                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/c74e9d76b9181d3585ba58111e512b89/play-services-base-17.2.1/res/values-bg/values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -35,23 +35,6 @@
                         "startOffsets": "2847,2958,3155,3292,3405,3631,3768,3917,4252,4480,4594,4800,4940,5156,5352,5452,5541",
                         "endColumns": "110,196,136,112,225,136,148,137,227,113,205,139,215,195,99,88,101",
                         "endOffsets": "2953,3150,3287,3400,3626,3763,3912,4050,4475,4589,4795,4935,5151,5347,5447,5536,5638"
-                    }
-                },
-                {
-                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/b33a16a0545b8dab4ac3c0b0eb2d784b/jetified-play-services-basement-17.0.0/res/values-bg/values.xml",
-                    "from": {
-                        "startLines": "4",
-                        "startColumns": "0",
-                        "startOffsets": "247",
-                        "endColumns": "196",
-                        "endOffsets": "443"
-                    },
-                    "to": {
-                        "startLines": "37",
-                        "startColumns": "4",
-                        "startOffsets": "4055",
-                        "endColumns": "196",
-                        "endOffsets": "4247"
                     }
                 },
                 {
@@ -69,6 +52,23 @@
                         "startOffsets": "105,220,327,432,518,623,744,823,901,992,1085,1181,1275,1376,1469,1564,1672,1763,1854,1937,2051,2160,2260,2374,2480,2588,2748,5643",
                         "endColumns": "114,106,104,85,104,120,78,77,90,92,95,93,100,92,94,107,90,90,82,113,108,99,113,105,107,159,98,82",
                         "endOffsets": "215,322,427,513,618,739,818,896,987,1080,1176,1270,1371,1464,1559,1667,1758,1849,1932,2046,2155,2255,2369,2475,2583,2743,2842,5721"
+                    }
+                },
+                {
+                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/379289b7c671899e70ff2ff4d256c3a2/jetified-play-services-basement-17.2.1/res/values-bg/values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "247",
+                        "endColumns": "196",
+                        "endOffsets": "443"
+                    },
+                    "to": {
+                        "startLines": "37",
+                        "startColumns": "4",
+                        "startOffsets": "4055",
+                        "endColumns": "196",
+                        "endOffsets": "4247"
                     }
                 }
             ]

@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/6eb14f512292913515d869914807ad40/play-services-base-17.1.0/res/values-tr/values.xml",
+                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/c74e9d76b9181d3585ba58111e512b89/play-services-base-17.2.1/res/values-tr/values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -38,7 +38,24 @@
                     }
                 },
                 {
-                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/b33a16a0545b8dab4ac3c0b0eb2d784b/jetified-play-services-basement-17.0.0/res/values-tr/values.xml",
+                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/35f29bb1a578f0319e9c3e21730b6b49/core-1.2.0/res/values-tr/values-tr.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "71",
+                        "startColumns": "4",
+                        "startOffsets": "8125",
+                        "endColumns": "100",
+                        "endOffsets": "8221"
+                    }
+                },
+                {
+                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/379289b7c671899e70ff2ff4d256c3a2/jetified-play-services-basement-17.2.1/res/values-tr/values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "0",
@@ -69,23 +86,6 @@
                         "startOffsets": "2786,2948,3085,3221,3334,3419,3505,3585,3673,3765,3878,3988,4081,4174,4281,4401,4483,4566,4743,4839,4948,5064,5167",
                         "endColumns": "161,136,135,112,84,85,79,87,91,112,109,92,92,106,119,81,82,176,95,108,115,102,138",
                         "endOffsets": "2943,3080,3216,3329,3414,3500,3580,3668,3760,3873,3983,4076,4169,4276,4396,4478,4561,4738,4834,4943,5059,5162,5301"
-                    }
-                },
-                {
-                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/3aaf6e5219b7f981ec263df919098c6f/core-1.1.0/res/values-tr/values-tr.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "100",
-                        "endOffsets": "151"
-                    },
-                    "to": {
-                        "startLines": "71",
-                        "startColumns": "4",
-                        "startOffsets": "8125",
-                        "endColumns": "100",
-                        "endOffsets": "8221"
                     }
                 }
             ]

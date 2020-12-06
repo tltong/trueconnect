@@ -4,7 +4,7 @@
             "outputFile": "/home/tltong/flutterproj/trueconnect/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-te/values-te.xml",
             "map": [
                 {
-                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/6eb14f512292913515d869914807ad40/play-services-base-17.1.0/res/values-te/values.xml",
+                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/c74e9d76b9181d3585ba58111e512b89/play-services-base-17.2.1/res/values-te/values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -21,24 +21,7 @@
                     }
                 },
                 {
-                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/b33a16a0545b8dab4ac3c0b0eb2d784b/jetified-play-services-basement-17.0.0/res/values-te/values.xml",
-                    "from": {
-                        "startLines": "4",
-                        "startColumns": "0",
-                        "startOffsets": "247",
-                        "endColumns": "198",
-                        "endOffsets": "445"
-                    },
-                    "to": {
-                        "startLines": "60",
-                        "startColumns": "4",
-                        "startOffsets": "6617",
-                        "endColumns": "198",
-                        "endOffsets": "6811"
-                    }
-                },
-                {
-                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/3aaf6e5219b7f981ec263df919098c6f/core-1.1.0/res/values-te/values-te.xml",
+                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/35f29bb1a578f0319e9c3e21730b6b49/core-1.2.0/res/values-te/values-te.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -86,6 +69,23 @@
                         "startOffsets": "2864,3027,3172,3314,3425,3513,3599,3681,3774,3863,3976,4088,4189,4290,4400,4528,4610,4703,4895,4991,5092,5204,5317",
                         "endColumns": "162,144,141,110,87,85,81,92,88,112,111,100,100,109,127,81,92,191,95,100,111,112,165",
                         "endOffsets": "3022,3167,3309,3420,3508,3594,3676,3769,3858,3971,4083,4184,4285,4395,4523,4605,4698,4890,4986,5087,5199,5312,5478"
+                    }
+                },
+                {
+                    "source": "/home/tltong/.gradle/caches/transforms-2/files-2.1/379289b7c671899e70ff2ff4d256c3a2/jetified-play-services-basement-17.2.1/res/values-te/values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "247",
+                        "endColumns": "198",
+                        "endOffsets": "445"
+                    },
+                    "to": {
+                        "startLines": "60",
+                        "startColumns": "4",
+                        "startOffsets": "6617",
+                        "endColumns": "198",
+                        "endOffsets": "6811"
                     }
                 }
             ]

@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:trueconnect/utils/image_util.dart';
 import '../../utils/appdata.dart';
 import '../../user.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+//import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 String startTimeString;
 
@@ -140,7 +140,7 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
               FormBuilder(
             // onChanged: (value) => ( ),
               key: _fbKey,
-              autovalidate: true,
+          autovalidateMode: AutovalidateMode.always,
               child: Column(
             children: <Widget>[
 
@@ -151,6 +151,8 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
                 elevation: 4.0,
           
                 onPressed: () {
+
+/*
                   DatePicker.showDateTimePicker(context,
                       theme: DatePickerTheme(
                         containerHeight: 210.0,
@@ -167,6 +169,8 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
                   }
                   //,currentTime: DateTime.now(), locale: LocaleType.en
                   );
+*/
+
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -220,6 +224,8 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
                     borderRadius: BorderRadius.circular(5.0)),
                 elevation: 4.0,
                 onPressed: () {
+
+                /*
                   DatePicker.showDateTimePicker(context,
                       theme: DatePickerTheme(
                         containerHeight: 210.0,
@@ -234,6 +240,7 @@ class VenueSettingsDetailsState extends State<VenueSettingsDetails>{
                   }
                   //, currentTime: DateTime.now(), locale: LocaleType.en
                   );
+                */
                 },
                 child: Container(
                   alignment: Alignment.center,

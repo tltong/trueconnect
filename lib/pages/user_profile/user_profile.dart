@@ -263,12 +263,9 @@ child = map<Widget>(
     [
 
  new CarouselSlider(//                      controller: namectrl
-
+      options: CarouselOptions(),
       items: child,
-      autoPlay: false,
-      enlargeCenterPage: true,
-      viewportFraction: 0.9,
-      aspectRatio: 2.0,
+
     ),
 
  new Center(

@@ -24,7 +24,7 @@ import 'package:trueconnect/utils/login_util.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:flutter_facebook_image_picker/flutter_facebook_image_picker.dart';
+//import 'package:flutter_facebook_image_picker/flutter_facebook_image_picker.dart';
 import './pages/test_pages/test_willpop.dart';
 import './pages/venue_page/venue_page.dart';
 import './data/venuedata/venuedata.dart';
@@ -40,6 +40,10 @@ import './utils/FS_Util/fs_query_int.dart';
 
 import './data/user/userdata.dart';
 import './data/user/userdatadao.dart';
+import 'package:intl/intl.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+
+import './pages/user_page/user_profile_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -62,6 +66,8 @@ class _MyAppState extends State<MyApp> implements AddUserCallback {
   Position _currentPosition;
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   String _currentAddress;
+
+  UserData userdata;
 
   _loginWithFB() async{
     
@@ -247,7 +253,7 @@ _getAddressFromLatLng() async {
                           LoginUtil login = LoginUtil();
                           login.LoginWithFB().then((ret) async {
 
-                              UserData userdata = new UserData(ret);
+                              userdata = new UserData(ret);
 /*                              
                               UserDataDao.uploadRecord(userdata).then((id) async {
                                 print('main');
@@ -298,15 +304,25 @@ _getAddressFromLatLng() async {
                   
                   
   Builder(
+        
         builder: (context) => 
         RaisedButton(
               onPressed: () {
 
-                Navigator.pushNamed(context,'/userprofile');
-
+                
+             Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => UserProfilePage(),
+            settings: RouteSettings(
+              arguments: userdata,
+            ),
+            
+          ),
+        );
 
               },
-              child: Text('User profile'),
+              child: Text('User profile page'),
             ),
         ),
 
@@ -459,6 +475,36 @@ _getAddressFromLatLng() async {
             ),
         ),
 
+/*
+       Builder(
+        builder: (context) => 
+        RaisedButton(
+              onPressed: () async {
+
+ final date = await showDatePicker(
+              context: context,
+              firstDate: DateTime(1900),
+              initialDate:  DateTime.now(),
+              lastDate: DateTime(2100));
+
+              if (date!=null){
+                  final time = await showTimePicker(
+              context: context,
+              initialTime:
+                  TimeOfDay.fromDateTime(DateTime.now()),
+            );
+
+            DateTime datetime = DateTimeField.combine(date, time);
+
+         //  print(datetime.toString());
+              }
+              
+
+              },
+              child: Text('Test date picker'),
+            ),
+        ),
+*/
         /*
 Builder(
         builder: (context) => 

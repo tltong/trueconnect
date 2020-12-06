@@ -171,7 +171,7 @@ void updateUserDetails(){
           FormBuilder(
             onChanged: (value) => ( updateUserDetails()),
   key: _fbKey,
-  autovalidate: true,
+ autovalidateMode: AutovalidateMode.always,
   child: Column(
     children: <Widget>[
         

@@ -5,9 +5,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_image_picker/model/photo.dart';
+//import 'package:flutter_facebook_image_picker/model/photo.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:flutter_facebook_image_picker/flutter_facebook_image_picker.dart';
+//import 'package:flutter_facebook_image_picker/flutter_facebook_image_picker.dart';
 import 'package:image_downloader/image_downloader.dart';
 import 'package:http/http.dart' show get;
 import './fs_util.dart';
@@ -259,7 +259,7 @@ static Future<File> Fetchfromweb(String site) async {
 
   }
 
-
+/*
 static Future<List<Photo>> pickImagefromFacebook(BuildContext context, String _accessToken) async {
   List<Photo> _photos = [];
   
@@ -270,7 +270,7 @@ Navigator.of(context).push(
               builder: (BuildContext context){
 
 
-    return FacebookImagePicker(
+    return pickImagefromFacebook(
                       _accessToken,
                       onDone: (items) {
                         Navigator.pop(context);
@@ -281,18 +281,8 @@ Navigator.of(context).push(
                       },
                       onCancel: () => Navigator.pop(context),
                     );
-    
-    
-    
-    }
-             
-             
+    } 
               ),
-              
-            );
-
-
-}
-
-
+            );}
+*/
 }

@@ -212,7 +212,7 @@ Widget UserDetails() {
                   'date': DateTime.now(),
                   'accept_terms': false,
                 },
-                autovalidate: true,
+                autovalidateMode: AutovalidateMode.always,
                 child: Column(
                   children: <Widget>[
                     FormBuilderTextField(

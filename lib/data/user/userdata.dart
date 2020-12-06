@@ -1,5 +1,8 @@
 
 
+
+import 'package:flutter/widgets.dart';
+
 class UserData{
 
   String id;
@@ -7,6 +10,17 @@ class UserData{
   String email;
   String first_name;
   String last_name;
+  String country;
+  String city;
+  String age;
+  String gender;
+  String about;
+  String height;
+  String occupation;
+  String education;
+
+  
+  List<Image> images;
 
   UserData(Map fbprofile){
 

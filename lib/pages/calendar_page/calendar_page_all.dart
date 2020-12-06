@@ -314,11 +314,8 @@ Widget _Dialog(BuildContext context, List<Image> displayImages) {
  CarouselSlider(
 
       items: displayImages,
-      
-      autoPlay: false,
-      enlargeCenterPage: true,
-      viewportFraction: 0.9,
-      aspectRatio: 2.0,
+      options: CarouselOptions(),
+
     ),
 
           

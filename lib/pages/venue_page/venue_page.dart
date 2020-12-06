@@ -337,11 +337,8 @@ return child;
           CarouselSlider(
 
       items: child,
+      options: CarouselOptions(),
       
-      autoPlay: false,
-      enlargeCenterPage: true,
-      viewportFraction: 0.9,
-      aspectRatio: 2.0,
     ),
 
   TextField(

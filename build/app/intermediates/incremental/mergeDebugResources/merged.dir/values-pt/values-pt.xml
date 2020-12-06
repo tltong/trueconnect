@@ -51,5 +51,5 @@
     <string gender="unknown" name="com_facebook_smart_login_confirmation_title">Confirmar login</string>
     <string gender="unknown" name="com_facebook_tooltip_default">Você está no controle — escolha quais informações você quer compartilhar com os aplicativos.</string>
     <string msgid="146198913615257606" name="search_menu_title">"Pesquisar"</string>
-    <string msgid="8106346172024741305" name="status_bar_notification_info_overflow">"999+"</string>
+    <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
 </resources>
