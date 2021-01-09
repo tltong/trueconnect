@@ -309,7 +309,6 @@ _getAddressFromLatLng() async {
         RaisedButton(
               onPressed: () {
 
-                
              Navigator.push(
           context,
           MaterialPageRoute(
@@ -451,7 +450,24 @@ _getAddressFromLatLng() async {
                   ),
               ),
 
+        Builder(
+        builder: (context) => 
+        RaisedButton(
+              onPressed: () async {
+               
+               if (userdata.gender==null){
+                 print('main : userdata is null');
+               }
+//               print('main : userdata others : ' + userdata.others);
 
+
+              },
+              child: Text('Test userdata user'),
+            ),
+        ),
+
+
+/*
 
         Builder(
         builder: (context) => 
@@ -474,6 +490,10 @@ _getAddressFromLatLng() async {
               child: Text('Test fetch user'),
             ),
         ),
+*/
+
+
+
 
 /*
        Builder(

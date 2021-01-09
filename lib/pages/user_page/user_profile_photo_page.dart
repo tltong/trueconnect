@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:trueconnect/utils/image_util.dart';
 
 
-
+enum photoSelection { Gallery, Facebook }
 
 class UserProfilePhotoPage extends StatefulWidget {
 
@@ -15,6 +16,63 @@ class UserProfilePhotoPage extends StatefulWidget {
   State<StatefulWidget> createState() {
     return UserProfilePhotoPageState();
   }
+
+}
+
+class ImageStruct {
+
+  Image image;
+  bool profile;
+
+  ImageStruct(Image inImage, bool inProfile){
+    image=inImage;
+    profile=inProfile;
+  }
+
+}
+
+
+
+Future<Image>asyncSimpleDialog(BuildContext context) async {
+
+  return showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: const Text('Photo options'),
+            children: <Widget>[
+
+              SimpleDialogOption(
+                onPressed: () {
+
+                  ImageUtil.pickImageFromGallery().then((retFile){
+                    if(retFile!=null){
+                      print('user profile photo page before navigator pop');
+
+                      Image retImage = new Image.file(retFile);
+
+                      Navigator.pop(context,retImage);
+                      print('user profile photo page after navigator pop');
+                   //   print('user profile photo page selected image : ' + retimage.toString());
+
+//                      return retimage;
+
+                    }
+                  
+                  });
+/*
+                  print('user profile photo page before navigator pop');
+                  Navigator.pop(context);
+                  print('user profile photo page after navigator pop');
+*/
+                },
+                child: const Text('Choose new photo'),
+              ),
+     ],
+        );
+      });
+
 
 }
 
@@ -55,8 +113,21 @@ class UserProfilePhotoPageState extends State<UserProfilePhotoPage>  {
 
            child: image1==null?Image.asset('images/addphoto.png'):image1,
             
-            onTap: () {
-             
+            onTap: () async {
+              print('user profile photo page : before selection ');
+
+               asyncSimpleDialog(context).then((image) async {
+                print('user profile photo page : after selection ' + image.toString());
+
+                setState((){
+                  image1=image;
+                 });
+
+                              });
+            
+
+         //     asyncSimpleDialog(context).then(()));
+              //print('user profile photo page : after selection ' + image.toString());
             },
             ),
             

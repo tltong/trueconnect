@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:trueconnect/utils/misc_util.dart';
 import './../../data/user/userdata.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import './user_profile_settings_tabs.dart';
@@ -51,7 +52,10 @@ class UserProfilePageState extends State<UserProfilePage> {
     namectrl.text=arg.name;
     countryctrl.text=arg.country;
     cityctrl.text=arg.city;
-    agectrl.text=arg.age;    // need to calculate age later, refer user.dart
+
+    if (arg.getAge()!=null){
+      agectrl.text=arg.getAge().toString();
+    }
     genderctrl.text=arg.gender;
     aboutctrl.text=arg.about;
     occupationctrl.text=arg.occupation;
@@ -106,19 +110,43 @@ class UserProfilePageState extends State<UserProfilePage> {
         title: Text("User Profile"),
       ),
       floatingActionButton: FloatingActionButton(
-      onPressed: () {
+      onPressed: () async {
 
 
-
+        UserData ret = await 
         Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => UserProfileSettingsTabs(),
         settings: RouteSettings(
-              arguments: argImages,
+              arguments: arg,
             ),
         
         ),
+
         );
+    
+    
+//        print ('user profile page : return value from user_profile_settings_tabs : name ' + ret.name);
+//        print ('user profile page : return value from user_profile_settings_tabs : country ' + ret.country);
+//        print ('user profile page : return value from user_profile_settings_tabs : education ' + ret.city);
+ //       print ('user profile page : return value from user_profile_settings_tabs : age ' + ret.getAge().toString());
+  
+
+        namectrl.text = ret.name;
+        countryctrl.text = ret.country;
+        cityctrl.text=ret.city;
+
+        if (ret.getAge()!=null){
+          agectrl.text=ret.getAge().toString();
+        }
+        
+        genderctrl.text=ret.gender;
+        heightctrl.text=ret.height;
+        occupationctrl.text=ret.occupation;
+        educationctrl.text=ret.education;
+        aboutctrl.text=ret.about;
+
+
       },
       child: const Icon(Icons.edit),
     ),
@@ -171,7 +199,7 @@ class UserProfilePageState extends State<UserProfilePage> {
               readOnly: true,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                labelText: 'Country'
+                labelText: 'City'
               ),
             ),
 
